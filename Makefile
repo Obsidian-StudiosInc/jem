@@ -1,4 +1,18 @@
-#
+#  This file is part of jem.
+#  
+#  jem is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  jem is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with jem.  If not, see <http://www.gnu.org/licenses/>.
+
 #  There exist several targets which are by default empty and which can be 
 #  used for execution of your targets. These targets are usually executed 
 #  before and after some main targets. They are: 
@@ -49,9 +63,21 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+CC = gcc
+FLAGS = -O2 -fPIC
+DEBUG_FLAGS = -O2 -fPIC -g
+INCLUDE =
+LIBS =
+WITH = -w -Wunused -Wuninitialized
+
+.PHONY : clean clean-tests
 
 # build
-build: .build-post
+#build: .build-post
+build:
+	$(CC) $(DEBUG_FLAGS) $(INCLUDE) $(LIBS) $(WITH) -o jem \
+	src/output_formatter.c src/file_parser.c src/package.c src/vm.c \
+	src/env_manager.c src/main.c
 
 .build-pre:
 # Add your pre 'build' code here...
@@ -61,13 +87,18 @@ build: .build-post
 
 
 # clean
-clean: .clean-post
+#clean: .clean-post
+clean: clean-tests
+	$(RM) jem
 
 .clean-pre:
 # Add your pre 'clean' code here...
 
 .clean-post: .clean-impl
 # Add your post 'clean' code here...
+
+clean-tests:
+	$(RM) test
 
 
 # clobber
@@ -91,7 +122,11 @@ all: .all-post
 
 
 # build tests
-build-tests: .build-tests-post
+#build-tests: .build-tests-post
+build-tests:
+	$(CC) $(DEBUG_FLAGS) $(INCLUDE) $(LIBS) $(WITH) -o test \
+	src/output_formatter.c src/file_parser.c src/package.c src/vm.c \
+	src/env_manager.c tests/test.c
 
 .build-tests-pre:
 # Add your pre 'build-tests' code here...
@@ -101,7 +136,11 @@ build-tests: .build-tests-post
 
 
 # run tests
-test: .test-post
+#test: .test-post
+test: clean-tests build-tests
+	/usr/bin/valgrind --leak-check=yes --leak-check=full \
+                --read-var-info=yes  --show-reachable=yes --track-origins=yes \
+		./test
 
 .test-pre: build-tests
 # Add your pre 'test' code here...
