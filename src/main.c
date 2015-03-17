@@ -177,5 +177,5 @@ int main(int argc, char **argv) {
     /* Invalid argument checks */
 
     atexit(cleanup);
-    exit(EXIT_SUCCESS);
+    exit(my_exit_status);
 }

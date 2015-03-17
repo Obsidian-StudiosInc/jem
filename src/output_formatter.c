@@ -29,6 +29,7 @@
 bool color_output = true;
 bool console_title = true;
 bool auto_indent = true;
+bool my_exit_status = EXIT_SUCCESS;
 
 const char *terms[] = {"xterm", "Eterm", "aterm", "rxvt"};
 
@@ -215,6 +216,7 @@ void printMsg(const char *preffix,
  */
 void printError(const char *msg) {
     printMsg("%H%R","!!! ERROR: ",msg,"%$\n");
+    my_exit_status = EXIT_FAILURE;
 }
 
 /**

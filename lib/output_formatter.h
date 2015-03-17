@@ -29,6 +29,7 @@
 extern bool color_output;
 extern bool console_title;
 extern bool auto_indent;
+extern bool my_exit_status;
 
 extern const char *terms[];
 
