@@ -33,12 +33,24 @@ struct env {
     struct vm *active_vm;   /** pointer to the active vm struct in the virtual machines vms struct array */
 };
 
+struct env jem_env;
+
+/**
+ * Cleanup call before program exit, clean up env, free memory, etc
+ */
+void cleanup();
+
 /**
  * Frees the allocated memory in a env struct
  *
  * @param params a pointer to an env struct
  */
 void freeEnv(struct env *env);
+
+/**
+ * Execute something which is in JAVA_HOME
+ */
+void exeJavaBin(char *exe_name);
 
 /**
  * Get the active VM
@@ -63,3 +75,85 @@ void initEnv(struct env *env);
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed! 
  */
 struct vm *loadActiveVM(struct env *env);
+
+/**
+ * Print a list of the Available VMs
+ */
+void listAvailableVMs();
+
+/**
+ * Print a list of installed Packages
+ */
+void listPackages();
+
+/**
+ * Print the active VM
+ */
+void printActiveVM();
+
+/**
+ * Print the active VM parameters
+ */
+void printVMParams(const char *vm_name);
+
+/**
+ * Print a command including path using the active VM
+ * 
+ * @param exec string containing the executable to print
+ */
+void printExe(const char *exe);
+
+/**
+ * Print the active VM java version
+ */
+void printJavaVersion();
+
+/**
+ * Print one or more package classpath values from the package.env file
+ *
+ * @param name string containing the name(s) of the package(s), 
+ *             multiple comma separated package names can be specified
+ */
+void printPackageClasspath(const char *name);
+
+/**
+ * Print the active VM absolute path to tools.jar
+ */
+void printToolsJar();
+
+/**
+ * Print one or more parameter values from the active VM config file
+ *
+ * @param name string containing the name(s) of the parameter(s), multiple comma separated parameter names can be specified
+ */
+void printValueFromActiveVM(const char *name);
+
+/**
+ * Print one or more parameter values from one or more package.env file
+ *
+ * @param name string containing the name(s) of the package(s), multiple package(s) separated parameter names can be specified
+ * @param param string containing the parameter(s) names, multiple comma separated parameter names can be specified
+ */
+void printValueFromPackage(const char *name,const char *param);
+
+/**
+ * Print providers/packages for one or more virtual package(s)
+ *
+ * @param name string containing the name(s) of the virtual package(s), 
+ *        multiple comma separated virtual package names can be specified
+ */
+void printVirtualProviders(const char *virtual);
+
+/**
+ * Set the System VM, create a symlink for the given vm
+ *
+ * @param vm_name string containing the vm name or number
+ */
+void setSystemVM(const char *vm_name);
+
+/**
+ * Set the User VM, create a symlink for the given vm
+ *
+ * @param vm_name string containing the vm name or number
+ */
+void setUserVM(const char *vm_name);
