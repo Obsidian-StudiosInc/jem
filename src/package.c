@@ -56,7 +56,7 @@ void freePkg(struct pkg *pkg) {
         return;
     if(pkg->filename)
          free(pkg->filename);
-    if(pkg->filename)
+    if(pkg->name)
          free(pkg->name);
     freeParams(pkg->params);
 }
