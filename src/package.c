@@ -168,7 +168,8 @@ const char *gjpGetActiveVirtualProvider(const char *virtual) {
     free(provider_str);
     if(!package) {
         char *msg = NULL;
-        asprintf(&msg,"No virtual providers are available, please ensure you have\none of the package's installed;\n%s",providers);
+        asprintf(&msg,"No virtual providers for %s, please ensure you have\n"
+                      "one of the following package's installed;\n%s",virtual,providers);
         printError(msg);
         free(msg);
     }
