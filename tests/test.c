@@ -5,27 +5,27 @@
  ****************************************************************************/
 
 /*
- *  This file is part of java-config.
- *  
- *  java-config is free software: you can redistribute it and/or modify
+ *  This file is part of jem.
+ *
+ *  jem is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
- *  java-config is distributed in the hope that it will be useful,
+ *
+ *  jem is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
- *  along with java-config.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with jem.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdio.h>
 
 #include "../lib/env_manager.h"
 
-#define VM_CONF_FILE "/usr/share/java-config-2/vm/icedtea-bin-7"
+#define VM_CONF_FILE "/usr/share/jem-2/vm/icedtea-bin-7"
 
 testOutputFormatter() {
     int i;
@@ -320,8 +320,8 @@ testEnvManager() {
     else
         fprintf(stdout,"VM pointer is null\n");
     
-    fprintf(stdout,"\nvm = getVM(vms,\"/usr/share/java-config-2/vm/icedtea-bin-7\") ->\n");
-    vm = getVM(vms,"/usr/share/java-config-2/vm/icedtea-bin-7");
+    fprintf(stdout,"\nvm = getVM(vms,\"/usr/share/jem-2/vm/icedtea-bin-7\") ->\n");
+    vm = getVM(vms,"/usr/share/jem-2/vm/icedtea-bin-7");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
@@ -365,7 +365,7 @@ testEnvManager() {
 
 int main(int argc, char **argv) {
 
-    fprintf(stdout,"\n\\********** Starting java-config tests **********\\\n\n");
+    fprintf(stdout,"\n\\********** Starting jem tests **********\\\n\n");
 
     testOutputFormatter();
     testFileParser();
@@ -373,7 +373,7 @@ int main(int argc, char **argv) {
     testVM();
     testEnvManager();
 
-    fprintf(stdout,"\n\\********** Finished java-config tests **********\\\n\n");
+    fprintf(stdout,"\n\\********** Finished jem tests **********\\\n\n");
 
     exit(EXIT_SUCCESS);
 }
