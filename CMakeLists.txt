@@ -37,13 +37,35 @@ install(TARGETS jem jem-cli
 	RUNTIME DESTINATION sbin
 	LIBRARY DESTINATION lib)
 
+# Tests
+#enable_testing()
+add_custom_command(TARGET jem-test
+	COMMAND /usr/bin/valgrind --leak-check=yes --leak-check=full
+			--read-var-info=yes --show-reachable=yes
+			--track-origins=yes ${CMAKE_BINARY_DIR}/dist/jem-test)
+# Package Sources
+set(CPACK_SOURCE_GENERATOR "TBZ2")
+set(CPACK_SOURCE_IGNORE_FILES
+"${PROJECT_SOURCE_DIR}/CMakeCache.txt"
+"${PROJECT_SOURCE_DIR}/CMakeFiles"
+"${PROJECT_SOURCE_DIR}/_CPack_Packages/"
+"${PROJECT_SOURCE_DIR}/CPackConfig.cmake"
+"${PROJECT_SOURCE_DIR}/CPackSourceConfig.cmake"
+"${PROJECT_SOURCE_DIR}/Makefile"
+"${PROJECT_SOURCE_DIR}/cmake_install.cmake"
+"${PROJECT_SOURCE_DIR}/dist/"
+"${PROJECT_SOURCE_DIR}/install_manifest.txt"
+)
+
 # Create RPM
 set(CPACK_PACKAGE_VERSION ${VERSION})
-set(CPACK_GENERATOR "RPM")
+set(CPACK_GENERATOR "DEB;RPM;TBZ2")
 set(CPACK_PACKAGE_NAME "jem")
 set(CPACK_PACKAGE_RELEASE 1)
 set(CPACK_PACKAGE_CONTACT "William L. Thomson Jr.")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "William L. Thomson Jr.")
 set(CPACK_PACKAGE_VENDOR "Obsidian-Studios, Inc.")
 set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_OUTPUT_FILE_PREFIX dist)
 include(CPack)
