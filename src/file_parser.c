@@ -24,7 +24,7 @@
 #include <errno.h>
 #include <sys/dir.h>
 #include <sys/stat.h>
-#include "../lib/file_parser.h"
+#include "../include/file_parser.h"
 
 /**
  * Frees the allocated memory in a array of param structs

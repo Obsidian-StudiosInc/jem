@@ -25,7 +25,7 @@
 #include <sys/dir.h>
 #include <sys/stat.h>
 
-#include "../lib/vm.h"
+#include "../include/vm.h"
 
 /**
  * Frees the allocated memory used by an array of vm structs

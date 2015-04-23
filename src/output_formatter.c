@@ -24,7 +24,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../lib/output_formatter.h"
+#include "../include/output_formatter.h"
 
 bool color_output = true;
 bool console_title = true;

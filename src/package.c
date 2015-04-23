@@ -24,7 +24,7 @@
 #include <errno.h>
 #include <sys/dir.h>
 #include <sys/stat.h>
-#include "../lib/package.h"
+#include "../include/package.h"
 
 bool with_dependencies = false;
 

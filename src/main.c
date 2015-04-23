@@ -23,7 +23,7 @@
 
 #include <argp.h>
 
-#include "../lib/env_manager.h"
+#include "../include/env_manager.h"
 
 #define ENCODING "UTF-8" // presently not used
 
