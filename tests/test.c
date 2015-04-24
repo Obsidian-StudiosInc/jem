@@ -23,7 +23,7 @@
 
 #include <stdio.h>
 
-#include "../lib/env_manager.h"
+#include "../include/env_manager.h"
 
 #define VM_CONF_FILE "/usr/share/jem-2/vm/icedtea-bin-7"
 
