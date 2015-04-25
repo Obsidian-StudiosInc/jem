@@ -25,6 +25,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
 
+set(CMAKE_INSTALL_PREFIX "/usr")
+
 include_directories(include)
 
 add_library(jem SHARED src/output_formatter.c src/file_parser.c src/vm.c src/package.c src/env_manager.c)
@@ -46,6 +48,9 @@ add_custom_command(TARGET jem-test
 # Package Sources
 set(CPACK_SOURCE_GENERATOR "TBZ2")
 set(CPACK_SOURCE_IGNORE_FILES
+"${PROJECT_SOURCE_DIR}/.git/"
+"${PROJECT_SOURCE_DIR}/.dep.inc"
+"${PROJECT_SOURCE_DIR}/.gitignore"
 "${PROJECT_SOURCE_DIR}/CMakeCache.txt"
 "${PROJECT_SOURCE_DIR}/CMakeFiles"
 "${PROJECT_SOURCE_DIR}/_CPack_Packages/"
@@ -53,6 +58,7 @@ set(CPACK_SOURCE_IGNORE_FILES
 "${PROJECT_SOURCE_DIR}/CPackSourceConfig.cmake"
 "${PROJECT_SOURCE_DIR}/Makefile"
 "${PROJECT_SOURCE_DIR}/cmake_install.cmake"
+"${PROJECT_SOURCE_DIR}/nbproject/"
 "${PROJECT_SOURCE_DIR}/dist/"
 "${PROJECT_SOURCE_DIR}/install_manifest.txt"
 )
