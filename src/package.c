@@ -31,7 +31,7 @@ bool with_dependencies = false;
 /**
  * Frees the allocated memory used by a dep struct
  *
- * @param pkgs a pointer to a pkg struct
+ * @param dep a pointer to a dep struct
  */
 void freeDep(struct dep *dep) {
     if(!dep)
