@@ -22,6 +22,7 @@
  */
 
 #include "package.h"
+#include "version.h"
 #include "vm.h"
 
 /**

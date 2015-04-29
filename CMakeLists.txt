@@ -16,7 +16,21 @@
 cmake_minimum_required (VERSION 2.6)
 project (jem)
 
-set(VERSION "1.0.1")
+file(STRINGS "${PROJECT_SOURCE_DIR}/include/version.h" 
+        JEM_BUILD_SPEC REGEX "^[ \t]*#define[ \t]+JEM_VERSION_[A-Z]+[ \t]+[0-9]+.*$")
+
+if(JEM_BUILD_SPEC)
+    message(STATUS "${JEM_BUILD_SPEC}")
+    foreach(item IN ITEMS MAJOR MINOR PATCH)
+       string(REGEX REPLACE ".*#define[ \t]+JEM_VERSION_${item}[ \t]+([0-9]+).*"
+              "\\1" XYZ ${JEM_BUILD_SPEC})
+       set("JEM_VERSION_${item}" ${XYZ} CACHE STRING "Jem version")
+    endforeach()
+else()
+    message(FATAL_ERROR "Version unavilable")
+endif()
+
+set(VERSION "${JEM_VERSION_MAJOR}.${JEM_VERSION_MINOR}")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")

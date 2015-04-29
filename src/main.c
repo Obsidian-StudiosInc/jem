@@ -31,8 +31,8 @@
 #define OPT_PACKAGE -20
 #define OPT_VIRT_PROVIDERS -30
 
-const char *argp_program_version = "jem, version 0.1";
-const char *argp_program_bug_address = "Obsidian-Studios, Inc. <support@o-sinc.com>";
+const char *argp_program_version = JEM_VERSION_STR;
+const char *argp_program_bug_address = JEM_CONTACT;
 static char doc[] = "\nJava Environment Manager\n"
                     "Copyright 2015 Obsidian-Studios, Inc.\n"
                     "Distributed under the terms of the GNU General Public License v3";
