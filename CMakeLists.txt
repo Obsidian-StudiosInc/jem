@@ -60,9 +60,8 @@ if(DOXYGEN_FOUND)
 #    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
-    )
-endif(DOXYGEN_FOUND)
+        COMMENT "Generating API documentation with Doxygen" VERBATIM)
+endif()
 
 # add a target to generate man page documentation with help2man
 find_program(HELP2MAN "help2man")
@@ -74,7 +73,7 @@ if(HELP2MAN)
                         DEPENDS jem-cli)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1 
                 DESTINATION share/man/man1)
-endif(HELP2MAN)
+endif()
 
 # Tests
 #enable_testing()
