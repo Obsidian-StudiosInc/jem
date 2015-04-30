@@ -8,4 +8,5 @@ Makefile
 Testing
 cmake_install.cmake
 dist/
+docs/
 install_manifest.txt

@@ -35,9 +35,10 @@ set(VERSION "${JEM_VERSION_MAJOR}.${JEM_VERSION_MINOR}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
+set(CMAKE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
 
 set(CMAKE_INSTALL_PREFIX "/usr")
 
@@ -52,6 +53,26 @@ target_link_libraries(jem-test jem)
 install(TARGETS jem jem-cli
 	RUNTIME DESTINATION sbin
 	LIBRARY DESTINATION lib)
+
+# add a target to generate API documentation with Doxygen
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+#    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+    add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen" VERBATIM
+    )
+endif(DOXYGEN_FOUND)
+
+# add a target to generate man page documentation with help2man
+find_program(HELP2MAN "help2man")
+if(HELP2MAN)
+    add_custom_target(man 
+                        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1
+                        COMMAND ${HELP2MAN} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/jem -o 
+                            ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1)
+    add_dependencies(man jem-cli)
+endif(HELP2MAN)
 
 # Tests
 #enable_testing()
