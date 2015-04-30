@@ -70,8 +70,8 @@ if(HELP2MAN)
     add_custom_target(man 
                         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1
                         COMMAND ${HELP2MAN} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/jem -o 
-                            ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1)
-    add_dependencies(man jem-cli)
+                            ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1
+                        DEPENDS jem-cli)
 endif(HELP2MAN)
 
 # Tests
