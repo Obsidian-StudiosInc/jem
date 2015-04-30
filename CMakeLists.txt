@@ -72,6 +72,8 @@ if(HELP2MAN)
                         COMMAND ${HELP2MAN} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/jem -o 
                             ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1
                         DEPENDS jem-cli)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1 
+                DESTINATION share/man/man1)
 endif(HELP2MAN)
 
 # Tests
