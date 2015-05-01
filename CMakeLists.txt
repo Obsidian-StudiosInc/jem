@@ -16,18 +16,18 @@
 cmake_minimum_required (VERSION 2.6)
 project (jem)
 
-file(STRINGS "${PROJECT_SOURCE_DIR}/include/version.h" 
-        JEM_BUILD_SPEC REGEX "^[ \t]*#define[ \t]+JEM_VERSION_[A-Z]+[ \t]+[0-9]+.*$")
+file(STRINGS "${PROJECT_SOURCE_DIR}/include/version.h"
+	JEM_BUILD_SPEC REGEX "^[ \t]*#define[ \t]+JEM_VERSION_[A-Z]+[ \t]+[0-9]+.*$")
 
 if(JEM_BUILD_SPEC)
-    message(STATUS "${JEM_BUILD_SPEC}")
-    foreach(item IN ITEMS MAJOR MINOR PATCH)
-       string(REGEX REPLACE ".*#define[ \t]+JEM_VERSION_${item}[ \t]+([0-9]+).*"
-              "\\1" XYZ ${JEM_BUILD_SPEC})
-       set("JEM_VERSION_${item}" ${XYZ} CACHE STRING "Jem version")
-    endforeach()
+	message(STATUS "${JEM_BUILD_SPEC}")
+	foreach(item IN ITEMS MAJOR MINOR PATCH)
+		string(REGEX REPLACE ".*#define[ \t]+JEM_VERSION_${item}[ \t]+([0-9]+).*"
+			"\\1" XYZ ${JEM_BUILD_SPEC})
+		set("JEM_VERSION_${item}" ${XYZ} CACHE STRING "Jem version")
+	endforeach()
 else()
-    message(FATAL_ERROR "Version unavilable")
+	message(FATAL_ERROR "Version unavilable")
 endif()
 
 set(VERSION "${JEM_VERSION_MAJOR}.${JEM_VERSION_MINOR}")
@@ -51,28 +51,35 @@ set_target_properties(jem-cli PROPERTIES OUTPUT_NAME jem)
 target_link_libraries(jem-cli jem)
 target_link_libraries(jem-test jem)
 install(TARGETS jem jem-cli
-	RUNTIME DESTINATION sbin
+	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib)
-
-# add a target to generate API documentation with Doxygen
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-#    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM)
-endif()
 
 # add a target to generate man page documentation with help2man
 find_program(HELP2MAN "help2man")
 if(HELP2MAN)
-    add_custom_target(man 
-                        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1
-                        COMMAND ${HELP2MAN} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/jem -o 
-                            ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1
-                        DEPENDS jem-cli)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1 
-                DESTINATION share/man/man1)
+	add_custom_target(man ALL
+			COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1
+			COMMAND ${HELP2MAN} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/jem -o
+				${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1
+			DEPENDS jem-cli)
+	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1
+		DESTINATION share/man/man1)
+endif()
+
+# add a target to generate API documentation with Doxygen
+if(BUILD_DOC)
+	find_package(Doxygen)
+	if(DOXYGEN_FOUND)
+#		configure_file(${PROJECT_SOURCE_DIR}/Doxyfile.in ${PROJECT_SOURCE_DIR}/Doxyfile @ONLY)
+		add_custom_target(doc ALL
+			${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/Doxyfile
+			WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+			DEPENDS man)
+		install(FILES ${PROJECT_SOURCE_DIR}/docs/man/man3/
+			DESTINATION share/man/man3)
+		install(DIRECTORY ${PROJECT_SOURCE_DIR}/docs/html
+			DESTINATION share/doc/jem-${VERSION}/)
+	endif()
 endif()
 
 # Tests
@@ -96,6 +103,7 @@ set(CPACK_SOURCE_IGNORE_FILES
 "${PROJECT_SOURCE_DIR}/cmake_install.cmake"
 "${PROJECT_SOURCE_DIR}/nbproject/"
 "${PROJECT_SOURCE_DIR}/dist/"
+"${PROJECT_SOURCE_DIR}/docs/"
 "${PROJECT_SOURCE_DIR}/install_manifest.txt"
 )
 
