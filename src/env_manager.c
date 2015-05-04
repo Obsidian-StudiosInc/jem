@@ -108,7 +108,6 @@ void initEnv(struct env *env) {
  */
 struct vm *loadActiveVM(struct env *env) {
     struct vm *vm = NULL;
-    char *vm_name = NULL;
     int i;
     char **vm_links = getVMLinks();
     for(i=0;vm_links[i];i++) {
