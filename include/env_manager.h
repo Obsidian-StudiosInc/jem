@@ -54,12 +54,29 @@ void freeEnv(struct env *env);
 void exeJavaBin(char *exe_name);
 
 /**
+ * Get active package for virtual
+ *
+ * @param name string containing the name of the virtual
+ * @return a string containing the value. The string must be freed!
+ */
+char *gjpGetActiveVirtualProvider(const char *virtual);
+
+/**
  * Get the active VM
  *
  * @param env pointer to an env struct
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
 struct vm *getActiveVM(struct env *env);
+
+/**
+ * Get providers/packages for one or more virtual package(s)
+ *
+ * @param name string containing the name(s) of the virtual package(s), 
+ *        multiple comma separated virtual package names can be specified
+ * @return a string containing the value. The string must be freed!
+ */
+char *gjpGetVirtualProviders(const char *virtual);
 
 /**
  * Initialize env struct
@@ -86,6 +103,30 @@ void listAvailableVMs();
  * Print a list of installed Packages
  */
 void listPackages();
+
+/**
+ * Loads a installed Package env file. Storing them in an dynamically allocated
+ * pkg struct array.
+ *
+ * @return a pkg struct. Which must be freed, including struct members!
+ */
+struct pkg *loadPackage(char *name);
+
+/**
+ * Loads all installed Package env files. Storing them in an dynamically allocated
+ * pkg struct array.
+ *
+ * @return an array of pkg structs. Which must be freed, including struct members!
+ */
+struct pkg *loadPackages();
+
+/**
+ * Compares the names of two packages, used soley by qsort in loadPackages()
+ *
+ * @return an integer -1, 0, or 1.
+ */
+
+int loadPackagesCompare(const struct pkg *p1, const struct pkg *p2);
 
 /**
  * Print the active VM

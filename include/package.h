@@ -70,14 +70,6 @@ void freePkg(struct pkg *pkg);
 void freePkgs(struct pkg *pkgs);
 
 /**
- * Get active package for virtual
- *
- * @param name string containing the name of the virtual
- * @return a string containing the value. The string must be freed!
- */
-const char *gjpGetActiveVirtualProvider(const char *virtual);
-
-/**
  * Get a package's classpath
  *
  * @param params an array of param structs
@@ -144,36 +136,3 @@ struct dep *gjpGetOptDeps(struct param *params);
  * @return a string containing the value. The string must be freed!
  */
 char *gjpGetTarget(struct param *params);
-
-/**
- * Get providers/packages for one or more virtual package(s)
- *
- * @param name string containing the name(s) of the virtual package(s), 
- *        multiple comma separated virtual package names can be specified
- * @return a string containing the value. The string must be freed!
- */
-const char *gjpGetVirtualProviders(const char *virtual);
-
-/**
- * Loads a installed Package env file. Storing them in an dynamically allocated
- * pkg struct array.
- *
- * @return a pkg struct. Which must be freed, including struct members!
- */
-struct pkg *loadPackage(char *name);
-
-/**
- * Loads all installed Package env files. Storing them in an dynamically allocated
- * pkg struct array.
- *
- * @return an array of pkg structs. Which must be freed, including struct members!
- */
-struct pkg *loadPackages();
-
-/**
- * Compares the names of two packages, used soley by qsort in loadPackages()
- *
- * @return an integer -1, 0, or 1.
- */
-
-int packageCompare(const struct pkg *p1, const struct pkg *p2);
