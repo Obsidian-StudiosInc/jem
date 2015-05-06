@@ -113,6 +113,8 @@ char *gjpGetActiveVirtualProvider(const char *virtual) {
         providers = gjpGetVirtualProviders(virtual);
     if(!providers)
         return(package);
+    else if(strcmp(providers,"")==0)
+        return(providers);
     char *provider = NULL;
     char *provider_str = calloc(strlen(providers)+1,sizeof(char));
     char *p_cursor = provider_str;
@@ -166,6 +168,16 @@ char *gjpGetVirtualProviders(const char *virtual) {
                     params = parseFile(virtual_file);
                 if(params) {
                     char *providers = getValue(params,"PROVIDERS");
+                    char *vvm_version = getValue(params,"VM");
+                    if(vvm_version) {
+                        while (*vvm_version && !isdigit(*vvm_version)) // skip through non-digit/alpha characters
+                            vvm_version++;
+                        initEnvVMs();
+                        struct vm *vm = getActiveVM(&jem_env);
+                        float vm_version = atof(gjvmGetProvidesVersion(vm->params));
+                        if(atof(vvm_version)<=vm_version)
+                            providers = "";
+                    }
                     if(providers) {
                         char *provide = NULL;
                         char *pkgs_str = calloc(strlen(providers)+1,sizeof(char));
@@ -309,7 +321,10 @@ struct pkg *loadPackage(char *name) {
     char *package_env = NULL;
     char *virt_pkg = gjpGetActiveVirtualProvider(name);
     if(virt_pkg) {
-        asprintf(&package_env,"%s%s%s",PKG_PATH,virt_pkg,PKG_ENV);
+        if(strcmp(virt_pkg,"")==0)
+            asprintf(&package_env,"%s%s",PKG_VIRTUAL_PATH,name);
+        else
+            asprintf(&package_env,"%s%s%s",PKG_PATH,virt_pkg,PKG_ENV);
         free(virt_pkg);
     } else
         asprintf(&package_env,"%s%s%s",PKG_PATH,name,PKG_ENV);
@@ -507,8 +522,14 @@ void printPackageClasspath(const char *name) {
                 char *old_cp = classpath;
                 asprintf(&classpath,"%s:%s",classpath,cp);
                 free(old_cp);
+            } else if(!cp && classpath) {
+                char *old_cp = classpath;
+                asprintf(&classpath,"%s",classpath);
+                free(old_cp);
             } else if(cp)
                 asprintf(&classpath,"%s",cp);
+            else 
+                asprintf(&classpath,"");
             freePkg(pkg);
             free(pkg);
         } else {
