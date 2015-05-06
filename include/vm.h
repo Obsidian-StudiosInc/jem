@@ -186,4 +186,4 @@ struct vm *loadVMs();
  * @param target a string representing the vm symlink target
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-bool setVM(struct vm *vm,const char *target);
+bool setVM(struct vm *vm,char *target);

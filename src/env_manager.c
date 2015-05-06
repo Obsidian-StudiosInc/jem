@@ -23,6 +23,7 @@
 
 #include <errno.h>
 #include <error.h>
+#include <libgen.h>
 #include <stdio.h>
 #include <sys/dir.h>
 #include <sys/stat.h>

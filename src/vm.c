@@ -22,9 +22,11 @@
  */
 
 #include <errno.h>
+#include <libgen.h>
 #include <sys/dir.h>
 #include <sys/stat.h>
 
+#include "../include/package.h"
 #include "../include/vm.h"
 
 /**
@@ -263,7 +265,7 @@ struct vm *getVM(struct vm *vms,const char *vm_name) {
     if(strlen(vm_name)>=2) {
         unsigned int b = vm_name[1];
         if(isdigit(b)) {
-            char *end_ptr;
+            char **end_ptr;
             unsigned long l = strtol(vm_name,end_ptr,10) - 1;
             if(i<=vms_len)
                 return(&vms[l]);
@@ -363,7 +365,7 @@ struct vm *loadVMs() {
  * @param target a string representing the vm symlink target
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-bool setVM(struct vm *vm,const char *target) {
+bool setVM(struct vm *vm,char *target) {
     int basename_len = strlen(basename(target));
     int target_len = strlen(target);
     char *buffer = calloc(target_len+1,sizeof(char));

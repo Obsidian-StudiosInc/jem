@@ -22,6 +22,7 @@
  */
 
 #include <errno.h>
+#include <libgen.h>
 #include "../include/package.h"
 
 bool with_dependencies = false;

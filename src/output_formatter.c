@@ -21,6 +21,7 @@
  *  along with jem.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libintl.h>
 #include <stdio.h>
 #include "../include/output_formatter.h"
 
