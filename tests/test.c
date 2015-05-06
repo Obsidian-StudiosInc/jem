@@ -25,7 +25,7 @@
 
 #include "../include/env_manager.h"
 
-#define VM_CONF_FILE "/usr/share/jem-2/vm/icedtea-bin-7"
+#define VM_CONF_FILE "/usr/share/java-config-2/vm/icedtea-bin-7"
 
 testOutputFormatter() {
     int i;
@@ -121,8 +121,8 @@ testPackage() {
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/idontexist/package.env\");\n");
     params = parseFile("/usr/share/idontexist/package.env");
 
-    fprintf(stdout,"\nparams = parseFile(\"/usr/share/cglib-2.1/package.env\");\n");
-    params = parseFile("/usr/share/cglib-2.1/package.env");
+    fprintf(stdout,"\nparams = parseFile(\"/usr/share/cglib-2.2/package.env\");\n");
+    params = parseFile("/usr/share/cglib-2.2/package.env");
 
     fprintf(stdout,"\nchar *gjpGetDescription(struct params *params) ->\n%s\n",gjpGetDescription(params));
     fprintf(stdout,"\nchar *gjpGetClasspath(struct params *params) ->\n%s\n",gjpGetClasspath(params));
