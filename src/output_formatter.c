@@ -106,7 +106,9 @@ char *addColor(char *msg) {
         char *c;
         if(color_output &&
            msg[i]=='%' &&
-           (c = getCode(msg[i+1]))!=msg[i+1]) {
+           (c = getCode(msg[i+1])) &&
+           c &&
+           c[0]!=msg[i+1]) {
             i++;
             memcpy(nmsg+nlen,c,strlen(c));
             nlen += strlen(c);

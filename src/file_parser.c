@@ -22,6 +22,7 @@
  */
 
 #include <errno.h>
+#include <stdio.h>
 #include <sys/dir.h>
 #include <sys/stat.h>
 #include "../include/file_parser.h"
@@ -75,7 +76,7 @@ struct param *parseFile(const char *file) {
             printError("Invalid file, does not exist"); // needs to be changed to throw an exception
         return(params);
     }
-    struct FILE *fp = fopen(file,"r");
+    FILE *fp = fopen(file,"r");
     if(!fp)
         return(params);
     short bytes_read = 0;

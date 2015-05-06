@@ -191,7 +191,7 @@ testPackage() {
     freeParams(params);
 
     fprintf(stdout,"\nconst char *gjpGetVirtualProviders(\"javamail\")->\n");
-    const char *virtual = gjpGetVirtualProviders("javamail");
+    char *virtual = gjpGetVirtualProviders("javamail");
     fprintf(stdout,"%s\n",virtual);
     free(virtual);
 

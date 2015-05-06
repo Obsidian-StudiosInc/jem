@@ -44,7 +44,7 @@ static struct argp_option options[] = {
     {"nocolor", 'n', 0, 0, "Disable color output"},
     {0,0,0,0,"VM Options:", 2},
     {"active-vm", 'a', "VM",  0, "Use this vm instead of the active vm when returning information", 2},
-    {"select-vm", 'a', 0,  OPTION_ALIAS, 2},
+    {"select-vm", 'a', 0,  OPTION_ALIAS},
     {"java", 'J', 0, 0, "Print the location of the java executable", 2},
     {"javac", 'c', 0, 0, "Print the location of the javac executable", 2},
     {"jar", 'j', 0, 0, "Print the location of the jar executable", 2},
