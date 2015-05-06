@@ -25,6 +25,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 extern bool color_output;
 extern bool console_title;
@@ -39,8 +40,8 @@ extern int codes_count;
  * terminal codes
  */
 struct code {
-    const int *key;     /** code key */
-    const char *value;  /** code value */
+    char key;     /** code key */
+    char *value;  /** code value */
 };
 
 /**
@@ -54,7 +55,7 @@ extern struct code codes[];
  * @param key the terminal code key
  * @return a pointer to a string containing the value. The string must NOT be freed!
  */
-char *getCode(const int *key);
+char *getCode(char key);
 
 /**
  * Checks to see if the present terminal supports colors/codes
@@ -85,7 +86,7 @@ char *indent(const char *preffix,const char *msg);
  *
  * @param msg the message
  */
-void print(const char *msg);
+void print(char *msg);
 
 /**
  * Print a message with colors and formatting
@@ -97,7 +98,7 @@ void print(const char *msg);
  */
 void printMsg(const char *preffix,
               const char *title,
-              const char *msg,
+              char *msg,
               const char *suffix);
 
 /**
@@ -105,21 +106,21 @@ void printMsg(const char *preffix,
  *
  * @param msg the error/message
  */
-void printError(const char *msg);
+void printError(char *msg);
 
 /**
  * Print a warning
  *
  * @param msg the warning/message
  */
-void printWarning(const char *msg);
+void printWarning(char *msg);
 
 /**
  * Print an alert
  *
  * @param msg the alert/message
  */
-void printAlert(const char *msg);
+void printAlert(char *msg);
 
 /**
  * Set the terminal title
@@ -128,4 +129,4 @@ void printAlert(const char *msg);
  */
 void setTermTitle(const char *title);
 
-void write(const char *msg);
+void write(char *msg);

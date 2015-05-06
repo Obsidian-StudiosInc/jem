@@ -21,9 +21,7 @@
  *  along with jem.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include "../include/output_formatter.h"
 
 bool color_output = true;
@@ -57,6 +55,7 @@ struct code codes[] = {
 };
 
 int codes_count = sizeof(codes) / sizeof(struct code);
+int terms_count = sizeof(terms) / sizeof(terms[0]);
 
 /**
  * Returns the value of a code from a static array of code structs
@@ -64,7 +63,7 @@ int codes_count = sizeof(codes) / sizeof(struct code);
  * @param key the terminal code key
  * @return a pointer to a string containing the value. The string must NOT be freed!
  */
-char *getCode(const int *key) {
+char *getCode(char key) {
     int i;
     for(i=0;i<codes_count;i++)
         if(codes[i].key==key)
@@ -81,7 +80,7 @@ bool isValidTerm() {
     char *term = getenv("TERM");
     if(term) {
         int i;
-        for(i=0;i<strlen(terms);i++)
+        for(i=0;i<terms_count;i++)
             if(strcasecmp(term,terms[i])==0)
                 return(true);
     }
@@ -170,7 +169,7 @@ char *indent(const char *preffix,const char *msg) {
  *
  * @param msg the message
  */
-void print(const char *msg) {
+void print(char *msg) {
     char *cmsg = addColor(msg);
     fprintf(stdout,gettext("%s\n"),cmsg);
     free(cmsg);
@@ -186,7 +185,7 @@ void print(const char *msg) {
  */
 void printMsg(const char *preffix,
               const char *title,
-              const char *msg,
+              char *msg,
               const char *suffix) {
     if(title)
         msg = indent(title,msg);
@@ -214,7 +213,7 @@ void printMsg(const char *preffix,
  *
  * @param msg the error/message
  */
-void printError(const char *msg) {
+void printError(char *msg) {
     printMsg("%H%R","!!! ERROR: ",msg,"%$\n");
     my_exit_status = EXIT_FAILURE;
 }
@@ -224,7 +223,7 @@ void printError(const char *msg) {
  *
  * @param msg the warning/message
  */
-void printWarning(const char *msg) {
+void printWarning(char *msg) {
     printMsg("%H%Y","!!! WARNING: ",msg,"%$\n");
 }
 
@@ -233,7 +232,7 @@ void printWarning(const char *msg) {
  *
  * @param msg the alert/message
  */
-void printAlert(const char *msg) {
+void printAlert(char *msg) {
     printMsg("%H%C","!!! ALERT: ",msg,"%$\n");
 }
 
@@ -248,6 +247,6 @@ void setTermTitle(const char *title) {
         fprintf(stdout,gettext("\x1b]1;\x07\x1b]2;%s\x07"),title); // Presently not working no effect :(
 }
 
-void write(const char *msg) {
+void write(char *msg) {
     print(msg); // Need to add strip() functionality
 }

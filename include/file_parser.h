@@ -29,8 +29,8 @@
  * config/package.env file parameter
  */
 struct param {
-    const char *name;   /** param name */
-    const char *value;  /** param value */
+    char *name;   /** param name */
+    char *value;  /** param value */
 };
 
 /**
