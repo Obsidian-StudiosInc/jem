@@ -308,7 +308,9 @@ char **getVMLinks() {
  * @return an integer -1, 0, or 1.
  */
 
-int compareVMs(const struct vm *vm1, const struct vm *vm2) {
+int compareVMs(const void *v1, const void *v2) {
+    const struct vm *vm1 = v1;
+    const struct vm *vm2 = v2;
     if(vm1->filename && vm2->filename)
         return strcmp (basename(vm1->filename), basename(vm2->filename));
     return(-1);

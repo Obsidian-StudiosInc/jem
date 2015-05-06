@@ -126,7 +126,7 @@ struct pkg *loadPackages();
  * @return an integer -1, 0, or 1.
  */
 
-int loadPackagesCompare(const struct pkg *p1, const struct pkg *p2);
+int loadPackagesCompare(const void *v1, const void *v2);
 
 /**
  * Print the active VM

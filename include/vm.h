@@ -169,7 +169,7 @@ char **getVMLinks();
  * @return an integer -1, 0, or 1.
  */
 
-int compareVMs(const struct vm *vm1, const struct vm *vm2);
+int compareVMs(const void *v1, const void *v2);
 
 /**
  * Loads all installed VMs config files. Storing them in an dynamically allocated

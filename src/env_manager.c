@@ -258,7 +258,7 @@ void listAvailableVMs() {
     print("%HThe following VMs are available:%$");
     int i;
     for(i=0;jem_env.vms[i].filename;i++) {
-        char **msg;
+        char *msg;
         if(avm && strcmp(avm->filename,jem_env.vms[i].filename)==0) {
             if(gjvmIsBuildOnly(jem_env.vms[i].params)) {
                 asprintf(&msg,
@@ -396,7 +396,9 @@ struct pkg *loadPackages() {
  * @return an integer -1, 0, or 1.
  */
 
-int loadPackagesCompare(const struct pkg *p1, const struct pkg *p2) {
+int loadPackagesCompare(const void *v1, const void *v2) {
+    const struct pkg *p1 = v1;
+    const struct pkg *p2 = v2;
     if(p1->name && p2->name)
         return strcmp (p1->name, p2->name);
     return(-1);
