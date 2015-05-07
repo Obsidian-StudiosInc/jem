@@ -257,7 +257,7 @@ char *gjpGetTarget(struct param *params) {
 /**
  * Get active package for virtual
  *
- * @param name string containing the name of the virtual
+ * @param virtual string containing the name of the virtual
  * @return a string containing the value. The string must be freed!
  */
 char *gjpGetActiveVirtualProvider(const char *virtual) {
@@ -275,7 +275,7 @@ char *gjpGetActiveVirtualProvider(const char *virtual) {
         freeParams(conf);
     }
     if(!providers)
-        providers = gjpGetVirtualProviders(virtual);
+        providers = gjpGetVirtualProviders(virtual,false);
     if(!providers)
         return(package);
     else if(strcmp(providers,"")==0)
@@ -312,11 +312,12 @@ char *gjpGetActiveVirtualProvider(const char *virtual) {
 /**
  * Get providers/packages for one or more virtual package(s)
  *
- * @param name string containing the name(s) of the virtual package(s), 
+ * @param virtual string containing the name(s) of the virtual package(s), 
  *        multiple comma separated virtual package names can be specified
+ * @param ignore_vm boolean get providers regardless if vm is a provider
  * @return a string containing the value. The string must be freed!
  */
-char *gjpGetVirtualProviders(const char *virtual) {
+char *gjpGetVirtualProviders(const char *virtual,bool ignore_vm) {
     char *packages = NULL;
     char *virtual_name = NULL;
     char *virtual_str = calloc(strlen(virtual)+1,sizeof(char));
@@ -334,7 +335,7 @@ char *gjpGetVirtualProviders(const char *virtual) {
                 if(params) {
                     char *providers = getValue(params,"PROVIDERS");
                     char *vvm_version = getValue(params,"VM");
-                    if(vvm_version) {
+                    if(vvm_version && !ignore_vm) {
                         while (*vvm_version && !isdigit(*vvm_version)) // skip through non-digit/alpha characters
                             vvm_version++;
                         initEnvVMs();
@@ -369,8 +370,31 @@ char *gjpGetVirtualProviders(const char *virtual) {
 }
 
 /**
- * Loads a installed Package env file. Storing them in an dynamically allocated
- * pkg struct array.
+ * Loads a installed env file into a dynamically allocated pkg struct
+ *
+ * @return a pkg struct. Which must be freed, including struct members!
+ */
+struct pkg *loadFile(char *filename, char *name) {
+    struct pkg *pkg = NULL;
+    struct stat st;
+    if(stat(filename,&st)==0) {
+        struct pkg *npkg = calloc(1,sizeof(struct pkg));
+        if(!npkg)
+            printError("Unable to allocate memory to hold package");
+        pkg = npkg;
+        asprintf(&(pkg->filename),"%s",filename);
+        if(!pkg->filename)
+            printError("Unable to allocate memory to hold package file name");
+        asprintf(&(pkg->name),"%s",name);
+        if(!pkg->name)
+            printError("Unable to allocate memory to hold package name");
+        pkg->params = parseFile(pkg->filename);
+    }
+    return(pkg);
+}
+
+/**
+ * Loads a installed package env into a dynamically allocated pkg struct
  *
  * @return a pkg struct. Which must be freed, including struct members!
  */
@@ -387,42 +411,36 @@ struct pkg *loadPackage(char *name) {
     } else
         asprintf(&package_env,"%s%s%s",PKG_PATH,name,PKG_ENV);
     if(package_env) {
-        struct stat st;
-        if(stat(package_env,&st)==0) {
-            struct pkg *npkg = calloc(1,sizeof(struct pkg));
-            if(!npkg)
-                printError("Unable to allocate memory to hold package.env file"); // needs to clean up and exit under error, not just print a message
-            pkg = npkg;
-            asprintf(&(pkg->filename),"%s",package_env);
-            if(!pkg->filename)
-                printError("Unable to allocate memory to hold package.env file name"); // needs to clean up and exit under error, not just print a message
-            asprintf(&(pkg->name),"%s",name);
-            if(!pkg->name)
-                printError("Unable to allocate memory to hold package name"); // needs to clean up and exit under error, not just print a message
-            pkg->params = parseFile(pkg->filename);
-        }
+        pkg = loadFile(package_env,name);
         free(package_env);
     }
     return(pkg);
 }
 
 /**
- * Loads all installed Package env files. Storing them in an dynamically allocated
- * pkg struct array.
+ * Loads all installed package env into a dynamically allocated pkg struct array
  *
+ * @param virtual boolean to control loading of virtual or package.env file
  * @return an array of pkg structs. Which must be freed, including struct members!
  */
-struct pkg *loadPackages() {
+struct pkg *loadPackages(bool virtual) {
     DIR *dp;
     struct pkg *pkgs = NULL;
     int i = 0;
-    if((dp = opendir(PKG_PATH))) {
+    char *path = PKG_PATH;
+    if(virtual)
+        path = PKG_VIRTUAL_PATH;
+    if((dp = opendir(path))) {
         struct dirent *file;
         while((file = readdir(dp))) {
             if(!strcmp(file->d_name,".") ||
                !strcmp(file->d_name,".."))
                 continue;
-            struct pkg *pkg = loadPackage(file->d_name);
+            struct pkg *pkg;
+            if(virtual)
+                pkg = loadVirtual(file->d_name);
+            else
+                pkg = loadPackage(file->d_name);
             if(pkg) {
                 struct pkg *npkgs = realloc(pkgs,sizeof(struct pkg)*(i+2));
                 if(!npkgs)
@@ -460,4 +478,20 @@ int loadPackagesCompare(const void *v1, const void *v2) {
     if(p1->name && p2->name)
         return strcmp (p1->name, p2->name);
     return(-1);
+}
+
+/**
+ * Loads a installed virtual into a dynamically allocated pkg struct
+ *
+ * @return a pkg struct. Which must be freed, including struct members!
+ */
+struct pkg *loadVirtual(char *name) {
+    struct pkg *pkg = NULL;
+    char *virtual = NULL;
+    asprintf(&virtual,"%s%s",PKG_VIRTUAL_PATH,name);
+    if(virtual) {
+        pkg = loadFile(virtual,name);
+        free(virtual);
+    }
+    return(pkg);
 }

@@ -184,7 +184,7 @@ void listAvailableVMs() {
  * Print a list of installed Packages
  */
 void listPackages() {
-    jem_env.pkgs = loadPackages();
+    jem_env.pkgs = loadPackages(false);
     if(jem_env.pkgs) {
         int i;
         for(i=0;jem_env.pkgs[i].filename;i++) {
@@ -194,6 +194,34 @@ void listPackages() {
                     gjpGetDescription(jem_env.pkgs[i].params),
                     jem_env.pkgs[i].filename);
         }
+        fprintf(stdout,"%d Java packages\n\n",i);
+        cleanup();
+    }
+    jem_env.pkgs = loadPackages(true);
+    if(jem_env.pkgs) {
+        int i;
+        for(i=0;jem_env.pkgs[i].filename;i++) {
+            char *active = gjpGetActiveVirtualProvider(jem_env.pkgs[i].name);
+            bool free_active = true;
+            char *providers = gjpGetVirtualProviders(jem_env.pkgs[i].name,true);
+            if(strcmp(active,"")==0) {
+                free_active = false;
+                free(active);
+                struct vm *vm = getActiveVM(&jem_env);
+                active = gjvmGetName(vm);
+            }
+            fprintf(stdout,
+                    "[%s] Using: %s; Providers: %s (%s)\n",
+                    jem_env.pkgs[i].name,
+                    active,
+                    providers,
+                    jem_env.pkgs[i].filename);
+            if(active && free_active)
+                free(active);
+            if(providers)
+                free(providers);
+        }
+        fprintf(stdout,"%d Java virtual packages\n",i);
     }
 }
 
@@ -427,7 +455,7 @@ void printValueFromPackage(const char *name,const char *param) {
  *        multiple comma separated virtual package names can be specified
  */
 void printVirtualProviders(const char *virtual) {
-    char *providers = gjpGetVirtualProviders(virtual);
+    char *providers = gjpGetVirtualProviders(virtual,true);
     if(providers) {
         print(providers);
         free(providers);

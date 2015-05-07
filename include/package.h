@@ -72,7 +72,7 @@ void freePkgs(struct pkg *pkgs);
 /**
  * Get active package for virtual
  *
- * @param name string containing the name of the virtual
+ * @param virtual string containing the name of the virtual
  * @return a string containing the value. The string must be freed!
  */
 char *gjpGetActiveVirtualProvider(const char *virtual);
@@ -148,27 +148,34 @@ char *gjpGetTarget(struct param *params);
 /**
  * Get providers/packages for one or more virtual package(s)
  *
- * @param name string containing the name(s) of the virtual package(s), 
+ * @param virtual string containing the name(s) of the virtual package(s), 
  *        multiple comma separated virtual package names can be specified
+ * @param ignore_vm boolean get providers regardless if vm is a provider
  * @return a string containing the value. The string must be freed!
  */
-char *gjpGetVirtualProviders(const char *virtual);
+char *gjpGetVirtualProviders(const char *virtual,bool ignore_vm);
 
 /**
- * Loads a installed Package env file. Storing them in an dynamically allocated
- * pkg struct array.
+ * Loads a installed env file into a dynamically allocated pkg struct
+ *
+ * @return a pkg struct. Which must be freed, including struct members!
+ */
+struct pkg *loadFile(char *filename, char *name);
+
+/**
+ * Loads a installed package env into a dynamically allocated pkg struct
  *
  * @return a pkg struct. Which must be freed, including struct members!
  */
 struct pkg *loadPackage(char *name);
 
 /**
- * Loads all installed Package env files. Storing them in an dynamically allocated
- * pkg struct array.
+ * Loads all installed package env into a dynamically allocated pkg struct array
  *
+ * @param virtual boolean to control loading of virtual or package.env file
  * @return an array of pkg structs. Which must be freed, including struct members!
  */
-struct pkg *loadPackages();
+struct pkg *loadPackages(bool virtual);
 
 /**
  * Compares the names of two packages, used soley by qsort in loadPackages()
@@ -177,3 +184,11 @@ struct pkg *loadPackages();
  */
 
 int loadPackagesCompare(const void *v1, const void *v2);
+
+/**
+ * Loads a installed virtual into a dynamically allocated pkg struct
+ *
+ * @return a pkg struct. Which must be freed, including struct members!
+ */
+struct pkg *loadVirtual(char *name);
+
