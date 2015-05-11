@@ -310,10 +310,10 @@ void printPackageClasspath(const char *name) {
                             for(j=0;deps[i].jars[j];j++) {
                                 if(classpath) {
                                     char *old_cp = classpath;
-                                    asprintf(&classpath,"%s:/usr/share/%s/include/%s",classpath,deps[i].name,deps[i].jars[j]);
+                                    asprintf(&classpath,"%s:/usr/share/%s/lib/%s",classpath,deps[i].name,deps[i].jars[j]);
                                     free(old_cp);
                                 } else
-                                    asprintf(&classpath,"/usr/share/%s/include/%s",deps[i].name,deps[i].jars[j]);
+                                    asprintf(&classpath,"/usr/share/%s/lib/%s",deps[i].name,deps[i].jars[j]);
                             }
                         } else {
                             struct pkg *dep_pkg = loadPackage(deps[i].name);
@@ -380,7 +380,7 @@ void printToolsJar() {
     if(avm &&
        !gjvmIsBuildOnly(avm->params)) {
         char *path;
-        asprintf(&path,"%s/include/tools.jar",getValue(avm->params,"JAVA_HOME"));
+        asprintf(&path,"%s/lib/tools.jar",getValue(avm->params,"JAVA_HOME"));
         if(path) {
             struct stat st;
             if(stat(path,&st)==0)
