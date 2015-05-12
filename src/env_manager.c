@@ -318,13 +318,7 @@ void printPackageClasspath(const char *name) {
                         } else {
                             struct pkg *dep_pkg = loadPackage(deps[i].name);
                             if(dep_pkg) {
-                                char *dep_cp = getValue(dep_pkg->params,"CLASSPATH");
-                                if(dep_cp && classpath) {
-                                    char *old_cp = classpath;
-                                    asprintf(&classpath,"%s:%s",classpath,dep_cp);
-                                    free(old_cp);
-                                } else if(dep_cp)
-                                    asprintf(&classpath,"%s",dep_cp);
+                                classpath = appendStrs(classpath,":",getValue(dep_pkg->params,"CLASSPATH"));
                                 freePkg(dep_pkg);
                                 free(dep_pkg);
                             } else {
@@ -340,19 +334,7 @@ void printPackageClasspath(const char *name) {
                     free(deps);
                 }
             }
-            char *cp = getValue(pkg->params,"CLASSPATH");
-            if(cp && classpath) {
-                char *old_cp = classpath;
-                asprintf(&classpath,"%s:%s",classpath,cp);
-                free(old_cp);
-            } else if(!cp && classpath) {
-                char *old_cp = classpath;
-                asprintf(&classpath,"%s",classpath);
-                free(old_cp);
-            } else if(cp)
-                asprintf(&classpath,"%s",cp);
-            else 
-                asprintf(&classpath,"");
+            classpath = appendStrs(classpath,":",getValue(pkg->params,"CLASSPATH"));
             freePkg(pkg);
             free(pkg);
         } else {
