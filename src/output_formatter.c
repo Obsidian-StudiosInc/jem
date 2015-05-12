@@ -121,6 +121,31 @@ char *addColor(char *msg) {
 }
 
 /**
+ * Appends two strings with a separator if specified
+ *
+ * @param cur_str a the current/original string the other should be added to
+ * @param sep_str a non-null string separator or "" for none.
+ * @param add_str a string to add
+ * @return a string containing the two strings with separator. The string must be freed!
+ */
+char *appendStrs(char* cur_str,char *sep_str,char *add_str) {
+    char *new_str = NULL;
+    if(add_str && cur_str) {
+        char *old_str = cur_str;
+        asprintf(&new_str,"%s%s%s",cur_str,sep_str,add_str);
+        free(old_str);
+    } else if(!add_str && cur_str) {
+        char *old_str = cur_str;
+        asprintf(&new_str,"%s",cur_str);
+        free(old_str);
+    } else if(add_str)
+        asprintf(&new_str,"%s",add_str);
+    else 
+        asprintf(&new_str,"");
+    return(new_str);
+}
+
+/**
  * Adds preffix to a message that is indented by the length of the preffix
  *
  * @param preffix the message preffix

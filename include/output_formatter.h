@@ -73,6 +73,16 @@ bool isValidTerm();
 char *addColor(char *msg);
 
 /**
+ * Appends two strings with a separator if specified
+ *
+ * @param cur_str a the current/original string the other should be added to
+ * @param sep_str a non-null string separator or "" for none.
+ * @param add_str a string to add
+ * @return a string containing the two strings with separator. The string must be freed!
+ */
+char *appendStrs(char* cur_str,char *sep_str,char *add_str);
+
+/**
  * Adds preffix to a message that is indented by the length of the preffix
  *
  * @param preffix the message preffix
