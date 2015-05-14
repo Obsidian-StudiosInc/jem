@@ -204,7 +204,7 @@ void listPackages() {
             char *active = gjpGetActiveVirtualProvider(jem_env.pkgs[i].name);
             bool free_active = true;
             char *providers = gjpGetVirtualProviders(jem_env.pkgs[i].name,true);
-            if(strcmp(active,"")==0) {
+            if(active && strcmp(active,"")==0) {
                 free_active = false;
                 free(active);
                 struct vm *vm = getActiveVM(&jem_env);
