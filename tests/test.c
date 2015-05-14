@@ -190,8 +190,8 @@ testPackage() {
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
     freeParams(params);
 
-    fprintf(stdout,"\nconst char *gjpGetVirtualProviders(\"javamail\")->\n");
-    char *virtual = gjpGetVirtualProviders("javamail");
+    fprintf(stdout,"\nconst char *gjpGetVirtualProviders(\"javamail\",true)->\n");
+    char *virtual = gjpGetVirtualProviders("javamail",true);
     fprintf(stdout,"%s\n",virtual);
     free(virtual);
 
@@ -271,8 +271,8 @@ testEnvManager() {
     fprintf(stdout,"\nstruct pkg *pkgs;\n");
     struct pkg *pkgs;
  
-    fprintf(stdout,"\npkgs = loadPackages();\n");
-    pkgs = loadPackages();
+    fprintf(stdout,"\npkgs = loadPackages(false);\n");
+    pkgs = loadPackages(false);
     
     for(i=0;pkgs[i].filename;i++) {
         fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
@@ -282,6 +282,17 @@ testEnvManager() {
     fprintf(stdout,"\nvoid freePkgs(struct pkg *pkgs)\n");
     freePkgs(pkgs);
 
+    fprintf(stdout,"\npkgs = loadPackages(true);\n");
+    pkgs = loadPackages(true);
+    
+    for(i=0;pkgs[i].filename;i++) {
+        fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
+        fprintf(stdout,"\tpkgs[%d]->name=%s\n",i,pkgs[i].name);
+    }
+
+    fprintf(stdout,"\nvoid freePkgs(struct pkg *pkgs)\n");
+    freePkgs(pkgs);
+    
     fprintf(stdout,"\nchar *getSystemVMLink() ->\n%s\n",getSystemVMLink());
 
     char *vm_name = getSystemVMName();
