@@ -23,12 +23,13 @@
 
 #include "file_parser.h"
 
-#define PKG_ENV "/package.env"
-#define PKG_PATH "/usr/share/"
-#define PKG_VIRTUAL_CONFIG "/etc/java-config-2/virtuals"
-#define PKG_VIRTUAL_PATH "/usr/share/java-config-2/virtuals/"
+#define JEM_PKG_ENV "/package.env"
+#define JEM_PKG_PATH JEM_USER_SHARE
+#define JEM_PKG_VIRTUALS "virtuals"
+#define JEM_PKG_VIRTUAL_CONFIG JEM_SYSTEM_CONFIG_PATH JEM_PKG_VIRTUALS
+#define JEM_PKG_VIRTUAL_PATH JEM_PKG_PATH JEM "/" JEM_PKG_VIRTUALS "/"
 
-extern bool with_dependencies;
+extern bool jem_with_dependencies;
 
 /**
  * java package

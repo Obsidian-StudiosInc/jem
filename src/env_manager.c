@@ -113,8 +113,8 @@ struct vm *loadActiveVM(struct env *env) {
     int i;
     char **vm_links = getVMLinks();
     for(i=0;vm_links[i];i++) {
-        char *abs_file = calloc(BASE_NAME_SIZE+1,sizeof(char));
-        if(readlink(vm_links[i],abs_file,BASE_NAME_SIZE)<0) {
+        char *abs_file = calloc(JEM_BASE_NAME_SIZE+1,sizeof(char));
+        if(readlink(vm_links[i],abs_file,JEM_BASE_NAME_SIZE)<0) {
             if(errno==EACCES)
                 printError("VM link not readable"); // might need to be changed to throw an exception
             else if(errno==EINVAL)
@@ -300,7 +300,7 @@ void printPackageClasspath(const char *name) {
         struct pkg *pkg = loadPackage(pkg_name);
         if(pkg) {
             package_found = true;
-            if(with_dependencies) {
+            if(jem_with_dependencies) {
                 struct dep *deps = gjpGetDeps(pkg->params);
                 if(deps) {
                     int i;

@@ -23,12 +23,14 @@
 
 #include "file_parser.h"
 
-#define BASE_NAME_SIZE 128
+#define JEM_BASE_NAME_SIZE 128
 
-#define SYSTEM_CONFIG_PATH "/etc/java-config-2/"
-#define SYSTEM_VM_LINK "/etc/java-config-2/current-system-vm"
-#define USER_VM_LINK_SUFFIX ".java/current-user-vm"
-#define VMS_PATH "/usr/share/java-config-2/vm"
+#define JEM "jem"
+#define JEM_SYSTEM_CONFIG_PATH "/etc/" JEM "/"
+#define JEM_SYSTEM_VM_LINK JEM_SYSTEM_CONFIG_PATH "current-system-vm"
+#define JEM_USER_SHARE "/usr/share/"
+#define JEM_USER_VM_LINK_SUFFIX ".java/current-user-vm"
+#define JEM_VMS_PATH JEM_USER_SHARE JEM "/vm"
 
 /**
  * java virtual machine

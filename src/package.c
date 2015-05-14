@@ -27,7 +27,7 @@
 #include <sys/stat.h>
 #include "../include/env_manager.h"
 
-bool with_dependencies = false;
+bool jem_with_dependencies = false;
 
 /**
  * Frees the allocated memory used by a dep struct
@@ -263,7 +263,7 @@ char *gjpGetTarget(struct param *params) {
 char *gjpGetActiveVirtualProvider(const char *virtual) {
     char *package = NULL;
     char *providers = NULL;
-    struct param *conf = parseFile(PKG_VIRTUAL_CONFIG);
+    struct param *conf = parseFile(JEM_PKG_VIRTUAL_CONFIG);
     if(conf) {
         int i;
         for(i=0;conf[i].name;i++) {
@@ -286,7 +286,7 @@ char *gjpGetActiveVirtualProvider(const char *virtual) {
     memcpy(p_cursor,providers,strlen(providers));
     while((provider = strsep(&p_cursor,","))) {
         char *package_env = NULL;
-        asprintf(&package_env,"%s%s%s",PKG_PATH,provider,PKG_ENV);
+        asprintf(&package_env,"%s%s%s",JEM_PKG_PATH,provider,JEM_PKG_ENV);
         if(!package_env)
             continue;
         struct stat st;
@@ -326,7 +326,7 @@ char *gjpGetVirtualProviders(const char *virtual,bool ignore_vm) {
     while((virtual_name = strsep(&v_cursor,","))) {
         if(virtual_name) {
             char *virtual_file = NULL;
-            asprintf(&virtual_file,"%s%s",PKG_VIRTUAL_PATH,virtual_name);
+            asprintf(&virtual_file,"%s%s",JEM_PKG_VIRTUAL_PATH,virtual_name);
             struct stat st;
             if(virtual_file) {
                 struct param *params = NULL;
@@ -404,12 +404,12 @@ struct pkg *loadPackage(char *name) {
     char *virt_pkg = gjpGetActiveVirtualProvider(name);
     if(virt_pkg) {
         if(strcmp(virt_pkg,"")==0)
-            asprintf(&package_env,"%s%s",PKG_VIRTUAL_PATH,name);
+            asprintf(&package_env,"%s%s",JEM_PKG_VIRTUAL_PATH,name);
         else
-            asprintf(&package_env,"%s%s%s",PKG_PATH,virt_pkg,PKG_ENV);
+            asprintf(&package_env,"%s%s%s",JEM_PKG_PATH,virt_pkg,JEM_PKG_ENV);
         free(virt_pkg);
     } else
-        asprintf(&package_env,"%s%s%s",PKG_PATH,name,PKG_ENV);
+        asprintf(&package_env,"%s%s%s",JEM_PKG_PATH,name,JEM_PKG_ENV);
     if(package_env) {
         pkg = loadFile(package_env,name);
         free(package_env);
@@ -427,9 +427,9 @@ struct pkg *loadPackages(bool virtual) {
     DIR *dp;
     struct pkg *pkgs = NULL;
     int i = 0;
-    char *path = PKG_PATH;
+    char *path = JEM_PKG_PATH;
     if(virtual)
-        path = PKG_VIRTUAL_PATH;
+        path = JEM_PKG_VIRTUAL_PATH;
     if((dp = opendir(path))) {
         struct dirent *file;
         while((file = readdir(dp))) {
@@ -488,7 +488,7 @@ int loadPackagesCompare(const void *v1, const void *v2) {
 struct pkg *loadVirtual(char *name) {
     struct pkg *pkg = NULL;
     char *virtual = NULL;
-    asprintf(&virtual,"%s%s",PKG_VIRTUAL_PATH,name);
+    asprintf(&virtual,"%s%s",JEM_PKG_VIRTUAL_PATH,name);
     if(virtual) {
         pkg = loadFile(virtual,name);
         free(virtual);

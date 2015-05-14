@@ -27,9 +27,9 @@
 
 #define ENCODING "UTF-8" // presently not used
 
-#define OPT_SELECT_VM -10
-#define OPT_PACKAGE -20
-#define OPT_VIRT_PROVIDERS -30
+#define JEM_OPT_SELECT_VM -10
+#define JEM_OPT_PACKAGE -20
+#define JEM_OPT_VIRT_PROVIDERS -30
 
 const char *argp_program_version = JEM_VERSION_STR;
 const char *argp_program_bug_address = JEM_CONTACT;
@@ -66,10 +66,10 @@ static struct argp_option options[] = {
     {"list-available-packages", 'l', 0, OPTION_ALIAS},
     {"with-dependencies", 'd', 0, 0, "Include package dependencies in --classpath and --library calls", 3},
     {"classpath", 'p', "PACKAGE(s)", 0, "Print entries in the environment classpath for these packages", 3},
-    {"package", OPT_PACKAGE, "PACKAGE(s)", 0, "Retrieve a value from a package(s) package.env file, value is specified by --query", 3},
+    {"package", JEM_OPT_PACKAGE, "PACKAGE(s)", 0, "Retrieve a value from a package(s) package.env file, value is specified by --query", 3},
     {"query", 'q', "PARAM(s)", 0, "Parameter(s) value(s) to retrieve from package(s) package.env file, specified by --package", 3},
     {"library", 'i', "LIRBARY(s)", 0, "Print java library paths for these packages", 3},
-    {"get-virtual-providers", OPT_VIRT_PROVIDERS, "PACKAGE(S)", 0, "Return a list of packages that provide a virtual", 3},
+    {"get-virtual-providers", JEM_OPT_VIRT_PROVIDERS, "PACKAGE(S)", 0, "Return a list of packages that provide a virtual", 3},
     {0,0,0,0,"GNU Options:", 4},
     {0}
 };
@@ -86,7 +86,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             jem_env.active_vm = getVM(jem_env.vms,arg);
             break;
         case 'd':
-            with_dependencies = true;
+            jem_with_dependencies = true;
             break;
         case 'n':
             color_output = false;
@@ -137,7 +137,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             if(state->argv[4])
                 printValueFromPackage(state->argv[4],arg);
             return(1);
-        case OPT_PACKAGE:
+        case JEM_OPT_PACKAGE:
             if(state->argv[4])
                 printValueFromPackage(arg,state->argv[4]);
             return(1);
@@ -153,7 +153,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         case 'o':
             printValueFromActiveVM("JAVA_HOME");
             return(1);
-        case OPT_VIRT_PROVIDERS:
+        case JEM_OPT_VIRT_PROVIDERS:
             printVirtualProviders(arg);
             return(1);
         case ARGP_KEY_NO_ARGS:

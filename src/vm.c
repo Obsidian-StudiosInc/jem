@@ -192,7 +192,7 @@ void freeVMLinks(char **vm_links) {
         return;
     int i;
     for(i=0;vm_links[i];i++)
-        if(strcmp(vm_links[i],SYSTEM_VM_LINK)!=0) // don't free static system vm link
+        if(strcmp(vm_links[i],JEM_SYSTEM_VM_LINK)!=0) // don't free static system vm link
             free(vm_links[i]);
     free(vm_links);
 }
@@ -203,7 +203,7 @@ void freeVMLinks(char **vm_links) {
  * @return a string containing the value. The string must NOT be freed!
  */
 char *getSystemVMLink() {
-    return(SYSTEM_VM_LINK); // might do some checking or change to calculated in future
+    return(JEM_SYSTEM_VM_LINK); // might do some checking or change to calculated in future
 }
 
 /**
@@ -212,8 +212,8 @@ char *getSystemVMLink() {
  * @return a string containing the value. The string must be freed!
  */
 char *getSystemVMName() {
-    char *abs_file = calloc(BASE_NAME_SIZE+1,sizeof(char));
-    if(readlink(getSystemVMLink(),abs_file,BASE_NAME_SIZE)<0) {
+    char *abs_file = calloc(JEM_BASE_NAME_SIZE+1,sizeof(char));
+    if(readlink(getSystemVMLink(),abs_file,JEM_BASE_NAME_SIZE)<0) {
         if(errno==EACCES)
             printError("System VM link not readable"); // might need to be changed to throw an exception
         else if(errno==EINVAL)
@@ -239,7 +239,7 @@ char *getUserVMLink() {
     char *home = NULL;
     char *user_vm = NULL;
     if((home = getenv("HOME"))) 
-        asprintf(&user_vm,"%s/%s",home,USER_VM_LINK_SUFFIX);
+        asprintf(&user_vm,"%s/%s",home,JEM_USER_VM_LINK_SUFFIX);
     return(user_vm);
 }
 
@@ -328,7 +328,7 @@ struct vm *loadVMs() {
     DIR *dp;
     struct vm *vms = NULL;
     int i = 0;
-    if((dp = opendir(VMS_PATH))) {
+    if((dp = opendir(JEM_VMS_PATH))) {
         struct dirent *file;
         while((file = readdir(dp))) {
             if(!strcmp(file->d_name,".") ||
@@ -340,7 +340,7 @@ struct vm *loadVMs() {
             vms = nvms;
             vms[i+1].filename = NULL;
             vms[i+1].params = NULL;
-            asprintf(&(vms[i].filename),"%s/%s",VMS_PATH,file->d_name);
+            asprintf(&(vms[i].filename),"%s/%s",JEM_VMS_PATH,file->d_name);
             if(!vms[i].filename)
                 printError("Unable to allocate memory to hold VM config file name"); // needs to clean up and exit under error, not just print a message
             vms[i].params = parseFile(vms[i].filename);
