@@ -123,7 +123,7 @@ testPackage() {
 
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/cglib-2.2/package.env\");\n");
     params = parseFile("/usr/share/cglib-2.2/package.env");
-
+    
     fprintf(stdout,"\nchar *gjpGetDescription(struct params *params) ->\n%s\n",gjpGetDescription(params));
     fprintf(stdout,"\nchar *gjpGetClasspath(struct params *params) ->\n%s\n",gjpGetClasspath(params));
 
@@ -141,6 +141,9 @@ testPackage() {
         }
         free(deps);
     }
+
+    fprintf(stdout,"\ncleanup()\n");
+    cleanup();
 
     fprintf(stdout,"\nchar **jemPkgGetJarNames(char *pkg_name) ->\n");
     char **jars = jemPkgGetJarNames("ant-core");
