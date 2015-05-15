@@ -142,6 +142,17 @@ testPackage() {
         free(deps);
     }
 
+    fprintf(stdout,"\nchar **jemPkgGetJarNames(char *pkg_name) ->\n");
+    char **jars = jemPkgGetJarNames("ant-core");
+    if(jars) {
+        int i;
+        for(i=0;jars[i];i++) {
+            fprintf(stdout,"\t%s\n",jars[i]);
+            free(jars[i]);
+        }
+        free(jars);
+    }
+    
     fprintf(stdout,"\nstruct dep *gjpGetBuildDeps(struct params *params) ->\n");
     struct dep *build_deps = gjpGetBuildDeps(params);
     if(build_deps) {

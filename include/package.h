@@ -95,6 +95,14 @@ char *gjpGetClasspath(struct param *params);
 char *gjpGetDescription(struct param *params);
 
 /**
+ * Get a packages jar names
+ *
+ * @param pkg_name string name of the package
+ * @return a string array containing the value. The string must be freed!
+ */
+char **jemPkgGetJarNames(char *pkg_name);
+
+/**
  * Get a package's dependencies, internal function called buy wrappers
  *
  * @param params an array of param structs

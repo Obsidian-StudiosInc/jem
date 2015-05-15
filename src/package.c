@@ -100,6 +100,43 @@ char *gjpGetClasspath(struct param *params) {
 }
 
 /**
+ * Get a packages jar names
+ *
+ * @param pkg_name string name of the package
+ * @return a string array containing the value. The string must be freed!
+ */
+char **jemPkgGetJarNames(char *pkg_name) {
+    DIR *dp;
+    char **jars = NULL;
+    int i = 0;
+    char *path = NULL;
+    asprintf(&path,"%s%s/lib",JEM_USER_SHARE,pkg_name);
+    if(path && (dp = opendir(path))) {
+        struct dirent *file;
+        while((file = readdir(dp))) {
+            if(!strcmp(file->d_name,".") ||
+               !strcmp(file->d_name,".."))
+                continue;
+            char **tmp = realloc(jars,sizeof(char *)*(i+2));
+            if(!tmp)
+                printError("Unable to allocate memory to hold package jar names");
+            jars = tmp;
+            jars[i+1] = NULL;
+            asprintf(&jars[i],"%s",file->d_name);
+            i++;
+        }
+    } else {
+        if(errno==EACCES)
+            printError("Package directory not readable");
+        else
+            printError("Invalid package directory");
+    }
+    free(path);
+    closedir(dp);
+    return(jars);
+}
+
+/**
  * Get a package's dependencies, internal function called buy wrappers
  *
  * @param params an array of param structs
@@ -236,9 +273,12 @@ char **gjpGetProvides(struct param *params) {
             printError("Unable to allocate memory to hold all provides"); // needs to clean up and exit under error, not just print a message
         provides = tmp;
         provides[i+1] = NULL;
+        asprintf(&provides[i],"%s",provide);
+/*
         int plen = strlen(provide);
         provides[i] = calloc(plen+1,sizeof(char));
         memcpy(provides[i],provide,plen);
+*/
     }
     free(provides_str);
     return(provides);
