@@ -308,11 +308,11 @@ void printPackageClasspath(const char *name) {
                         int j;
                         if(deps[i].jars) {
                             for(j=0;deps[i].jars[j];j++) {
-                                if(classpath) {
+                                if(classpath && !strstr(classpath,deps[i].jars[j])) {
                                     char *old_cp = classpath;
                                     asprintf(&classpath,"%s:/usr/share/%s/lib/%s",classpath,deps[i].name,deps[i].jars[j]);
                                     free(old_cp);
-                                } else
+                                } else if (!classpath)
                                     asprintf(&classpath,"/usr/share/%s/lib/%s",deps[i].name,deps[i].jars[j]);
                             }
                         } else {
