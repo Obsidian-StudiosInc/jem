@@ -159,6 +159,9 @@ struct dep *__gjpGetDeps(struct dep *deps,
         char *pkg_name = dep_name;
         if(pkg_name = strstr(pkg_name,"@")) {
             pkg_name++; // skip @
+            memset(dep_name+strlen(dep_name)-strlen(pkg_name)-1,'\0',1); // set dep_name to jar name
+            if(strstr(gjpGetClasspath(params),dep_name))
+                continue;            
             has_jar = true;
         } else 
             pkg_name = dep_name; // re-assign since null
@@ -183,7 +186,6 @@ struct dep *__gjpGetDeps(struct dep *deps,
         ADDJARS:
         if(!has_jar)
             continue;
-        memset(dep_name+strlen(dep_name)-strlen(pkg_name)-1,'\0',1);
         int j = 0;
         bool jar_added = false;
         if(deps[i].jars) {
