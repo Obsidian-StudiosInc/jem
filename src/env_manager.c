@@ -299,7 +299,7 @@ void printPackageClasspath(const char *name) {
         package_found = false;
         struct pkg *pkg = loadPackage(pkg_name);
         if(pkg) {
-            char *pkg_classpath = getValue(pkg->params,"CLASSPATH");
+            char *pkg_classpath = gjpGetClasspath(pkg->params);
             package_found = true;
             if(jem_with_dependencies) {
                 struct dep *deps = gjpGetDeps(pkg->params);
@@ -309,9 +309,7 @@ void printPackageClasspath(const char *name) {
                         int j;
                         if(deps[i].jars) {
                             for(j=0;deps[i].jars[j];j++) {
-                                if(classpath && 
-                                   !strstr(classpath,deps[i].jars[j]) &&
-                                   !strstr(pkg_classpath,deps[i].jars[j])) {
+                                if(classpath) {
                                     char *old_cp = classpath;
                                     asprintf(&classpath,"%s:/usr/share/%s/lib/%s",classpath,deps[i].name,deps[i].jars[j]);
                                     free(old_cp);
@@ -321,7 +319,7 @@ void printPackageClasspath(const char *name) {
                         } else {
                             struct pkg *dep_pkg = loadPackage(deps[i].name);
                             if(dep_pkg) {
-                                classpath = appendStrs(classpath,":",getValue(dep_pkg->params,"CLASSPATH"));
+                                classpath = appendStrs(classpath,":",gjpGetClasspath(dep_pkg->params));
                                 freePkg(dep_pkg);
                                 free(dep_pkg);
                             } else {
