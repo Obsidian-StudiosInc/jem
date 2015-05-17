@@ -95,6 +95,13 @@ char *gjpGetClasspath(struct param *params);
 char *gjpGetDescription(struct param *params);
 
 /**
+ * Compares the names of two jars, used soley by qsort in jemPkgGetJarNames()
+ *
+ * @return an integer -1, 0, or 1.
+ */
+int jemPkgCmpJarNames(const void *v1, const void *v2);
+
+/**
  * Get a packages jar names
  *
  * @param pkg_name string name of the package

@@ -23,6 +23,7 @@
 
 #include <errno.h>
 #include <libgen.h>
+#include <stdio.h>
 #include <sys/dir.h>
 #include <sys/stat.h>
 #include "../include/env_manager.h"
@@ -133,7 +134,20 @@ char **jemPkgGetJarNames(char *pkg_name) {
     }
     free(path);
     closedir(dp);
+    if(jars)
+        qsort(jars,i+1,sizeof(char *),jemPkgCmpJarNames);
     return(jars);
+}
+
+/**
+ * Compares the names of two jars, used soley by qsort in jemPkgGetJarNames()
+ *
+ * @return an integer -1, 0, or 1.
+ */
+int jemPkgCmpJarNames(const void *v1, const void *v2) {
+    const char **j1 = (const char **)v1;
+    const char **j2 = (const char **)v1;
+    return strcmp(*j1, *j2);
 }
 
 /**
@@ -154,7 +168,7 @@ struct dep *__gjpGetDeps(struct dep *deps,
     char *cursor = deps_str;
     memcpy(cursor,value,strlen(value));
     int i = 0;
-    OUTER:while(dep_name = strsep(&cursor,":")) {
+    while(dep_name = strsep(&cursor,":")) {
         bool has_jar = false;
         char *pkg_name = dep_name;
         if(pkg_name = strstr(pkg_name,"@")) {
@@ -165,12 +179,10 @@ struct dep *__gjpGetDeps(struct dep *deps,
             has_jar = true;
         } else 
             pkg_name = dep_name; // re-assign since null
-        if(deps) {
-            for(i=0;deps[i].name;i++) {
+        if(deps)
+            for(i=0;deps[i].name;i++)
                 if(strcmp(deps[i].name,pkg_name)==0)
                     goto ADDJARS;
-            }
-        }
         struct dep *tmp = realloc(deps,sizeof(struct dep)*(i+2));
         if(!tmp)
             printError("Unable to allocate memory to hold all dependencies"); // needs to clean up and exit under error, not just print a message
@@ -513,7 +525,6 @@ struct pkg *loadPackages(bool virtual) {
  *
  * @return an integer -1, 0, or 1.
  */
-
 int loadPackagesCompare(const void *v1, const void *v2) {
     const struct pkg *p1 = v1;
     const struct pkg *p2 = v2;
