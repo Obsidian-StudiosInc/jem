@@ -217,21 +217,18 @@ void printMsg(const char *preffix,
               const char *suffix) {
     if(title)
         msg = indent(title,msg);
-    int len = strlen(msg);
+    char *pmsg;
     if(preffix)
-        len += strlen(preffix);
-    if(suffix)
-        len += strlen(suffix);
-    char *pmsg = calloc(len+1,sizeof(char));
-    if(preffix) {
-        memcpy(pmsg,preffix,strlen(preffix));
-        memcpy(pmsg+strlen(preffix),msg,strlen(msg));
-    } else
-        memcpy(pmsg,msg,strlen(msg));
+        asprintf(&pmsg,"%s%s",preffix,msg);
+    else
+        asprintf(&pmsg,"%s",msg);
     if(title)
         free(msg);
-    if(suffix)
-        memcpy(pmsg+strlen(pmsg),suffix,strlen(suffix));
+    if(suffix) {
+        char *tmp_msg = pmsg;
+        asprintf(&pmsg,"%s%s",pmsg,suffix);
+        free(tmp_msg);
+    }
     print(pmsg);
     free(pmsg);
 }
