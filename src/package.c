@@ -179,10 +179,15 @@ struct dep *__gjpGetDeps(struct dep *deps,
             has_jar = true;
         } else 
             pkg_name = dep_name; // re-assign since null
-        if(deps)
-            for(i=0;deps[i].name;i++)
-                if(strcmp(deps[i].name,pkg_name)==0)
+        if(deps) {
+            for(i=0;deps[i].name;i++) {
+                if(strcmp(deps[i].name,pkg_name)==0) {
+                    if(!deps[i].jars && has_jar)
+                        has_jar = false;
                     goto ADDJARS;
+                }
+            }
+        }
         struct dep *tmp = realloc(deps,sizeof(struct dep)*(i+2));
         if(!tmp)
             printError("Unable to allocate memory to hold all dependencies"); // needs to clean up and exit under error, not just print a message
