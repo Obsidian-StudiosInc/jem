@@ -327,6 +327,7 @@ void printPackageClasspath(const char *name) {
                                 asprintf(&msg,"Package %s a dependency of package %s was not found!",deps[i].name,pkg_name);
                                 printError(msg);
                                 free(msg);
+                                package_found = false;
                                 break;
                             }
                         }
@@ -343,6 +344,7 @@ void printPackageClasspath(const char *name) {
             asprintf(&msg,"Package %s was not found!",pkg_name);
             printError(msg);
             free(msg);
+            package_found = false;
             break;
         }
     }
