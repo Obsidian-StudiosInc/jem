@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df root="src" name="0">
+    <df root="include" name="0">
+      <in>env_manager.h</in>
+      <in>file_parser.h</in>
+      <in>output_formatter.h</in>
+      <in>package.h</in>
+      <in>version.h</in>
+      <in>vm.h</in>
+    </df>
+    <df root="src" name="1">
       <in>env_manager.c</in>
       <in>file_parser.c</in>
       <in>main.c</in>
@@ -9,7 +17,7 @@
       <in>package.c</in>
       <in>vm.c</in>
     </df>
-    <df root="tests" name="1">
+    <df root="tests" name="2">
       <in>test.c</in>
     </df>
   </logicalFolder>

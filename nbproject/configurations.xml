@@ -36,8 +36,7 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0" commonFlags="-g"/>
-        <element flagsID="1" commonFlags="-g -fPIC"/>
+        <element flagsID="0" commonFlags="-g -fPIC"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -58,39 +57,37 @@
         </cTool>
       </folder>
       <item path="src/env_manager.c" ex="false" tool="0" flavor2="2">
-        <cTool flags="1">
+        <cTool flags="0">
           <preprocessorList>
             <Elem>jem_EXPORTS</Elem>
           </preprocessorList>
         </cTool>
       </item>
       <item path="src/file_parser.c" ex="false" tool="0" flavor2="2">
-        <cTool flags="1">
+        <cTool flags="0">
           <preprocessorList>
             <Elem>jem_EXPORTS</Elem>
           </preprocessorList>
         </cTool>
       </item>
       <item path="src/main.c" ex="false" tool="0" flavor2="2">
-        <cTool flags="0">
-        </cTool>
       </item>
       <item path="src/output_formatter.c" ex="false" tool="0" flavor2="2">
-        <cTool flags="1">
+        <cTool flags="0">
           <preprocessorList>
             <Elem>jem_EXPORTS</Elem>
           </preprocessorList>
         </cTool>
       </item>
       <item path="src/package.c" ex="false" tool="0" flavor2="2">
-        <cTool flags="1">
+        <cTool flags="0">
           <preprocessorList>
             <Elem>jem_EXPORTS</Elem>
           </preprocessorList>
         </cTool>
       </item>
       <item path="src/vm.c" ex="false" tool="0" flavor2="2">
-        <cTool flags="1">
+        <cTool flags="0">
           <preprocessorList>
             <Elem>jem_EXPORTS</Elem>
           </preprocessorList>
