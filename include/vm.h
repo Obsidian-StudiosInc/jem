@@ -27,9 +27,9 @@
 
 #define JEM "jem"
 #define JEM_SYSTEM_CONFIG_PATH "/etc/" JEM "/"
-#define JEM_SYSTEM_VM_LINK JEM_SYSTEM_CONFIG_PATH "current-system-vm"
+#define JEM_SYSTEM_VM_LINK JEM_SYSTEM_CONFIG_PATH "vm"
 #define JEM_USER_SHARE "/usr/share/"
-#define JEM_USER_VM_LINK_SUFFIX ".java/current-user-vm"
+#define JEM_USER_VM_LINK_SUFFIX ".java/vm"
 #define JEM_VMS_PATH JEM_USER_SHARE JEM "/vm"
 
 /**

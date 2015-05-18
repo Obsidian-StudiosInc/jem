@@ -1,8 +1,8 @@
-# Copyright 1999-2013 Gentoo Foundation
-# Distributed under the terms of the GNU General Public License, v2 or later
+# Copyright 2015 Obsidian-Studios, Inc.
+# Distributed under the terms of the GNU General Public License, v3 or later
 
-set user_vm = "${HOME}/.java/current-user-vm"
-set system_vm = "/etc/jem/current-system-vm"
+set user_vm = "${HOME}/.java/vm"
+set system_vm = "/etc/jem/vm"
 
 ## If we have a current-user-vm (and aren't root)... set it to JAVA_HOME
 ## Otherwise set to the current system vm
