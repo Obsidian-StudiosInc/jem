@@ -40,7 +40,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
 
-set(CMAKE_INSTALL_PREFIX "/usr")
+set(CMAKE_INSTALL_PREFIX "/")
 
 include_directories(include)
 
@@ -51,8 +51,14 @@ set_target_properties(jem-cli PROPERTIES OUTPUT_NAME jem)
 target_link_libraries(jem-cli jem)
 target_link_libraries(jem-test jem)
 install(TARGETS jem jem-cli
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib)
+	RUNTIME DESTINATION usr/bin
+	LIBRARY DESTINATION usr/lib)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/etc/jem
+		DESTINATION etc/)
+
+install(FILES ${PROJECT_SOURCE_DIR}/etc/profile.d/jem.csh
+		${PROJECT_SOURCE_DIR}/etc/profile.d/jem.sh
+		DESTINATION etc/profile.d/)
 
 # add a target to generate man page documentation with help2man
 find_program(HELP2MAN "help2man")
@@ -63,7 +69,7 @@ if(HELP2MAN)
 				${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1
 			DEPENDS jem-cli)
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/docs/man/man1/jem.1
-		DESTINATION share/man/man1)
+		DESTINATION usr/share/man/man1)
 endif()
 
 # add a target to generate API documentation with Doxygen
@@ -76,9 +82,9 @@ if(BUILD_DOC)
 			WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 			DEPENDS man)
 		install(FILES ${PROJECT_SOURCE_DIR}/docs/man/man3/
-			DESTINATION share/man/man3)
+			DESTINATION usr/share/man/man3)
 		install(DIRECTORY ${PROJECT_SOURCE_DIR}/docs/html
-			DESTINATION share/doc/jem-${VERSION}/)
+			DESTINATION usr/share/doc/jem-${VERSION}/)
 	endif()
 endif()
 
