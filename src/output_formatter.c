@@ -25,17 +25,17 @@
 #include <stdio.h>
 #include "../include/output_formatter.h"
 
-bool color_output = true;
-bool console_title = true;
-bool auto_indent = true;
-bool my_exit_status = EXIT_SUCCESS;
+bool jem_color_output = true;
+bool jem_console_title = true;
+bool jem_auto_indent = true;
+bool jem_exit_status = EXIT_SUCCESS;
 
-const char *terms[] = {"xterm", "Eterm", "aterm", "rxvt"};
+const char *jem_terms[] = {"xterm", "Eterm", "aterm", "rxvt"};
 
 /**
  * array of terminal codes
  */
-struct code codes[] = {
+struct jem_term_code jem_term_codes[] = {
     {'H', "\x1b[01m"},        /** Bold */
     {'U', "\x1b[04m"},        /** Underline */
     {'I', "\x1b[07m"},        /** Inverse */
@@ -55,8 +55,8 @@ struct code codes[] = {
     {'%', "%"}                /** Percent */
 };
 
-int codes_count = sizeof(codes) / sizeof(struct code);
-int terms_count = sizeof(terms) / sizeof(terms[0]);
+int jem_codes_count = sizeof(jem_term_codes) / sizeof(struct jem_term_code);
+int jem_terms_count = sizeof(jem_terms) / sizeof(jem_terms[0]);
 
 /**
  * Returns the value of a code from a static array of code structs
@@ -64,11 +64,11 @@ int terms_count = sizeof(terms) / sizeof(terms[0]);
  * @param key the terminal code key
  * @return a pointer to a string containing the value. The string must NOT be freed!
  */
-char *getCode(char key) {
+char *jemGetTermCode(char key) {
     int i;
-    for(i=0;i<codes_count;i++)
-        if(codes[i].key==key)
-            return(codes[i].value);
+    for(i=0;i<jem_codes_count;i++)
+        if(jem_term_codes[i].key==key)
+            return(jem_term_codes[i].value);
     return(NULL);
 }
 
@@ -77,12 +77,12 @@ char *getCode(char key) {
  *
  * @return true if valid terminal, false otherwise
  */
-bool isValidTerm() {
+bool jemIsValidTerm() {
     char *term = getenv("TERM");
     if(term) {
         int i;
-        for(i=0;i<terms_count;i++)
-            if(strcasecmp(term,terms[i])==0)
+        for(i=0;i<jem_terms_count;i++)
+            if(strcasecmp(term,jem_terms[i])==0)
                 return(true);
     }
     return(false);
@@ -94,19 +94,19 @@ bool isValidTerm() {
  * @param msg the message
  * @return a string containing the message and terminal color codes. The string must be freed!
  */
-char *addColor(char *msg) {
+char *jemAddTermColor(char *msg) {
     // The following check might be moved to jem's main function
-    if(!isValidTerm())
-        color_output = false;
+    if(!jemIsValidTerm())
+        jem_color_output = false;
     int len = strlen(msg);
     int nlen = 0;
     char *nmsg = calloc(len*2,sizeof(char));
     int i;
     for(i=0;i<len;i++) {
         char *c;
-        if(color_output &&
+        if(jem_color_output &&
            msg[i]=='%' &&
-           (c = getCode(msg[i+1])) &&
+           (c = jemGetTermCode(msg[i+1])) &&
            c &&
            c[0]!=msg[i+1]) {
             i++;
@@ -128,7 +128,7 @@ char *addColor(char *msg) {
  * @param add_str a string to add
  * @return a string containing the two strings with separator. The string must be freed!
  */
-char *appendStrs(char* cur_str,char *sep_str,char *add_str) {
+char *jemAppendStrs(char* cur_str,char *sep_str,char *add_str) {
     char *new_str = NULL;
     if(add_str && cur_str && strlen(cur_str)>0) {
         char *old_str = cur_str;
@@ -152,11 +152,11 @@ char *appendStrs(char* cur_str,char *sep_str,char *add_str) {
  * @param msg the message to indent
  * @return a string containing the combined preffix and indented message. The string must be freed!
  */
-char *indent(const char *preffix,const char *msg) {
+char *jemIndent(const char *preffix,const char *msg) {
     int plen = strlen(preffix);
     int mlen = strlen(msg);
     char *nmsg;
-    if(auto_indent &&
+    if(jem_auto_indent &&
        strchr(msg,'\n')) {
         plen++;
         char *indent = calloc(plen+1,sizeof(char));
@@ -197,8 +197,8 @@ char *indent(const char *preffix,const char *msg) {
  *
  * @param msg the message
  */
-void print(char *msg) {
-    char *cmsg = addColor(msg);
+void jemPrint(char *msg) {
+    char *cmsg = jemAddTermColor(msg);
     fprintf(stdout,gettext("%s\n"),cmsg);
     free(cmsg);
 }
@@ -211,12 +211,12 @@ void print(char *msg) {
  * @param msg the message to print
  * @param suffix the message suffix, used for terminal codes (not required)
  */
-void printMsg(const char *preffix,
-              const char *title,
-              char *msg,
-              const char *suffix) {
+void jemPrintMsg(const char *preffix,
+                 const char *title,
+                 char *msg,
+                 const char *suffix) {
     if(title)
-        msg = indent(title,msg);
+        msg = jemIndent(title,msg);
     char *pmsg;
     if(preffix)
         asprintf(&pmsg,"%s%s",preffix,msg);
@@ -229,7 +229,7 @@ void printMsg(const char *preffix,
         asprintf(&pmsg,"%s%s",pmsg,suffix);
         free(tmp_msg);
     }
-    print(pmsg);
+    jemPrint(pmsg);
     free(pmsg);
 }
 
@@ -238,9 +238,9 @@ void printMsg(const char *preffix,
  *
  * @param msg the error/message
  */
-void printError(char *msg) {
-    printMsg("%H%R","!!! ERROR: ",msg,"%$\n");
-    my_exit_status = EXIT_FAILURE;
+void jemPrintError(char *msg) {
+    jemPrintMsg("%H%R","!!! ERROR: ",msg,"%$\n");
+    jem_exit_status = EXIT_FAILURE;
 }
 
 /**
@@ -248,8 +248,8 @@ void printError(char *msg) {
  *
  * @param msg the warning/message
  */
-void printWarning(char *msg) {
-    printMsg("%H%Y","!!! WARNING: ",msg,"%$\n");
+void jemPrintWarning(char *msg) {
+    jemPrintMsg("%H%Y","!!! WARNING: ",msg,"%$\n");
 }
 
 /**
@@ -257,8 +257,8 @@ void printWarning(char *msg) {
  *
  * @param msg the alert/message
  */
-void printAlert(char *msg) {
-    printMsg("%H%C","!!! ALERT: ",msg,"%$\n");
+void jemPrintAlert(char *msg) {
+    jemPrintMsg("%H%C","!!! ALERT: ",msg,"%$\n");
 }
 
 /**
@@ -266,12 +266,12 @@ void printAlert(char *msg) {
  *
  * @param title the terminal title
  */
-void setTermTitle(const char *title) {
-    if(console_title &&
-       isValidTerm())
+void jemSetTermTitle(const char *title) {
+    if(jem_console_title &&
+       jemIsValidTerm())
         fprintf(stdout,gettext("\x1b]1;\x07\x1b]2;%s\x07"),title); // Presently not working no effect :(
 }
 
-void write(char *msg) {
-    print(msg); // Need to add strip() functionality
+void jemWrite(char *msg) {
+    jemPrint(msg); // Need to add strip() functionality
 }

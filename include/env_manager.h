@@ -28,30 +28,30 @@
 /**
  * java environment
  */
-struct env {
-    struct pkg *pkgs;       /** packages */
-    struct vm *vms;         /** virtual machines */
-    struct vm *active_vm;   /** pointer to the active vm struct in the virtual machines vms struct array */
+struct jem_env {
+    struct jem_pkg *pkgs;       /** packages */
+    struct jem_vm *vms;         /** virtual machines */
+    struct jem_vm *active_vm;   /** pointer to the active vm struct in the virtual machines vms struct array */
 };
 
-struct env jem_env;
+struct jem_env jem_env;
 
 /**
  * Cleanup call before program exit, clean up env, free memory, etc
  */
-void cleanup();
+void jemCleanup();
 
 /**
  * Frees the allocated memory in a env struct
  *
  * @param params a pointer to an env struct
  */
-void freeEnv(struct env *env);
+void jemFreeEnv(struct jem_env *env);
 
 /**
  * Execute something which is in JAVA_HOME
  */
-void exeJavaBin(char *exe_name);
+void jemExeJavaBin(char *exe_name);
 
 /**
  * Get the active VM
@@ -59,14 +59,14 @@ void exeJavaBin(char *exe_name);
  * @param env pointer to an env struct
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
-struct vm *getActiveVM(struct env *env);
+struct jem_vm *jemGetActiveVM(struct jem_env *env);
 
 /**
  * Initialize env struct
  *
  * @param env pointer to an uninitialized env structure
  */
-void initEnv(struct env *env);
+void jemInitEnv(struct jem_env *env);
 
 /**
  * Load the active VM, first by env variable. If that does not exist, by
@@ -75,39 +75,39 @@ void initEnv(struct env *env);
  * @param env pointer to an env struct
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed! 
  */
-struct vm *loadActiveVM(struct env *env);
+struct jem_vm *jemLoadActiveVM(struct jem_env *env);
 
 /**
  * Print a list of the Available VMs
  */
-void listAvailableVMs();
+void jemListAvailableVMs();
 
 /**
  * Print a list of installed Packages
  */
-void listPackages();
+void jemListPackages();
 
 /**
  * Print the active VM
  */
-void printActiveVM();
+void jemPrintActiveVM();
 
 /**
  * Print the active VM parameters
  */
-void printVMParams(const char *vm_name);
+void jemPrintVMParams(const char *vm_name);
 
 /**
  * Print a command including path using the active VM
  * 
  * @param exec string containing the executable to print
  */
-void printExe(const char *exe);
+void jemPrintExe(const char *exe);
 
 /**
  * Print the active VM java version
  */
-void printJavaVersion();
+void jemPrintJavaVersion();
 
 /**
  * Print one or more package classpath values from the package.env file
@@ -115,19 +115,19 @@ void printJavaVersion();
  * @param name string containing the name(s) of the package(s), 
  *             multiple comma separated package names can be specified
  */
-void printPackageClasspath(const char *name);
+void jemPrintPackageClasspath(const char *name);
 
 /**
  * Print the active VM absolute path to tools.jar
  */
-void printToolsJar();
+void jemPrintToolsJar();
 
 /**
  * Print one or more parameter values from the active VM config file
  *
  * @param name string containing the name(s) of the parameter(s), multiple comma separated parameter names can be specified
  */
-void printValueFromActiveVM(const char *name);
+void jemPrintValueFromActiveVM(const char *name);
 
 /**
  * Print one or more parameter values from one or more package.env file
@@ -135,7 +135,7 @@ void printValueFromActiveVM(const char *name);
  * @param name string containing the name(s) of the package(s), multiple package(s) separated parameter names can be specified
  * @param param string containing the parameter(s) names, multiple comma separated parameter names can be specified
  */
-void printValueFromPackage(const char *name,const char *param);
+void jemPrintValueFromPackage(const char *name,const char *param);
 
 /**
  * Print providers/packages for one or more virtual package(s)
@@ -143,18 +143,18 @@ void printValueFromPackage(const char *name,const char *param);
  * @param name string containing the name(s) of the virtual package(s), 
  *        multiple comma separated virtual package names can be specified
  */
-void printVirtualProviders(const char *virtual);
+void jemPrintVirtualProviders(const char *virtual);
 
 /**
  * Set the System VM, create a symlink for the given vm
  *
  * @param vm_name string containing the vm name or number
  */
-void setSystemVM(const char *vm_name);
+void jemSetSystemVM(const char *vm_name);
 
 /**
  * Set the User VM, create a symlink for the given vm
  *
  * @param vm_name string containing the vm name or number
  */
-void setUserVM(const char *vm_name);
+void jemSetUserVM(const char *vm_name);

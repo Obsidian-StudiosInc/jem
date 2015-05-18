@@ -35,7 +35,7 @@ bool jem_with_dependencies = false;
  *
  * @param dep a pointer to a dep struct
  */
-void freeDep(struct dep *dep) {
+void jemFreeDep(struct jem_dep *dep) {
     if(!dep)
         return;
     if(dep->name)
@@ -53,14 +53,14 @@ void freeDep(struct dep *dep) {
  *
  * @param pkgs a pointer to a pkg struct
  */
-void freePkg(struct pkg *pkg) {
+void jemFreePkg(struct jem_pkg *pkg) {
     if(!pkg)
         return;
     if(pkg->filename)
          free(pkg->filename);
     if(pkg->name)
          free(pkg->name);
-    freeParams(pkg->params);
+    jemFreeParams(pkg->params);
 }
 
 /**
@@ -68,12 +68,12 @@ void freePkg(struct pkg *pkg) {
  *
  * @param pkgs a pointer an array of pkg structs
  */
-void freePkgs(struct pkg *pkgs) {
+void jemFreePkgs(struct jem_pkg *pkgs) {
     if(!pkgs)
         return;
     int i;
     for(i=0;pkgs[i].filename;i++)   // <- ugly, nasty, etc but works! :)
-        freePkg(&pkgs[i]);
+        jemFreePkg(&pkgs[i]);
     free(pkgs);
 }
 
@@ -83,8 +83,8 @@ void freePkgs(struct pkg *pkgs) {
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjpGetDescription(struct param *params) {
-    char *desc = getValue(params,"DESCRIPTION");
+char *jemPkgGetDescription(struct jem_param *params) {
+    char *desc = jemGetValue(params,"DESCRIPTION");
     if(desc)
         return(desc);
     return("No Description");
@@ -96,8 +96,8 @@ char *gjpGetDescription(struct param *params) {
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjpGetClasspath(struct param *params) {
-    return(getValue(params,"CLASSPATH"));
+char *jemPkgGetClasspath(struct jem_param *params) {
+    return(jemGetValue(params,"CLASSPATH"));
 }
 
 /**
@@ -120,7 +120,7 @@ char **jemPkgGetJarNames(char *pkg_name) {
                 continue;
             char **tmp = realloc(jars,sizeof(char *)*(i+2));
             if(!tmp)
-                printError("Unable to allocate memory to hold package jar names");
+                jemPrintError("Unable to allocate memory to hold package jar names");
             jars = tmp;
             jars[i+1] = NULL;
             asprintf(&jars[i],"%s",file->d_name);
@@ -128,9 +128,9 @@ char **jemPkgGetJarNames(char *pkg_name) {
         }
     } else {
         if(errno==EACCES)
-            printError("Package directory not readable");
+            jemPrintError("Package directory not readable");
         else
-            printError("Invalid package directory");
+            jemPrintError("Invalid package directory");
     }
     free(path);
     closedir(dp);
@@ -157,10 +157,10 @@ int jemPkgCmpJarNames(const void *v1, const void *v2) {
  * @name string containing the variable name, DEPEND/BUILD_DEPEND/OPTIONAL_DEPEND
  * @return an array of dep structs. Which must be freed, including struct members!
  */
-struct dep *__gjpGetDeps(struct dep *deps,
-                         struct param *params,
+struct jem_dep *_jemPkgGetDeps(struct jem_dep *deps,
+                         struct jem_param *params,
                          char *name) {
-    char *value = getValue(params,name);
+    char *value = jemGetValue(params,name);
     if(!value)
         return(deps);
     char *dep_name = NULL;
@@ -174,7 +174,7 @@ struct dep *__gjpGetDeps(struct dep *deps,
         if(pkg_name = strstr(pkg_name,"@")) {
             pkg_name++; // skip @
             memset(dep_name+strlen(dep_name)-strlen(pkg_name)-1,'\0',1); // set dep_name to jar name
-            if(strstr(gjpGetClasspath(params),dep_name))
+            if(strstr(jemPkgGetClasspath(params),dep_name))
                 continue;            
             has_jar = true;
         } else 
@@ -188,9 +188,9 @@ struct dep *__gjpGetDeps(struct dep *deps,
                 }
             }
         }
-        struct dep *tmp = realloc(deps,sizeof(struct dep)*(i+2));
+        struct jem_dep *tmp = realloc(deps,sizeof(struct jem_dep)*(i+2));
         if(!tmp)
-            printError("Unable to allocate memory to hold all dependencies"); // needs to clean up and exit under error, not just print a message
+            jemPrintError("Unable to allocate memory to hold all dependencies"); // needs to clean up and exit under error, not just print a message
         deps = tmp;
         deps[i+1].name = NULL;
         deps[i+1].jars = NULL;
@@ -198,7 +198,7 @@ struct dep *__gjpGetDeps(struct dep *deps,
         deps[i].jars = NULL;
         asprintf(&(deps[i].name),"%s",pkg_name);
         if(!deps[i].name)
-            printError("Unable to allocate memory to hold dependency name"); // needs to clean up and exit under error, not just print a message
+            jemPrintError("Unable to allocate memory to hold dependency name"); // needs to clean up and exit under error, not just print a message
         deps[i].parsed_sub_deps = false;
         ADDJARS:
         if(!has_jar) {
@@ -214,12 +214,12 @@ struct dep *__gjpGetDeps(struct dep *deps,
                     if(!exists) {
                         char **tmp_jars = realloc(deps[i].jars,sizeof(char *)*(k+2));
                         if(!tmp_jars)
-                            printError("Unable to allocate memory to hold all dependency jars");
+                            jemPrintError("Unable to allocate memory to hold all dependency jars");
                         deps[i].jars = tmp_jars;
                         deps[i].jars[k+1]= NULL;
                         asprintf(&(deps[i].jars[k]),"%s",jars[j]);
                         if(!deps[i].jars[k])
-                            printError("Unable to allocate memory to hold dependency jar");
+                            jemPrintError("Unable to allocate memory to hold dependency jar");
                     }
                 }
                 free(jars);
@@ -238,20 +238,20 @@ struct dep *__gjpGetDeps(struct dep *deps,
             continue;
         char **tmp_jars = realloc(deps[i].jars,sizeof(char *)*(j+2));
         if(!tmp_jars)
-            printError("Unable to allocate memory to hold all dependency jars"); // needs to clean up and exit under error, not just print a message
+            jemPrintError("Unable to allocate memory to hold all dependency jars"); // needs to clean up and exit under error, not just print a message
         deps[i].jars = tmp_jars;
         deps[i].jars[j+1]= NULL;
         asprintf(&(deps[i].jars[j]),"%s",dep_name);
         if(!deps[i].jars[j])
-            printError("Unable to allocate memory to hold dependency jar"); // needs to clean up and exit under error, not just print a message
+            jemPrintError("Unable to allocate memory to hold dependency jar"); // needs to clean up and exit under error, not just print a message
     }
     if(deps) {
         for(i=0;deps[i].name && !deps[i].parsed_sub_deps;i++) {
             deps[i].parsed_sub_deps = true;
-            struct pkg *pkg = loadPackage(deps[i].name);
+            struct jem_pkg *pkg = jemPkgLoadPackage(deps[i].name);
             if(pkg) {
-                deps = __gjpGetDeps(deps,pkg->params,name);
-                freePkg(pkg);
+                deps = _jemPkgGetDeps(deps,pkg->params,name);
+                jemFreePkg(pkg);
                 free(pkg);
             }
         }
@@ -266,9 +266,9 @@ struct dep *__gjpGetDeps(struct dep *deps,
  * @param params an array of param structs
  * @return an array of dep structs. Which must be freed, including struct members!
  */
-struct dep *gjpGetDeps(struct param *params) {
-    struct dep *deps = NULL;
-    return(__gjpGetDeps(deps,params,"DEPEND"));
+struct jem_dep *jemPkgGetDeps(struct jem_param *params) {
+    struct jem_dep *deps = NULL;
+    return(_jemPkgGetDeps(deps,params,"DEPEND"));
 }
 
 /**
@@ -277,9 +277,9 @@ struct dep *gjpGetDeps(struct param *params) {
  * @param params an array of param structs
  * @return an array of dep structs. Which must be freed, including struct members!
  */
-struct dep *gjpGetBuildDeps(struct param *params) {
-    struct dep *deps = NULL;
-    return(__gjpGetDeps(deps,params,"BUILD_DEPEND"));
+struct jem_dep *jemPkgGetBuildDeps(struct jem_param *params) {
+    struct jem_dep *deps = NULL;
+    return(_jemPkgGetDeps(deps,params,"BUILD_DEPEND"));
 }
 
 /**
@@ -288,9 +288,9 @@ struct dep *gjpGetBuildDeps(struct param *params) {
  * @param params an array of param structs
  * @return an array of dep structs. Which must be freed, including struct members!
  */
-struct dep *gjpGetOptDeps(struct param *params) {
-    struct dep *deps = NULL;
-    return(__gjpGetDeps(deps,params,"OPTIONAL_DEPEND"));
+struct jem_dep *jemPkgGetOptDeps(struct jem_param *params) {
+    struct jem_dep *deps = NULL;
+    return(_jemPkgGetDeps(deps,params,"OPTIONAL_DEPEND"));
 }
 
 /**
@@ -299,8 +299,8 @@ struct dep *gjpGetOptDeps(struct param *params) {
  * @param params an array of param structs
  * @return an array of strings containing the value. The array and strings must be freed!
  */
-char **gjpGetProvides(struct param *params) {
-    char *value = getValue(params,"PROVIDES");
+char **jemPkgGetProvides(struct jem_param *params) {
+    char *value = jemGetValue(params,"PROVIDES");
     if(!value)
         return(NULL);
     char *provide = NULL;
@@ -312,7 +312,7 @@ char **gjpGetProvides(struct param *params) {
     for(i=0;(provide = strsep(&cursor," "));i++) {
         char **tmp = realloc(provides,sizeof(char *)*(i+2));
         if(!tmp)
-            printError("Unable to allocate memory to hold all provides"); // needs to clean up and exit under error, not just print a message
+            jemPrintError("Unable to allocate memory to hold all provides"); // needs to clean up and exit under error, not just print a message
         provides = tmp;
         provides[i+1] = NULL;
         asprintf(&provides[i],"%s",provide);
@@ -332,8 +332,8 @@ char **gjpGetProvides(struct param *params) {
  * @param params an array of param structs
  * @return a string containing the value. The string must be freed!
  */
-char *gjpGetTarget(struct param *params) {
-    return(getValue(params,"TARGET"));
+char *jemPkgGetTarget(struct jem_param *params) {
+    return(jemGetValue(params,"TARGET"));
 }
 
 /**
@@ -342,10 +342,10 @@ char *gjpGetTarget(struct param *params) {
  * @param virtual string containing the name of the virtual
  * @return a string containing the value. The string must be freed!
  */
-char *gjpGetActiveVirtualProvider(const char *virtual) {
+char *jemPkgGetActiveVirtualProvider(const char *virtual) {
     char *package = NULL;
     char *providers = NULL;
-    struct param *conf = parseFile(JEM_PKG_VIRTUAL_CONFIG);
+    struct jem_param *conf = jemParseFile(JEM_PKG_VIRTUAL_CONFIG);
     if(conf) {
         int i;
         for(i=0;conf[i].name;i++) {
@@ -354,10 +354,10 @@ char *gjpGetActiveVirtualProvider(const char *virtual) {
                 break;
             }
         }
-        freeParams(conf);
+        jemFreeParams(conf);
     }
     if(!providers)
-        providers = gjpGetVirtualProviders(virtual,false);
+        providers = jemPkgGetVirtualProviders(virtual,false);
     if(!providers)
         return(package);
     else if(strcmp(providers,"")==0)
@@ -384,7 +384,7 @@ char *gjpGetActiveVirtualProvider(const char *virtual) {
         char *msg = NULL;
         asprintf(&msg,"No virtual providers for %s, please ensure you have\n"
                       "one of the following package's installed;\n%s",virtual,providers);
-        printError(msg);
+        jemPrintError(msg);
         free(msg);
     }
     free(providers);
@@ -399,7 +399,7 @@ char *gjpGetActiveVirtualProvider(const char *virtual) {
  * @param ignore_vm boolean get providers regardless if vm is a provider
  * @return a string containing the value. The string must be freed!
  */
-char *gjpGetVirtualProviders(const char *virtual,bool ignore_vm) {
+char *jemPkgGetVirtualProviders(const char *virtual,bool ignore_vm) {
     char *packages = NULL;
     char *virtual_name = NULL;
     char *virtual_str = calloc(strlen(virtual)+1,sizeof(char));
@@ -411,18 +411,18 @@ char *gjpGetVirtualProviders(const char *virtual,bool ignore_vm) {
             asprintf(&virtual_file,"%s%s",JEM_PKG_VIRTUAL_PATH,virtual_name);
             struct stat st;
             if(virtual_file) {
-                struct param *params = NULL;
+                struct jem_param *params = NULL;
                 if(stat(virtual_file,&st)==0) // no output if file exist, remove for error if it does not
-                    params = parseFile(virtual_file);
+                    params = jemParseFile(virtual_file);
                 if(params) {
-                    char *providers = getValue(params,"PROVIDERS");
-                    char *vvm_version = getValue(params,"VM");
+                    char *providers = jemGetValue(params,"PROVIDERS");
+                    char *vvm_version = jemGetValue(params,"VM");
                     if(vvm_version && !ignore_vm) {
                         while (*vvm_version && !isdigit(*vvm_version)) // skip through non-digit/alpha characters
                             vvm_version++;
                         initEnvVMs();
-                        struct vm *vm = getActiveVM(&jem_env);
-                        float vm_version = atof(gjvmGetProvidesVersion(vm->params));
+                        struct jem_vm *vm = jemGetActiveVM(&jem_env);
+                        float vm_version = atof(jemVmGetProvidesVersion(vm->params));
                         if(atof(vvm_version)<=vm_version)
                             providers = "";
                     }
@@ -441,7 +441,7 @@ char *gjpGetVirtualProviders(const char *virtual,bool ignore_vm) {
                         }
                         free(pkgs_str);
                     }
-                    freeParams(params);
+                    jemFreeParams(params);
                 }
                 free(virtual_file);
             }
@@ -456,21 +456,21 @@ char *gjpGetVirtualProviders(const char *virtual,bool ignore_vm) {
  *
  * @return a pkg struct. Which must be freed, including struct members!
  */
-struct pkg *loadFile(char *filename, char *name) {
-    struct pkg *pkg = NULL;
+struct jem_pkg *jemPkgLoadFile(char *filename, char *name) {
+    struct jem_pkg *pkg = NULL;
     struct stat st;
     if(stat(filename,&st)==0) {
-        struct pkg *npkg = calloc(1,sizeof(struct pkg));
+        struct jem_pkg *npkg = calloc(1,sizeof(struct jem_pkg));
         if(!npkg)
-            printError("Unable to allocate memory to hold package");
+            jemPrintError("Unable to allocate memory to hold package");
         pkg = npkg;
         asprintf(&(pkg->filename),"%s",filename);
         if(!pkg->filename)
-            printError("Unable to allocate memory to hold package file name");
+            jemPrintError("Unable to allocate memory to hold package file name");
         asprintf(&(pkg->name),"%s",name);
         if(!pkg->name)
-            printError("Unable to allocate memory to hold package name");
-        pkg->params = parseFile(pkg->filename);
+            jemPrintError("Unable to allocate memory to hold package name");
+        pkg->params = jemParseFile(pkg->filename);
     }
     return(pkg);
 }
@@ -480,10 +480,10 @@ struct pkg *loadFile(char *filename, char *name) {
  *
  * @return a pkg struct. Which must be freed, including struct members!
  */
-struct pkg *loadPackage(char *name) {
-    struct pkg *pkg = NULL;
+struct jem_pkg *jemPkgLoadPackage(char *name) {
+    struct jem_pkg *pkg = NULL;
     char *package_env = NULL;
-    char *virt_pkg = gjpGetActiveVirtualProvider(name);
+    char *virt_pkg = jemPkgGetActiveVirtualProvider(name);
     if(virt_pkg) {
         if(strcmp(virt_pkg,"")==0)
             asprintf(&package_env,"%s%s",JEM_PKG_VIRTUAL_PATH,name);
@@ -493,7 +493,7 @@ struct pkg *loadPackage(char *name) {
     } else
         asprintf(&package_env,"%s%s%s",JEM_PKG_PATH,name,JEM_PKG_ENV);
     if(package_env) {
-        pkg = loadFile(package_env,name);
+        pkg = jemPkgLoadFile(package_env,name);
         free(package_env);
     }
     return(pkg);
@@ -505,9 +505,9 @@ struct pkg *loadPackage(char *name) {
  * @param virtual boolean to control loading of virtual or package.env file
  * @return an array of pkg structs. Which must be freed, including struct members!
  */
-struct pkg *loadPackages(bool virtual) {
+struct jem_pkg *jemPkgLoadPackages(bool virtual) {
     DIR *dp;
-    struct pkg *pkgs = NULL;
+    struct jem_pkg *pkgs = NULL;
     int i = 0;
     char *path = JEM_PKG_PATH;
     if(virtual)
@@ -518,15 +518,15 @@ struct pkg *loadPackages(bool virtual) {
             if(!strcmp(file->d_name,".") ||
                !strcmp(file->d_name,".."))
                 continue;
-            struct pkg *pkg;
+            struct jem_pkg *pkg;
             if(virtual)
-                pkg = loadVirtual(file->d_name);
+                pkg = jemPkgLoadVirtual(file->d_name);
             else
-                pkg = loadPackage(file->d_name);
+                pkg = jemPkgLoadPackage(file->d_name);
             if(pkg) {
-                struct pkg *npkgs = realloc(pkgs,sizeof(struct pkg)*(i+2));
+                struct jem_pkg *npkgs = realloc(pkgs,sizeof(struct jem_pkg)*(i+2));
                 if(!npkgs)
-                    printError("Unable to allocate memory to hold all package.env files"); // needs to clean up and exit under error, not just print a message
+                    jemPrintError("Unable to allocate memory to hold all package.env files"); // needs to clean up and exit under error, not just print a message
                 pkgs = npkgs;
                 pkgs[i+1].filename = NULL;
                 pkgs[i+1].name = NULL;
@@ -538,12 +538,12 @@ struct pkg *loadPackages(bool virtual) {
         }
     } else {
         if(errno==EACCES)
-            printError("Package directory not readable"); // needs to be changed to throw an exception
+            jemPrintError("Package directory not readable"); // needs to be changed to throw an exception
         else
-            printError("Invalid package directory"); // needs to be changed to throw an exception
+            jemPrintError("Invalid package directory"); // needs to be changed to throw an exception
     }
     if(pkgs)
-        qsort(pkgs,i+2,sizeof(struct pkg),loadPackagesCompare);
+        qsort(pkgs,i+2,sizeof(struct jem_pkg),jemPkgLoadPackagesCompare);
     closedir(dp);
     return(pkgs);
 }
@@ -553,9 +553,9 @@ struct pkg *loadPackages(bool virtual) {
  *
  * @return an integer -1, 0, or 1.
  */
-int loadPackagesCompare(const void *v1, const void *v2) {
-    const struct pkg *p1 = v1;
-    const struct pkg *p2 = v2;
+int jemPkgLoadPackagesCompare(const void *v1, const void *v2) {
+    const struct jem_pkg *p1 = v1;
+    const struct jem_pkg *p2 = v2;
     if(p1->name && p2->name)
         return strcmp (p1->name, p2->name);
     return(-1);
@@ -566,12 +566,12 @@ int loadPackagesCompare(const void *v1, const void *v2) {
  *
  * @return a pkg struct. Which must be freed, including struct members!
  */
-struct pkg *loadVirtual(char *name) {
-    struct pkg *pkg = NULL;
+struct jem_pkg *jemPkgLoadVirtual(char *name) {
+    struct jem_pkg *pkg = NULL;
     char *virtual = NULL;
     asprintf(&virtual,"%s%s",JEM_PKG_VIRTUAL_PATH,name);
     if(virtual) {
-        pkg = loadFile(virtual,name);
+        pkg = jemPkgLoadFile(virtual,name);
         free(virtual);
     }
     return(pkg);

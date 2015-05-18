@@ -32,8 +32,8 @@
 /**
  * Cleanup call before program exit, clean up env, free memory, etc
  */
-void cleanup() {
-    freeEnv(&jem_env);
+void jemCleanup() {
+    jemFreeEnv(&jem_env);
 }
 
 /**
@@ -41,11 +41,11 @@ void cleanup() {
  *
  * @param params a pointer to an env struct
  */
-void freeEnv(struct env *env) {
+void jemFreeEnv(struct jem_env *env) {
     if(!env)
         return;
-    freePkgs(env->pkgs);
-    freeVMs(env->vms);
+    jemFreePkgs(env->pkgs);
+    jemFreeVMs(env->vms);
 }
 
 /**
@@ -53,23 +53,23 @@ void freeEnv(struct env *env) {
  */
 void initEnvVMs() {
     if(!jem_env.vms)
-        jem_env.vms = loadVMs();
+        jem_env.vms = jemVmLoadVMs();
 }
 
 /**
  * Execute something which is in JAVA_HOME
  */
-void exeJavaBin(char *exe_name) {
+void jemExeJavaBin(char *exe_name) {
     initEnvVMs();
-    struct vm *avm = getActiveVM(&jem_env);
+    struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm) {
         char *exec;
-        asprintf(&exec,"%s/bin/%s",getValue(avm->params,"JAVA_HOME"),exe_name);
+        asprintf(&exec,"%s/bin/%s",jemGetValue(avm->params,"JAVA_HOME"),exe_name);
         if(exec) {
             char *argv[] = { exec, "-version", NULL };
             int e = execve(exec,argv,NULL);
             if(e==-1)
-                printError("Unable to execute command");
+                jemPrintError("Unable to execute command");
             free(exec);
         }
     }
@@ -81,12 +81,12 @@ void exeJavaBin(char *exe_name) {
  * @param env pointer to an env struct
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
-struct vm *getActiveVM(struct env *env) {
+struct jem_vm *jemGetActiveVM(struct jem_env *env) {
     if(!env->active_vm)
-        loadActiveVM(env);
+        jemLoadActiveVM(env);
     if(env->active_vm)
         return(env->active_vm);
-    printError("Active vm not set, please run jem -s/-S"); // might need to be changed to throw an exception
+    jemPrintError("Active vm not set, please run jem -s/-S"); // might need to be changed to throw an exception
     return(NULL);
 }
 
@@ -95,7 +95,7 @@ struct vm *getActiveVM(struct env *env) {
  *
  * @param env pointer to an uninitialized env structure
  */
-void initEnv(struct env *env) {
+void jemInitEnv(struct jem_env *env) {
     env->pkgs = NULL;
     env->vms = NULL;
     env->active_vm = NULL;
@@ -108,28 +108,28 @@ void initEnv(struct env *env) {
  * @param env pointer to an env struct
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
-struct vm *loadActiveVM(struct env *env) {
-    struct vm *vm = NULL;
+struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
+    struct jem_vm *vm = NULL;
     int i;
-    char **vm_links = getVMLinks();
+    char **vm_links = jemVmGetVMLinks();
     for(i=0;vm_links[i];i++) {
         char *abs_file = calloc(JEM_BASE_NAME_SIZE+1,sizeof(char));
         if(readlink(vm_links[i],abs_file,JEM_BASE_NAME_SIZE)<0) {
             if(errno==EACCES)
-                printError("VM link not readable"); // might need to be changed to throw an exception
+                jemPrintError("VM link not readable"); // might need to be changed to throw an exception
             else if(errno==EINVAL)
-                printError("VM file is not a symlink"); // might need to be changed to throw an exception
+                jemPrintError("VM file is not a symlink"); // might need to be changed to throw an exception
             else if(errno==EIO)
-                printError("A hardware error has occurred"); // might need to be changed to throw an exception
+                jemPrintError("A hardware error has occurred"); // might need to be changed to throw an exception
             free(abs_file);
             continue;
         }
-        vm = getVM(env->vms,basename(abs_file));
+        vm = jemVmGetVM(env->vms,basename(abs_file));
         free(abs_file);
         if(vm)
             break;
     }
-    freeVMLinks(vm_links);
+    jemFreeVMLinks(vm_links);
     if(vm)
         env->active_vm = vm;
     return(vm);
@@ -138,77 +138,77 @@ struct vm *loadActiveVM(struct env *env) {
 /**
  * Print a list of the Available VMs
  */
-void listAvailableVMs() {
+void jemListAvailableVMs() {
     initEnvVMs();
-    struct vm *avm = getActiveVM(&jem_env);
+    struct jem_vm *avm = jemGetActiveVM(&jem_env);
     bool has_build_only = false;
-    print("%HThe following VMs are available:%$");
+    jemPrint("%HThe following VMs are available:%$");
     int i;
     for(i=0;jem_env.vms[i].filename;i++) {
         char *msg;
         if(avm && strcmp(avm->filename,jem_env.vms[i].filename)==0) {
-            if(gjvmIsBuildOnly(jem_env.vms[i].params)) {
+            if(jemVmIsBuildOnly(jem_env.vms[i].params)) {
                 asprintf(&msg,
                          "%%G*)\t%s [%s] %%r(Build Only)%%$",
-                         gjvmGetVersion(jem_env.vms[i].params),
-                         gjvmGetName(&(jem_env.vms[i])));
+                         jemVmGetVersion(jem_env.vms[i].params),
+                         jemVmGetName(&(jem_env.vms[i])));
                 has_build_only = true;
             } else
                 asprintf(&msg,"%%G*)\t%s [%s]%%$",
-                         gjvmGetVersion(jem_env.vms[i].params),
-                         gjvmGetName(&(jem_env.vms[i])));
+                         jemVmGetVersion(jem_env.vms[i].params),
+                         jemVmGetName(&(jem_env.vms[i])));
         } else {
-            if(gjvmIsBuildOnly(jem_env.vms[i].params)) {
+            if(jemVmIsBuildOnly(jem_env.vms[i].params)) {
                 asprintf(&msg,
                          "%d)\t%s [%s] %%r(Build Only)%%$",
                          i+1,
-                         gjvmGetVersion(jem_env.vms[i].params),
-                         gjvmGetName(&(jem_env.vms[i])));
+                         jemVmGetVersion(jem_env.vms[i].params),
+                         jemVmGetName(&(jem_env.vms[i])));
                 has_build_only = true;
             } else
                 asprintf(&msg,"%d)\t%s [%s]",
                          i+1,
-                         gjvmGetVersion(jem_env.vms[i].params),
-                         gjvmGetName(&(jem_env.vms[i])));
+                         jemVmGetVersion(jem_env.vms[i].params),
+                         jemVmGetName(&(jem_env.vms[i])));
         }
         if(msg) {
-            print(msg);
+            jemPrint(msg);
             free(msg);
         }
     }
     if(has_build_only)
-        print("\n%rVMs marked as Build Only may contain Security Vulnerabilities and/or be EOL.%$");
+        jemPrint("\n%rVMs marked as Build Only may contain Security Vulnerabilities and/or be EOL.%$");
 }
 
 /**
  * Print a list of installed Packages
  */
-void listPackages() {
-    jem_env.pkgs = loadPackages(false);
+void jemListPackages() {
+    jem_env.pkgs = jemPkgLoadPackages(false);
     if(jem_env.pkgs) {
         int i;
         for(i=0;jem_env.pkgs[i].filename;i++) {
             fprintf(stdout,
                     "[%s] %s (%s)\n",
                     jem_env.pkgs[i].name,
-                    gjpGetDescription(jem_env.pkgs[i].params),
+                    jemPkgGetDescription(jem_env.pkgs[i].params),
                     jem_env.pkgs[i].filename);
         }
         fprintf(stdout,"%d Java packages\n\n",i);
-        cleanup();
+        jemCleanup();
     }
-    jem_env.pkgs = loadPackages(true);
+    jem_env.pkgs = jemPkgLoadPackages(true);
     if(jem_env.pkgs) {
         int i;
         for(i=0;jem_env.pkgs[i].filename;i++) {
-            char *active = gjpGetActiveVirtualProvider(jem_env.pkgs[i].name);
+            char *active = jemPkgGetActiveVirtualProvider(jem_env.pkgs[i].name);
             bool free_active = true;
-            char *providers = gjpGetVirtualProviders(jem_env.pkgs[i].name,true);
+            char *providers = jemPkgGetVirtualProviders(jem_env.pkgs[i].name,true);
             if(active && strcmp(active,"")==0) {
                 free_active = false;
                 free(active);
-                struct vm *vm = getActiveVM(&jem_env);
-                active = gjvmGetName(vm);
+                struct jem_vm *vm = jemGetActiveVM(&jem_env);
+                active = jemVmGetName(vm);
             }
             fprintf(stdout,
                     "[%s] Using: %s; Providers: %s (%s)\n",
@@ -228,19 +228,19 @@ void listPackages() {
 /**
  * Print the active VM
  */
-void printActiveVM() {
+void jemPrintActiveVM() {
     initEnvVMs();
-    struct vm *avm = getActiveVM(&jem_env);
+    struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm)
-        print(gjvmGetName(avm));
+        jemPrint(jemVmGetName(avm));
 }
 
 /**
  * Print the active VM parameters
  */
-void printVMParams(const char *vm_name) {
+void jemPrintVMParams(const char *vm_name) {
     initEnvVMs();
-    struct vm *vm = getVM(jem_env.vms,vm_name);
+    struct jem_vm *vm = jemVmGetVM(jem_env.vms,vm_name);
     int i;
     if(vm)
         for(i=0;vm->params[i].name;i++)
@@ -252,13 +252,13 @@ void printVMParams(const char *vm_name) {
  * 
  * @param exec string containing the executable to print
  */
-void printExe(const char *exe) {
+void jemPrintExe(const char *exe) {
     initEnvVMs();
-    struct vm *avm = getActiveVM(&jem_env);
+    struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm) {
-        char *e = gjvmGetExec(avm->params,exe);
+        char *e = jemVmGetExec(avm->params,exe);
         if(e) {
-            print(e);
+            jemPrint(e);
             free(e);
         }
     }
@@ -267,16 +267,16 @@ void printExe(const char *exe) {
 /**
  * Print the active VM java version
  */
-void printJavaVersion() {
+void jemPrintJavaVersion() {
     initEnvVMs();
-    struct vm *avm = getActiveVM(&jem_env);
+    struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm) {
-        char *exec = gjvmGetExec(avm->params,"java");
+        char *exec = jemVmGetExec(avm->params,"java");
         if(exec) {
             char *argv[] = { exec, "-version", NULL };
             int e = execve(exec,argv,NULL);
             if(e==-1)
-                printError("Unable to print java version");
+                jemPrintError("Unable to print java version");
             free(exec);
         }
     }
@@ -288,7 +288,7 @@ void printJavaVersion() {
  * @param name string containing the name(s) of the package(s), 
  *             multiple comma separated package names can be specified
  */
-void printPackageClasspath(const char *name) {
+void jemPrintPackageClasspath(const char *name) {
     bool package_found = false;
     char *pkg_name = NULL;
     char *pkgs_str = calloc(strlen(name)+1,sizeof(char));
@@ -297,12 +297,12 @@ void printPackageClasspath(const char *name) {
     memcpy(cursor,name,strlen(name));
     while((pkg_name = strsep(&cursor,","))) {
         package_found = false;
-        struct pkg *pkg = loadPackage(pkg_name);
+        struct jem_pkg *pkg = jemPkgLoadPackage(pkg_name);
         if(pkg) {
-            char *pkg_classpath = gjpGetClasspath(pkg->params);
+            char *pkg_classpath = jemPkgGetClasspath(pkg->params);
             package_found = true;
             if(jem_with_dependencies) {
-                struct dep *deps = gjpGetDeps(pkg->params);
+                struct jem_dep *deps = jemPkgGetDeps(pkg->params);
                 if(deps) {
                     int i;
                     for(i=0;deps[i].name;i++) {
@@ -317,32 +317,32 @@ void printPackageClasspath(const char *name) {
                                     asprintf(&classpath,"/usr/share/%s/lib/%s",deps[i].name,deps[i].jars[j]);
                             }
                         } else {
-                            struct pkg *dep_pkg = loadPackage(deps[i].name);
+                            struct jem_pkg *dep_pkg = jemPkgLoadPackage(deps[i].name);
                             if(dep_pkg) {
-                                classpath = appendStrs(classpath,":",gjpGetClasspath(dep_pkg->params));
-                                freePkg(dep_pkg);
+                                classpath = jemAppendStrs(classpath,":",jemPkgGetClasspath(dep_pkg->params));
+                                jemFreePkg(dep_pkg);
                                 free(dep_pkg);
                             } else {
                                 char *msg;
                                 asprintf(&msg,"Package %s a dependency of package %s was not found!",deps[i].name,pkg_name);
-                                printError(msg);
+                                jemPrintError(msg);
                                 free(msg);
                                 package_found = false;
                                 break;
                             }
                         }
-                        freeDep(&deps[i]);
+                        jemFreeDep(&deps[i]);
                     }
                     free(deps);
                 }
             }
-            classpath = appendStrs(classpath,":",pkg_classpath);
-            freePkg(pkg);
+            classpath = jemAppendStrs(classpath,":",pkg_classpath);
+            jemFreePkg(pkg);
             free(pkg);
         } else {
             char *msg;
             asprintf(&msg,"Package %s was not found!",pkg_name);
-            printError(msg);
+            jemPrintError(msg);
             free(msg);
             package_found = false;
             break;
@@ -350,7 +350,7 @@ void printPackageClasspath(const char *name) {
     }
     if(classpath) {
         if(package_found)
-            print(classpath);
+            jemPrint(classpath);
         free(classpath);
     }
     free(pkgs_str);
@@ -359,17 +359,17 @@ void printPackageClasspath(const char *name) {
 /**
  * Print the active VM absolute path to tools.jar
  */
-void printToolsJar() {
+void jemPrintToolsJar() {
     initEnvVMs();
-    struct vm *avm = getActiveVM(&jem_env);
+    struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm &&
-       !gjvmIsBuildOnly(avm->params)) {
+       !jemVmIsBuildOnly(avm->params)) {
         char *path;
-        asprintf(&path,"%s/lib/tools.jar",getValue(avm->params,"JAVA_HOME"));
+        asprintf(&path,"%s/lib/tools.jar",jemGetValue(avm->params,"JAVA_HOME"));
         if(path) {
             struct stat st;
             if(stat(path,&st)==0)
-                print(path);
+                jemPrint(path);
             free(path);
         }
     }
@@ -380,20 +380,20 @@ void printToolsJar() {
  *
  * @param name string containing the name(s) of the parameter(s), multiple comma separated parameter names can be specified
  */
-void printValueFromActiveVM(const char *name) {
+void jemPrintValueFromActiveVM(const char *name) {
     initEnvVMs();
-    struct vm *avm = getActiveVM(&jem_env);
+    struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm) {
         char *var = NULL;
         char *vars_str = calloc(strlen(name)+1,sizeof(char));
         char *cursor = vars_str;
         memcpy(cursor,name,strlen(name));
         while((var = strsep(&cursor,","))) {
-            char *value = getValue(avm->params,var);
+            char *value = jemGetValue(avm->params,var);
             if(value)
-                print(value);
+                jemPrint(value);
             else
-                printError("Value could not be found in the active VM environment");
+                jemPrintError("Value could not be found in the active VM environment");
         }
         free(vars_str);
     }
@@ -405,30 +405,30 @@ void printValueFromActiveVM(const char *name) {
  * @param name string containing the name(s) of the package(s), multiple package(s) separated parameter names can be specified
  * @param param string containing the parameter(s) names, multiple comma separated parameter names can be specified
  */
-void printValueFromPackage(const char *name,const char *param) {
+void jemPrintValueFromPackage(const char *name,const char *param) {
     char *package = NULL;
     char *package_str = calloc(strlen(name)+1,sizeof(char));
     char *p_cursor = package_str;
     memcpy(p_cursor,name,strlen(name));
     while((package = strsep(&p_cursor,","))) {
-        struct pkg *pkg = loadPackage(package);
+        struct jem_pkg *pkg = jemPkgLoadPackage(package);
         if(pkg) {
             char *var = NULL;
             char *vars_str = calloc(strlen(param)+1,sizeof(char));
             char *cursor = vars_str;
             memcpy(cursor,param,strlen(param));
             while((var = strsep(&cursor,","))) {
-                char *value = getValue(pkg->params,var);
+                char *value = jemGetValue(pkg->params,var);
                 if(value)
-                    print(value);
+                    jemPrint(value);
                 else
-                    print("");
+                    jemPrint("");
             }
             free(vars_str);
-            freePkg(pkg);
+            jemFreePkg(pkg);
             free(pkg);
         } else
-            printError("Package not found");
+            jemPrintError("Package not found");
     }
     free(package_str);
 }
@@ -439,10 +439,10 @@ void printValueFromPackage(const char *name,const char *param) {
  * @param name string containing the name(s) of the virtual package(s), 
  *        multiple comma separated virtual package names can be specified
  */
-void printVirtualProviders(const char *virtual) {
-    char *providers = gjpGetVirtualProviders(virtual,true);
+void jemPrintVirtualProviders(const char *virtual) {
+    char *providers = jemPkgGetVirtualProviders(virtual,true);
     if(providers) {
-        print(providers);
+        jemPrint(providers);
         free(providers);
     }
 }
@@ -452,17 +452,17 @@ void printVirtualProviders(const char *virtual) {
  *
  * @param vm_name string containing the vm name or number
  */
-void setSystemVM(const char *vm_name) {
+void jemSetSystemVM(const char *vm_name) {
     if(getuid()!=0) {
-        printError("Only root user can set the System VM");
+        jemPrintError("Only root user can set the System VM");
         return;
     }
     initEnvVMs();
-    struct vm *vm = getVM(jem_env.vms,vm_name);
+    struct jem_vm *vm = jemVmGetVM(jem_env.vms,vm_name);
     if(!vm)
-        printError("Could not find matching vm");
+        jemPrintError("Could not find matching vm");
     else
-        setVM(vm,getSystemVMLink());
+        jemVmSetVM(vm,jemVmGetSystemVMLink());
 }
 
 /**
@@ -470,18 +470,18 @@ void setSystemVM(const char *vm_name) {
  *
  * @param vm_name string containing the vm name or number
  */
-void setUserVM(const char *vm_name) {
+void jemSetUserVM(const char *vm_name) {
     if(getuid()==0) {
-        printError("The root user can only use the System VM");
+        jemPrintError("The root user can only use the System VM");
         return;
     }
     initEnvVMs();
-    struct vm *vm = getVM(jem_env.vms,vm_name);
+    struct jem_vm *vm = jemVmGetVM(jem_env.vms,vm_name);
     if(!vm)
-        printError("Could not find matching vm");
+        jemPrintError("Could not find matching vm");
     else {
-        char *target = getUserVMLink();
-        setVM(vm,target);
+        char *target = jemVmGetUserVMLink();
+        jemVmSetVM(vm,target);
         free(target);
     }
 }

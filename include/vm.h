@@ -35,9 +35,9 @@
 /**
  * java virtual machine
  */
-struct vm {
+struct jem_vm {
     char *filename;         /** config file absolute name */
-    struct param *params;   /** config file parameters */
+    struct jem_param *params;   /** config file parameters */
 };
 
 /**
@@ -45,7 +45,7 @@ struct vm {
  *
  * @param pkgs a pointer an array of vm structs
  */
-void freeVMs(struct vm *vms);
+void jemFreeVMs(struct jem_vm *vms);
 
 /**
  * Get the path to an executable by name
@@ -54,7 +54,7 @@ void freeVMs(struct vm *vms);
  * @param exec name of the executables path to get
  * @return a string containing the value. The string must be freed!
  */
-char *gjvmGetExec(struct param *params,const char *exec);
+char *jemVmGetExec(struct jem_param *params,const char *exec);
 
 /**
  * Get the name of the vm
@@ -62,7 +62,7 @@ char *gjvmGetExec(struct param *params,const char *exec);
  * @param vm a pointer to a vm struct
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetName(struct vm *vm);
+char *jemVmGetName(struct jem_vm *vm);
 
 /**
  * Get the types the vm provides
@@ -70,7 +70,7 @@ char *gjvmGetName(struct vm *vm);
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetProvidesType(struct param *params);
+char *jemVmGetProvidesType(struct jem_param *params);
 
 /**
  * Get the versions of the vm provides
@@ -78,7 +78,7 @@ char *gjvmGetProvidesType(struct param *params);
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetProvidesVersion(struct param *params);
+char *jemVmGetProvidesVersion(struct jem_param *params);
 
 /**
  * Get the versions the vm
@@ -86,14 +86,14 @@ char *gjvmGetProvidesVersion(struct param *params);
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetVersion(struct param *params);
+char *jemVmGetVersion(struct jem_param *params);
 
 /**
  * Check to see if the vm is build only
  *
  * @return true if build only, false otherwise
  */
-bool gjvmIsBuildOnly(struct param *params);
+bool jemVmIsBuildOnly(struct jem_param *params);
 
 /**
  * Check to see if the vm is/provides a particular type
@@ -101,22 +101,22 @@ bool gjvmIsBuildOnly(struct param *params);
  * @param type the type of vm
  * @return true if the vm is/provides a particular type , false otherwise
  */
-bool gjvmIsType(struct param *params,const char *type);
+bool jemVmIsType(struct jem_param *params,const char *type);
 
 /**
  * Check to see if the vm is a JDK
  *
  * @return true if the vm is a JDK, false otherwise
  */
-bool gjvmIsJDK(struct param *params);
+bool jemVmIsJDK(struct jem_param *params);
 /**
  * Check to see if the vm is a JRE
  *
  * @return true if the vm is a JRE, false otherwise
  */
-bool gjvmIsJRE(struct param *params);
+bool jemVmIsJRE(struct jem_param *params);
 
-int gjvmProvides(struct param *params,
+int jemVmProvides(struct jem_param *params,
                  char **virtuals);
 
 /**
@@ -124,28 +124,28 @@ int gjvmProvides(struct param *params,
  *
  * @param vm_links a pointer an array of strings
  */
-void freeVMLinks(char **vm_links);
+void jemFreeVMLinks(char **vm_links);
 
 /**
  * Get the system VM's link
  *
  * @return a string containing the value. The string must NOT be freed!
  */
-char *getSystemVMLink();
+char *jemVmGetSystemVMLink();
 
 /**
  * Get the system VM's name by returning the basename of the system VM link
  *
  * @return a string containing the value. The string must be freed!
  */
-char *getSystemVMName();
+char *jemVmGetSystemVMName();
 
 /**
  * Get the user VM's link
  *
  * @return a string containing the value. The string must be freed!
  */
-char *getUserVMLink();
+char *jemVmGetUserVMLink();
 
 /**
  * Get a VM by index, filename, VM name including partial match, or JAVA_HOME
@@ -155,7 +155,7 @@ char *getUserVMLink();
  * @param file the name of the file to parse
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
-struct vm *getVM(struct vm *vms,const char *vm_name);
+struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name);
 
 /**
  * Get user and system VM links
@@ -163,7 +163,7 @@ struct vm *getVM(struct vm *vms,const char *vm_name);
  * @return a pointer to an array of strings containing the user and/or system
  * vm links, or null if not found. Array and links must be freed!
  */
-char **getVMLinks();
+char **jemVmGetVMLinks();
 
 /**
  * Compares the filenames of two vms, used soley by qsort in loadVMs()
@@ -171,7 +171,7 @@ char **getVMLinks();
  * @return an integer -1, 0, or 1.
  */
 
-int compareVMs(const void *v1, const void *v2);
+int jemVmCompareVMs(const void *v1, const void *v2);
 
 /**
  * Loads all installed VMs config files. Storing them in an dynamically allocated
@@ -179,7 +179,7 @@ int compareVMs(const void *v1, const void *v2);
  *
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-struct vm *loadVMs();
+struct jem_vm *jemVmLoadVMs();
 
 /**
  * Set the VM, create a symlink for the given vm to target
@@ -188,4 +188,4 @@ struct vm *loadVMs();
  * @param target a string representing the vm symlink target
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-bool setVM(struct vm *vm,char *target);
+bool jemVmSetVM(struct jem_vm *vm,char *target);

@@ -34,13 +34,13 @@
  *
  * @param pkgs a pointer an array of vm structs
  */
-void freeVMs(struct vm *vms) {
+void jemFreeVMs(struct jem_vm *vms) {
     if(!vms)
         return;
     int i;
     for(i=0;vms[i].filename;i++) {   // <- ugly, nasty, etc but works! :)
         free(vms[i].filename);
-        freeParams(vms[i].params);
+        jemFreeParams(vms[i].params);
     }
     free(vms);
 }
@@ -52,8 +52,8 @@ void freeVMs(struct vm *vms) {
  * @param exec name of the executables path to get
  * @return a string containing the value. The string must be freed!
  */
-char *gjvmGetExec(struct param *params,const char *exec) {
-    char *paths = getValue(params,"PATH");
+char *jemVmGetExec(struct jem_param *params,const char *exec) {
+    char *paths = jemGetValue(params,"PATH");
     char *path = NULL;
     while((path = strsep(&paths,":"))) {
         char *cmd;
@@ -62,9 +62,9 @@ char *gjvmGetExec(struct param *params,const char *exec) {
         if(stat(cmd,&st)<0) {
             free(cmd);
             if(errno==EACCES)
-                printError("Java executable not readable"); // might need to be changed to throw an exception
+                jemPrintError("Java executable not readable"); // might need to be changed to throw an exception
             else
-                printError("Invalid java executable, bad path or file name"); // might need to be changed to throw an exception
+                jemPrintError("Invalid java executable, bad path or file name"); // might need to be changed to throw an exception
             return(NULL);
         }
         return(cmd);
@@ -78,7 +78,7 @@ char *gjvmGetExec(struct param *params,const char *exec) {
  * @param vm a pointer to a vm struct
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetName(struct vm *vm) {
+char *jemVmGetName(struct jem_vm *vm) {
     return(basename(vm->filename));
 }
 
@@ -88,8 +88,8 @@ char *gjvmGetName(struct vm *vm) {
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetProvidesType(struct param *params) {
-    return(getValue(params,"PROVIDES_TYPE"));
+char *jemVmGetProvidesType(struct jem_param *params) {
+    return(jemGetValue(params,"PROVIDES_TYPE"));
 }
 
 /**
@@ -98,8 +98,8 @@ char *gjvmGetProvidesType(struct param *params) {
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetProvidesVersion(struct param *params) {
-    return(getValue(params,"PROVIDES_VERSION"));
+char *jemVmGetProvidesVersion(struct jem_param *params) {
+    return(jemGetValue(params,"PROVIDES_VERSION"));
 }
 
 /**
@@ -108,8 +108,8 @@ char *gjvmGetProvidesVersion(struct param *params) {
  * @param params an array of param structs
  * @return a string containing the value. The string must NOT be freed!
  */
-char *gjvmGetVersion(struct param *params) {
-    return(getValue(params,"VERSION"));
+char *jemVmGetVersion(struct jem_param *params) {
+    return(jemGetValue(params,"VERSION"));
 }
 
 /**
@@ -117,8 +117,8 @@ char *gjvmGetVersion(struct param *params) {
  *
  * @return true if build only, false otherwise
  */
-bool gjvmIsBuildOnly(struct param *params) {
-    char *v = getValue(params,"BUILD_ONLY");
+bool jemVmIsBuildOnly(struct jem_param *params) {
+    char *v = jemGetValue(params,"BUILD_ONLY");
     if(v &&
        strcasecmp(v,"TRUE")==0)
         return(true);
@@ -131,9 +131,9 @@ bool gjvmIsBuildOnly(struct param *params) {
  * @param type the type of vm
  * @return true if the vm is/provides a particular type , false otherwise
  */
-bool gjvmIsType(struct param *params,const char *type) {
+bool jemVmIsType(struct jem_param *params,const char *type) {
     bool is_type = false;
-    char *types = gjvmGetProvidesType(params);
+    char *types = jemVmGetProvidesType(params);
     char *types_str = calloc(strlen(types)+1,sizeof(char));
     char *cursor = types_str;
     memcpy(cursor,types,strlen(types));
@@ -150,8 +150,8 @@ bool gjvmIsType(struct param *params,const char *type) {
  *
  * @return true if the vm is a JDK, false otherwise
  */
-bool gjvmIsJDK(struct param *params) {
-    return(gjvmIsType(params,"JDK"));
+bool jemVmIsJDK(struct jem_param *params) {
+    return(jemVmIsType(params,"JDK"));
 }
 
 /**
@@ -159,14 +159,14 @@ bool gjvmIsJDK(struct param *params) {
  *
  * @return true if the vm is a JRE, false otherwise
  */
-bool gjvmIsJRE(struct param *params) {
-    return(gjvmIsType(params,"JRE"));
+bool jemVmIsJRE(struct jem_param *params) {
+    return(jemVmIsType(params,"JRE"));
 }
 
-int gjvmProvides(struct param *params,
+int jemVmProvides(struct jem_param *params,
                  char **virtuals) {
     int provides = 0;
-    char **vp = gjpGetProvides(params);
+    char **vp = jemPkgGetProvides(params);
     if(vp) {
         int a;
         int b;
@@ -187,7 +187,7 @@ int gjvmProvides(struct param *params,
  *
  * @param vm_links a pointer an array of strings
  */
-void freeVMLinks(char **vm_links) {
+void jemFreeVMLinks(char **vm_links) {
     if(!vm_links)
         return;
     int i;
@@ -202,7 +202,7 @@ void freeVMLinks(char **vm_links) {
  *
  * @return a string containing the value. The string must NOT be freed!
  */
-char *getSystemVMLink() {
+char *jemVmGetSystemVMLink() {
     return(JEM_SYSTEM_VM_LINK); // might do some checking or change to calculated in future
 }
 
@@ -211,15 +211,15 @@ char *getSystemVMLink() {
  *
  * @return a string containing the value. The string must be freed!
  */
-char *getSystemVMName() {
+char *jemVmGetSystemVMName() {
     char *abs_file = calloc(JEM_BASE_NAME_SIZE+1,sizeof(char));
-    if(readlink(getSystemVMLink(),abs_file,JEM_BASE_NAME_SIZE)<0) {
+    if(readlink(jemVmGetSystemVMLink(),abs_file,JEM_BASE_NAME_SIZE)<0) {
         if(errno==EACCES)
-            printError("System VM link not readable"); // might need to be changed to throw an exception
+            jemPrintError("System VM link not readable"); // might need to be changed to throw an exception
         else if(errno==EINVAL)
-            printError("System VM file is not a symlink"); // might need to be changed to throw an exception
+            jemPrintError("System VM file is not a symlink"); // might need to be changed to throw an exception
         else if(errno==EIO)
-            printError("A hardware error has occurred"); // might need to be changed to throw an exception
+            jemPrintError("A hardware error has occurred"); // might need to be changed to throw an exception
         free(abs_file);
         return(NULL);
     }
@@ -235,7 +235,7 @@ char *getSystemVMName() {
  *
  * @return a string containing the value. The string must be freed!
  */
-char *getUserVMLink() {
+char *jemVmGetUserVMLink() {
     char *home = NULL;
     char *user_vm = NULL;
     if((home = getenv("HOME"))) 
@@ -251,9 +251,9 @@ char *getUserVMLink() {
  * @param file the name of the file to parse
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
-struct vm *getVM(struct vm *vms,const char *vm_name) {
+struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name) {
     unsigned int i = vm_name[0];
-    size_t vms_len = sizeof(struct vm) / sizeof(vms);
+    size_t vms_len = sizeof(struct jem_vm) / sizeof(vms);
     if(strlen(vm_name)==1 &&
        isdigit(i)) {
         i = atoi(vm_name) - 1;
@@ -276,9 +276,9 @@ struct vm *getVM(struct vm *vms,const char *vm_name) {
     for(i=0;vms[i].filename;i++) {
         if(strcasecmp(vm_name,vms[i].filename)==0)
             return(&vms[i]);
-        if(strncasecmp(vm_name,gjvmGetName(&vms[i]),strlen(vm_name))==0)  // handles both full and partial matches
+        if(strncasecmp(vm_name,jemVmGetName(&vms[i]),strlen(vm_name))==0)  // handles both full and partial matches
             return(&vms[i]);
-        if(strcasecmp(vm_name,getValue(vms[i].params,"JAVA_HOME"))==0)
+        if(strcasecmp(vm_name,jemGetValue(vms[i].params,"JAVA_HOME"))==0)
             return(&vms[i]);
     }
     return(NULL);
@@ -290,17 +290,17 @@ struct vm *getVM(struct vm *vms,const char *vm_name) {
  * @return a pointer to an array of strings containing the user and/or system
  * vm links, or null if not found. Array and links must be freed!
  */
-char **getVMLinks() {
+char **jemVmGetVMLinks() {
     char *user_vm = NULL;
     char **links = NULL;
     int c = 0;
-    if((user_vm = getUserVMLink())) {
+    if((user_vm = jemVmGetUserVMLink())) {
         links = calloc(3,sizeof(char *));
         links[0] = user_vm;
         c++;
     } else
         links = calloc(2,sizeof(char *));
-    links[c] = getSystemVMLink();
+    links[c] = jemVmGetSystemVMLink();
     return(links);
 }
 
@@ -310,9 +310,9 @@ char **getVMLinks() {
  * @return an integer -1, 0, or 1.
  */
 
-int compareVMs(const void *v1, const void *v2) {
-    const struct vm *vm1 = v1;
-    const struct vm *vm2 = v2;
+int jemVmCompareVMs(const void *v1, const void *v2) {
+    const struct jem_vm *vm1 = v1;
+    const struct jem_vm *vm2 = v2;
     if(vm1->filename && vm2->filename)
         return strcmp (basename(vm1->filename), basename(vm2->filename));
     return(-1);
@@ -324,9 +324,9 @@ int compareVMs(const void *v1, const void *v2) {
  *
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-struct vm *loadVMs() {
+struct jem_vm *jemVmLoadVMs() {
     DIR *dp;
-    struct vm *vms = NULL;
+    struct jem_vm *vms = NULL;
     int i = 0;
     if((dp = opendir(JEM_VMS_PATH))) {
         struct dirent *file;
@@ -334,26 +334,26 @@ struct vm *loadVMs() {
             if(!strcmp(file->d_name,".") ||
                !strcmp(file->d_name,".."))
                 continue;
-            struct vm *nvms = realloc(vms,sizeof(struct vm)*(i+2));
+            struct jem_vm *nvms = realloc(vms,sizeof(struct jem_vm)*(i+2));
             if(!nvms)
-                printError("Unable to allocate memory to hold all VM config files"); // needs to clean up and exit under error, not just print a message
+                jemPrintError("Unable to allocate memory to hold all VM config files"); // needs to clean up and exit under error, not just print a message
             vms = nvms;
             vms[i+1].filename = NULL;
             vms[i+1].params = NULL;
             asprintf(&(vms[i].filename),"%s/%s",JEM_VMS_PATH,file->d_name);
             if(!vms[i].filename)
-                printError("Unable to allocate memory to hold VM config file name"); // needs to clean up and exit under error, not just print a message
-            vms[i].params = parseFile(vms[i].filename);
+                jemPrintError("Unable to allocate memory to hold VM config file name"); // needs to clean up and exit under error, not just print a message
+            vms[i].params = jemParseFile(vms[i].filename);
             i++;
         }
     } else {
         if(errno==EACCES)
-            printError("VMs config directory not readable"); // needs to be changed to throw an exception
+            jemPrintError("VMs config directory not readable"); // needs to be changed to throw an exception
         else
-            printError("Invalid VMs configuration directory"); // needs to be changed to throw an exception
+            jemPrintError("Invalid VMs configuration directory"); // needs to be changed to throw an exception
     }
     if(vms)
-        qsort(vms,i+2,sizeof(struct vm),compareVMs);
+        qsort(vms,i+2,sizeof(struct jem_vm),jemVmCompareVMs);
     closedir(dp);
     return(vms);
 }
@@ -365,7 +365,7 @@ struct vm *loadVMs() {
  * @param target a string representing the vm symlink target
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-bool setVM(struct vm *vm,char *target) {
+bool jemVmSetVM(struct jem_vm *vm,char *target) {
     int basename_len = strlen(basename(target));
     int target_len = strlen(target);
     char *buffer = calloc(target_len+1,sizeof(char));
@@ -379,9 +379,9 @@ bool setVM(struct vm *vm,char *target) {
         if(stat(dirs[i],&st)<0) {
             if(mkdir(dirs[i], S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)<0) {  // create dir if doesn't exist mode 755
                 if(errno==EACCES)
-                    printError("Write permission denied for System VM link parent directory"); // needs to be changed to throw an exception
+                    jemPrintError("Write permission denied for System VM link parent directory"); // needs to be changed to throw an exception
                 else
-                    printError("Invalid VMs configuration directory"); // needs to be changed to throw an exception
+                    jemPrintError("Invalid VMs configuration directory"); // needs to be changed to throw an exception
                 free(buffer);
                 return;
             }
@@ -393,24 +393,24 @@ bool setVM(struct vm *vm,char *target) {
     if(readlink(target,buffer,target_len)>0) // if symlinks exists, remove
         unlink(target);
     free(buffer);
-    char *vm_name = gjvmGetName(vm);
+    char *vm_name = jemVmGetName(vm);
     char *symlnk;
     asprintf(&symlnk,"/usr/lib/jvm/%s",vm_name);
     if(symlink(symlnk,target)<0)
-        printError("Failed to create symlink, unable to set VM"); // needs to be changed to throw an exception
+        jemPrintError("Failed to create symlink, unable to set VM"); // needs to be changed to throw an exception
     else {
         char *msg;
         char *vm_type = "system";
-        if(strncasecmp(target,getSystemVMLink(),target_len)!=0)
+        if(strncasecmp(target,jemVmGetSystemVMLink(),target_len)!=0)
             vm_type = "user";
-        asprintf(&msg, "Now using %s as your %s JVM", gjvmGetName(vm),vm_type);
-        print(msg);
+        asprintf(&msg, "Now using %s as your %s JVM", jemVmGetName(vm),vm_type);
+        jemPrint(msg);
         free(msg);
-        if(gjvmIsBuildOnly(vm->params)) {
+        if(jemVmIsBuildOnly(vm->params)) {
             asprintf(&msg,
                      "%s is marked as a build-only JVM. Using this vm is not recommended.",
-                     gjvmGetName(vm));
-            printWarning(msg);
+                     jemVmGetName(vm));
+            jemPrintWarning(msg);
             free(msg);
         }
     }

@@ -28,7 +28,7 @@
 /**
  * config/package.env file parameter
  */
-struct param {
+struct jem_param {
     char *name;   /** param name */
     char *value;  /** param value */
 };
@@ -38,7 +38,7 @@ struct param {
  *
  * @param params a pointer to an array of param structs
  */
-void freeParams(struct param *params);
+void jemFreeParams(struct jem_param *params);
 
 /**
  * Returns the value of a parameter in the array of param structs
@@ -47,7 +47,7 @@ void freeParams(struct param *params);
  * @param name the name of the parameter
  * @return a string containing the value. The string must NOT be freed!
  */
-char *getValue(struct param *params,const char *name);
+char *jemGetValue(struct jem_param *params,const char *name);
 
 /**
  * Parses a config/package.env file's parameters. Storing them in an dynamically
@@ -56,4 +56,4 @@ char *getValue(struct param *params,const char *name);
  * @param file the name of the file to parse
  * @return an array of param structs. Which must be freed, including struct members!
  */
-struct param *parseFile(const char *file);
+struct jem_param *jemParseFile(const char *file);

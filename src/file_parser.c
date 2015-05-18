@@ -32,7 +32,7 @@
  *
  * @param params a pointer to an array of param structs
  */
-void freeParams(struct param *params) {
+void jemFreeParams(struct jem_param *params) {
     if(!params)
         return;
     int i;
@@ -51,7 +51,7 @@ void freeParams(struct param *params) {
  * @param name the name of the parameter
  * @return a string containing the value. The string must NOT be freed!
  */
-char *getValue(struct param *params,const char *name) {
+char *jemGetValue(struct jem_param *params,const char *name) {
     int i;
     for(i=0;params[i].name;i++)
         if(strcmp(params[i].name,name)==0)
@@ -66,14 +66,14 @@ char *getValue(struct param *params,const char *name) {
  * @param file the name of the file to parse
  * @return an array of param structs. Which must be freed, including struct members!
  */
-struct param *parseFile(const char *file) {
-    struct param *params = NULL;
+struct jem_param *jemParseFile(const char *file) {
+    struct jem_param *params = NULL;
     struct stat st;
     if(stat(file,&st)<0) {
         if(errno==EACCES)
-            printError("File not readable"); // needs to be changed to throw an exception
+            jemPrintError("File not readable"); // needs to be changed to throw an exception
         else
-            printError("Invalid file, does not exist"); // needs to be changed to throw an exception
+            jemPrintError("Invalid file, does not exist"); // needs to be changed to throw an exception
         return(params);
     }
     FILE *fp = fopen(file,"r");
@@ -101,15 +101,15 @@ struct param *parseFile(const char *file) {
                 value_len-=2;
                 memset(line+bytes_read-1,'\0',1); // end the string in case extra data in buffer
             }
-            struct param *nparams = realloc(params,sizeof(struct param)*(i+3));
+            struct jem_param *nparams = realloc(params,sizeof(struct jem_param)*(i+3));
             if(!nparams)
-                printError("Unable to allocate memory to hold all file parameters"); // needs to clean up and exit under error, not just print a message
+                jemPrintError("Unable to allocate memory to hold all file parameters"); // needs to clean up and exit under error, not just print a message
             params = nparams;
             params[i+1].name = NULL;
             params[i+1].value = NULL;
             params[i].name = calloc(name_len,sizeof(char));
             if(!params[i].name)
-                printError("Unable to allocate memory to hold all file parameter names"); // needs to clean up and exit under error, not just print a message
+                jemPrintError("Unable to allocate memory to hold all file parameter names"); // needs to clean up and exit under error, not just print a message
             memcpy(params[i].name,line,name_len-1);
             params[i].value = NULL;
             // Expand ${VAR} before storing value
@@ -128,9 +128,9 @@ struct param *parseFile(const char *file) {
                         free(var_name);
                     var_name = calloc(var_len,sizeof(char));
                     if(!var_name)
-                        printError("Unable to allocate memory to hold all file parameter variable name"); // needs to clean up and exit under error, not just print a message
+                        jemPrintError("Unable to allocate memory to hold all file parameter variable name"); // needs to clean up and exit under error, not just print a message
                     memcpy(var_name,subptr+2,var_len-1);
-                    var_value = getValue(params,var_name);
+                    var_value = jemGetValue(params,var_name);
                     if(!var_value)
                         break;
                     var_value_len = strlen(var_value);
@@ -138,7 +138,7 @@ struct param *parseFile(const char *file) {
                 value_len += var_value_len - var_len - 2;
                 char *tmp = realloc(params[i].value,(value_len+1) * sizeof(char));
                 if(!tmp)
-                    printError("Unable to re-allocate memory while parsing file parameter variables"); // needs to clean up and exit under error, not just print a message
+                    jemPrintError("Unable to re-allocate memory while parsing file parameter variables"); // needs to clean up and exit under error, not just print a message
                 params[i].value = tmp;
                 if(cur_len>0)
                     cur_len -= sub_len-1;                                       // back up so we overwrite/start where the next variable starts
@@ -152,7 +152,7 @@ struct param *parseFile(const char *file) {
             if(!params[i].value) {
                 params[i].value = calloc(value_len,sizeof(char));
                 if(!params[i].value)
-                    printError("Unable to allocate memory to hold all file parameter values"); // needs to clean up and exit under error, not just print a message
+                    jemPrintError("Unable to allocate memory to hold all file parameter values"); // needs to clean up and exit under error, not just print a message
                 memcpy(params[i].value,value,value_len-1);
             }
             i++;

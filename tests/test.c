@@ -32,33 +32,33 @@ testOutputFormatter() {
 
     fprintf(stdout,"Testing output_formatter.h functions\n\n"
                    "char *getCode(const char *key) output effects next terminal line\n");
-    for(i=0;i<codes_count;i++)
-        fprintf(stdout,"getCode('%c')%s\n",codes[i].key,getCode(codes[i].key));
+    for(i=0;i<jem_codes_count;i++)
+        fprintf(stdout,"getCode('%c')%s\n",jem_term_codes[i].key,jemGetTermCode(jem_term_codes[i].key));
 
     fprintf(stdout,"\nbool isValidTerm()\n");
-    if(isValidTerm())
+    if(jemIsValidTerm())
         fprintf(stdout,"Yes valid terminal\n");
     else
         fprintf(stdout,"No invalid terminal\n");
 
     fprintf(stdout,"\nchar *addColor(const char *key)\n");
-    for(i=0;i<codes_count;i++) {
+    for(i=0;i<jem_codes_count;i++) {
         char msg[10];
         memset(msg,'%',1);
-        memset(msg+1,codes[i].key,1);
+        memset(msg+1,jem_term_codes[i].key,1);
         memcpy(msg+2," text %$",8);
         memset(msg+10,'\0',1);
-        char *nmsg = addColor(msg);
+        char *nmsg = jemAddTermColor(msg);
         fprintf(stdout,"addColor(%s) -> %s\n",msg,nmsg);
         free(nmsg);
     }
 
     fprintf(stdout,"\nchar *indent(const char *prefix,const char *msg)\n");
-    char *imsg = indent("Preffix : ","A message that does not repeat (no indent test)");
+    char *imsg = jemIndent("Preffix : ","A message that does not repeat (no indent test)");
     fprintf(stdout,"\nindent(\"Preffix : \",\"A message that does not repeat\") ->\n%s\n",imsg);
     free(imsg);
 
-    imsg = indent("Preffix : ","An indented message that repeats 1\n"
+    imsg = jemIndent("Preffix : ","An indented message that repeats 1\n"
                                "An indented message that repeats 2\n"
                                "An indented message that repeats 3");
     fprintf(stdout,"\nindent(\"Preffix : \",\"An indented message that repeats 1\n%s%s\") ->\n%s\n",
@@ -66,18 +66,18 @@ testOutputFormatter() {
                    "An indented message that repeats 3",imsg);
     free(imsg);
 
-    imsg = indent("!!! Alert : ","Printing an alert that spans\na few lines so we get some\nline indenting\n");
+    imsg = jemIndent("!!! Alert : ","Printing an alert that spans\na few lines so we get some\nline indenting\n");
     fprintf(stdout,"\nindent(\"!!! Alert : \",\"Printing an alert that spans\na few lines so we get some\nline indenting\n\") ->\n%s",imsg);
     free(imsg);
 
     fprintf(stdout,"\nvoid printAlert(const char *msg)\n");
-    printAlert("Printing an alert that spans\na few lines so we get some\nline indenting\n");
+    jemPrintAlert("Printing an alert that spans\na few lines so we get some\nline indenting\n");
 
     fprintf(stdout,"void printError(const char *msg)\n");
-    printError("Printing an error that spans\na few lines so we get some\nline indenting\n");
+    jemPrintError("Printing an error that spans\na few lines so we get some\nline indenting\n");
 
     fprintf(stdout,"void printWarning(const char *msg)\n");
-    printWarning("Printing a warning that spans\na few lines so we get some\nline indenting\n");
+    jemPrintWarning("Printing a warning that spans\na few lines so we get some\nline indenting\n");
 
 }
 
@@ -85,50 +85,50 @@ testFileParser() {
     fprintf(stdout,"\nTesting file_parser.h functions\n");
     int i;
     fprintf(stdout,"\nstruct param *params;\n");
-    struct param *params = NULL;
+    struct jem_param *params = NULL;
 
     fprintf(stdout,"\nparse vm config (also tests/fills in variables in values)");
     fprintf(stdout,"\nparams = parseFile(\"%s\"); ->\n",VM_CONF_FILE);
-    params = parseFile(VM_CONF_FILE);
+    params = jemParseFile(VM_CONF_FILE);
     for(i=0;params[i].name;i++)
         fprintf(stdout,"\tparams[%d]->name=%s\n\tparams[%d]->value=%s\n",i,params[i].name,i,params[i].value);
 
-    fprintf(stdout,"\ngetValue(params,\"BOOTCLASSPATH\") ->\n%s\n",getValue(params,"BOOTCLASSPATH"));
+    fprintf(stdout,"\ngetValue(params,\"BOOTCLASSPATH\") ->\n%s\n",jemGetValue(params,"BOOTCLASSPATH"));
 
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
-    freeParams(params);
+    jemFreeParams(params);
     
     fprintf(stdout,"\nparse package.env");
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/ant-core/package.env\"); ->\n");
-    params = parseFile("/usr/share/ant-core/package.env");
+    params = jemParseFile("/usr/share/ant-core/package.env");
     for(i=0;params[i].name;i++)
         fprintf(stdout,"\tparams[%d]->name=%s\n\tparams[%d]->value=%s\n",i,params[i].name,i,params[i].value);
 
     fprintf(stdout,"\nchar *getValue(struct param *params,const char *name) ->\n");
 
-    fprintf(stdout,"\ngetValue(params,\"MERGE_VM\") ->\n%s\n",getValue(params,"MERGE_VM"));
+    fprintf(stdout,"\ngetValue(params,\"MERGE_VM\") ->\n%s\n",jemGetValue(params,"MERGE_VM"));
 
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
-    freeParams(params);
+    jemFreeParams(params);
 
 }
 
 testPackage() {
     fprintf(stdout,"\nTesting package.h functions\n");
     fprintf(stdout,"\nstruct param *params;\n");
-    struct param *params = NULL;
+    struct jem_param *params = NULL;
 
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/idontexist/package.env\");\n");
-    params = parseFile("/usr/share/idontexist/package.env");
+    params = jemParseFile("/usr/share/idontexist/package.env");
 
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/cglib-2.2/package.env\");\n");
-    params = parseFile("/usr/share/cglib-2.2/package.env");
+    params = jemParseFile("/usr/share/cglib-2.2/package.env");
     
-    fprintf(stdout,"\nchar *gjpGetDescription(struct params *params) ->\n%s\n",gjpGetDescription(params));
-    fprintf(stdout,"\nchar *gjpGetClasspath(struct params *params) ->\n%s\n",gjpGetClasspath(params));
+    fprintf(stdout,"\nchar *gjpGetDescription(struct params *params) ->\n%s\n",jemPkgGetDescription(params));
+    fprintf(stdout,"\nchar *gjpGetClasspath(struct params *params) ->\n%s\n",jemPkgGetClasspath(params));
 
     fprintf(stdout,"\nstruct dep *gjpGetDeps(struct params *params) ->\n");
-    struct dep *deps = gjpGetDeps(params);
+    struct jem_dep *deps = jemPkgGetDeps(params);
     if(deps) {
         int i;
         for(i=0;deps[i].name;i++) {
@@ -137,13 +137,13 @@ testPackage() {
             if(deps[i].jars)
                 for(j=0;deps[i].jars[j];j++)
                     fprintf(stdout,"\t\t%s\n",deps[i].jars[j]);
-            freeDep(&deps[i]);
+            jemFreeDep(&deps[i]);
         }
         free(deps);
     }
 
     fprintf(stdout,"\ncleanup()\n");
-    cleanup();
+    jemCleanup();
 
     fprintf(stdout,"\nchar **jemPkgGetJarNames(char *pkg_name) ->\n");
     char **jars = jemPkgGetJarNames("ant-core");
@@ -157,7 +157,7 @@ testPackage() {
     }
     
     fprintf(stdout,"\nstruct dep *gjpGetBuildDeps(struct params *params) ->\n");
-    struct dep *build_deps = gjpGetBuildDeps(params);
+    struct jem_dep *build_deps = jemPkgGetBuildDeps(params);
     if(build_deps) {
         int i;
         for(i=0;build_deps[i].name;i++) {
@@ -166,13 +166,13 @@ testPackage() {
             if(build_deps[i].jars)
                 for(j=0;build_deps[i].jars[j];j++)
                     fprintf(stdout,"\t\t%s\n",build_deps[i].jars[j]);
-            freeDep(&build_deps[i]);
+            jemFreeDep(&build_deps[i]);
         }
         free(build_deps);
     }
 
     fprintf(stdout,"\nstruct dep *gjpGetOptDeps(struct params *params) ->\n");
-    struct dep *opt_deps = gjpGetOptDeps(params);
+    struct jem_dep *opt_deps = jemPkgGetOptDeps(params);
     if(opt_deps) {
         int i;
         for(i=0;opt_deps[i].name;i++) {
@@ -181,7 +181,7 @@ testPackage() {
             if(opt_deps[i].jars)
                 for(j=0;opt_deps[i].jars[j];j++)
                     fprintf(stdout,"\t\t%s\n",opt_deps[i].jars[j]);
-            freeDep(&opt_deps[i]);
+            jemFreeDep(&opt_deps[i]);
         }
         free(opt_deps);
     }
@@ -189,7 +189,7 @@ testPackage() {
     fprintf(stdout,"\nDoesn't seem like any package.env file has this yet?");
     fprintf(stdout,"\nchar **gjpGetProvides(params) ->\n");
 
-    char **provides = gjpGetProvides(params);
+    char **provides = jemPkgGetProvides(params);
     if(provides) {
         int i;
         for(i=0;provides[i];i++) {
@@ -199,18 +199,18 @@ testPackage() {
         free(provides);
     }
 
-    fprintf(stdout,"\nchar *gjpGetTarget(struct params *params) -> %s\n",gjpGetTarget(params));
+    fprintf(stdout,"\nchar *gjpGetTarget(struct params *params) -> %s\n",jemPkgGetTarget(params));
 
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
-    freeParams(params);
+    jemFreeParams(params);
 
     fprintf(stdout,"\nconst char *gjpGetVirtualProviders(\"javamail\",true)->\n");
-    char *virtual = gjpGetVirtualProviders("javamail",true);
+    char *virtual = jemPkgGetVirtualProviders("javamail",true);
     fprintf(stdout,"%s\n",virtual);
     free(virtual);
 
     fprintf(stdout,"\nconst char *gjpGetActiveVirtualProvider(\"javamail\")->\n");
-    virtual = gjpGetActiveVirtualProvider("javamail");
+    virtual = jemPkgGetActiveVirtualProvider("javamail");
     fprintf(stdout,"%s\n",virtual);
     free(virtual);
 
@@ -219,52 +219,52 @@ testPackage() {
 testVM() {
     fprintf(stdout,"\nTesting vm.h functions\n");
     fprintf(stdout,"\nstruct param *params;\n");
-    struct param *params = NULL;
+    struct jem_param *params = NULL;
 
     fprintf(stdout,"\nparams = parseFile(\"%s\");\n",VM_CONF_FILE);
-    params = parseFile(VM_CONF_FILE);
+    params = jemParseFile(VM_CONF_FILE);
 
     fprintf(stdout,"\nchar *gjvmGetExec(params,\"javah\") ->\n");
     char *exec;
-    if((exec = gjvmGetExec(params,"javah"))) {
+    if((exec = jemVmGetExec(params,"javah"))) {
         fprintf(stdout,"exec = %s\n",exec);
         free(exec);
     }
 
     fprintf(stdout,"\nchar *gjvmGetExec(params,\"your_momma\") ->\n");
-    if((exec = gjvmGetExec(params,"your_momma"))) {
+    if((exec = jemVmGetExec(params,"your_momma"))) {
         fprintf(stdout,"exec = %s\n",exec);
         free(exec);
     }
 
 //    fprintf(stdout,"\nchar *gjvmGetName(struct vm *vm) ->\n%s\n",gjvmGetName(params));
     
-    fprintf(stdout,"\nchar *gjvmGetProvidesType(struct params *params) ->\n%s\n",gjvmGetProvidesType(params));
+    fprintf(stdout,"\nchar *gjvmGetProvidesType(struct params *params) ->\n%s\n",jemVmGetProvidesType(params));
 
-    fprintf(stdout,"\nchar *gjvmGetVersion(struct params *params) ->\n%s\n",gjvmGetVersion(params));
+    fprintf(stdout,"\nchar *gjvmGetVersion(struct params *params) ->\n%s\n",jemVmGetVersion(params));
 
     fprintf(stdout,"\nbool gjvmIsBuildOnly(struct params *params) ->\n");
-    if(gjvmIsBuildOnly(params))
+    if(jemVmIsBuildOnly(params))
         fprintf(stdout,"true\n");
     else
         fprintf(stdout,"false\n");
 
     fprintf(stdout,"\nbool gjvmIsType(params,\"JDK\") ->\n");
-    if(gjvmIsType(params,"JDK"))
+    if(jemVmIsType(params,"JDK"))
         fprintf(stdout,"true\n");
     else
         fprintf(stdout,"false\n");
 
     fprintf(stdout,"\nbool gjvmIsJDK(struct *params) ->\n");
-    if(gjvmIsJDK(params))
+    if(jemVmIsJDK(params))
         fprintf(stdout,"Yes its a JDK\n");
 
     fprintf(stdout,"\nbool gjvmIsJRE(struct params *params) ->\n");
-    if(gjvmIsJRE(params))
+    if(jemVmIsJRE(params))
         fprintf(stdout,"Yes its a JRE\n");
 
     fprintf(stdout,"\nchar **gjpGetProvides(struct params *params) ->\n");
-    char **provides = gjpGetProvides(params);
+    char **provides = jemPkgGetProvides(params);
     if(provides) {
         int i;
         for(i=0;provides[i];i++) {
@@ -275,7 +275,7 @@ testVM() {
     }
 
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
-    freeParams(params);
+    jemFreeParams(params);
 }
 
 testEnvManager() {
@@ -283,10 +283,10 @@ testEnvManager() {
     int i;
 
     fprintf(stdout,"\nstruct pkg *pkgs;\n");
-    struct pkg *pkgs;
+    struct jem_pkg *pkgs;
  
     fprintf(stdout,"\npkgs = loadPackages(false);\n");
-    pkgs = loadPackages(false);
+    pkgs = jemPkgLoadPackages(false);
     
     for(i=0;pkgs[i].filename;i++) {
         fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
@@ -294,10 +294,10 @@ testEnvManager() {
     }
 
     fprintf(stdout,"\nvoid freePkgs(struct pkg *pkgs)\n");
-    freePkgs(pkgs);
+    jemFreePkgs(pkgs);
 
     fprintf(stdout,"\npkgs = loadPackages(true);\n");
-    pkgs = loadPackages(true);
+    pkgs = jemPkgLoadPackages(true);
     
     for(i=0;pkgs[i].filename;i++) {
         fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
@@ -305,87 +305,87 @@ testEnvManager() {
     }
 
     fprintf(stdout,"\nvoid freePkgs(struct pkg *pkgs)\n");
-    freePkgs(pkgs);
+    jemFreePkgs(pkgs);
     
-    fprintf(stdout,"\nchar *getSystemVMLink() ->\n%s\n",getSystemVMLink());
+    fprintf(stdout,"\nchar *getSystemVMLink() ->\n%s\n",jemVmGetSystemVMLink());
 
-    char *vm_name = getSystemVMName();
+    char *vm_name = jemVmGetSystemVMName();
     fprintf(stdout,"\nchar *getSystemVMName() ->\n%s\n",vm_name);
     free(vm_name);
 
-    vm_name = getUserVMLink();
+    vm_name = jemVmGetUserVMLink();
     fprintf(stdout,"\nchar *getUserVMLink() ->\n%s\n",vm_name);
     free(vm_name);
 
     fprintf(stdout,"\nchar **getVMLinks() ->\n");
-    char **links = getVMLinks();
+    char **links = jemVmGetVMLinks();
     if(links) {
         for(i=0;links[i];i++)
             fprintf(stdout,"\t%s\n",links[i]);
     }
     fprintf(stdout,"\nvoid freeVMLinks(char **vm_links)\n");
-    freeVMLinks(links);
+    jemFreeVMLinks(links);
 
     fprintf(stdout,"\nstruct vm *vms;\n");
-    struct vm *vms;
+    struct jem_vm *vms;
  
     fprintf(stdout,"\nvms = loadVMs();\n");
-    vms = loadVMs();
+    vms = jemVmLoadVMs();
     for(i=0;vms[i].filename;i++)
         fprintf(stdout,"\tvms[%d]->filename=%s\n",i,vms[i].filename);
 
     fprintf(stdout,"\nstruct vm *vm;\n");
-    struct vm *vm;
+    struct jem_vm *vm;
 
     fprintf(stdout,"\nstruct vm *getVM(struct vm *vms,const char *vm_name);\n");
     fprintf(stdout,"\nvm = getVM(vms,\"2\") ->\n");
-    vm = getVM(vms,"2");
+    vm = jemVmGetVM(vms,"2");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
     
     fprintf(stdout,"\nvm = getVM(vms,\"/usr/share/jem-2/vm/icedtea-bin-7\") ->\n");
-    vm = getVM(vms,"/usr/share/jem-2/vm/icedtea-bin-7");
+    vm = jemVmGetVM(vms,"/usr/share/jem-2/vm/icedtea-bin-7");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
     
     fprintf(stdout,"\nvm = getVM(vms,\"icedtea-bin-7\") ->\n");
-    vm = getVM(vms,"icedtea-bin-7");
+    vm = jemVmGetVM(vms,"icedtea-bin-7");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
     fprintf(stdout,"\nvm = getVM(vms,\"/usr/lib/jvm/icedtea-bin-7\") ->\n");
-    vm = getVM(vms,"/usr/lib/icedtea-bin-7");
+    vm = jemVmGetVM(vms,"/usr/lib/icedtea-bin-7");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
     fprintf(stdout,"\nvoid freeVMs(struct vm *vms)\n");
-    freeVMs(vms);
+    jemFreeVMs(vms);
 
     fprintf(stdout,"\nstruct env env;\n");
-    struct env env;
+    struct jem_env env;
     
     fprintf(stdout,"\ninitEnv(&env)\n");
-    initEnv(&env);
+    jemInitEnv(&env);
     
     fprintf(stdout,"\nenv.vms = loadVMs()\n");
-    env.vms = loadVMs();
+    env.vms = jemVmLoadVMs();
     
     fprintf(stdout,"\nstruct vm *avm = getActiveVM(&env);\n");
-    struct vm *avm = getActiveVM(&env);
+    struct jem_vm *avm = jemGetActiveVM(&env);
     
     if(avm)
         fprintf(stdout,"\navm->filename =%s\n",avm->filename);
 
     fprintf(stdout,"\nvoid freeEnv(struct env *env)\n");
-    freeEnv(&env);
+    jemFreeEnv(&env);
 }
 
 int main(int argc, char **argv) {

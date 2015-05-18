@@ -27,19 +27,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern bool color_output;
-extern bool console_title;
-extern bool auto_indent;
-extern bool my_exit_status;
+extern bool jem_color_output;
+extern bool jem_console_title;
+extern bool jem_auto_indent;
+extern bool jem_exit_status;
 
-extern const char *terms[];
+extern const char *jem_terms[];
 
-extern int codes_count;
+extern int jem_codes_count;
 
 /**
  * terminal codes
  */
-struct code {
+struct jem_term_code {
     char key;     /** code key */
     char *value;  /** code value */
 };
@@ -47,7 +47,7 @@ struct code {
 /**
  * array of terminal codes
  */
-extern struct code codes[];
+extern struct jem_term_code jem_term_codes[];
 
 /**
  * Returns the value of a code from a static array of code structs
@@ -55,14 +55,14 @@ extern struct code codes[];
  * @param key the terminal code key
  * @return a pointer to a string containing the value. The string must NOT be freed!
  */
-char *getCode(char key);
+char *jemGetTermCode(char key);
 
 /**
  * Checks to see if the present terminal supports colors/codes
  *
  * @return true if valid terminal, false otherwise
  */
-bool isValidTerm();
+bool jemIsValidTerm();
 
 /**
  * Adds terminal color codes to a message
@@ -70,7 +70,7 @@ bool isValidTerm();
  * @param msg the message
  * @return a string containing the message and terminal color codes. The string must be freed!
  */
-char *addColor(char *msg);
+char *jemAddTermColor(char *msg);
 
 /**
  * Appends two strings with a separator if specified
@@ -80,7 +80,7 @@ char *addColor(char *msg);
  * @param add_str a string to add
  * @return a string containing the two strings with separator. The string must be freed!
  */
-char *appendStrs(char* cur_str,char *sep_str,char *add_str);
+char *jemAppendStrs(char* cur_str,char *sep_str,char *add_str);
 
 /**
  * Adds preffix to a message that is indented by the length of the preffix
@@ -89,14 +89,14 @@ char *appendStrs(char* cur_str,char *sep_str,char *add_str);
  * @param msg the message to indent
  * @return a string containing the combined preffix and indented message. The string must be freed!
  */
-char *indent(const char *preffix,const char *msg);
+char *jemIndent(const char *preffix,const char *msg);
 
 /**
  * Print a message with colors and no formating
  *
  * @param msg the message
  */
-void print(char *msg);
+void jemPrint(char *msg);
 
 /**
  * Print a message with colors and formatting
@@ -106,37 +106,37 @@ void print(char *msg);
  * @param msg the message to print
  * @param suffix the message suffix, used for terminal codes (not required)
  */
-void printMsg(const char *preffix,
-              const char *title,
-              char *msg,
-              const char *suffix);
+void jemPrintMsg(const char *preffix,
+                 const char *title,
+                 char *msg,
+                 const char *suffix);
 
 /**
  * Print an error
  *
  * @param msg the error/message
  */
-void printError(char *msg);
+void jemPrintError(char *msg);
 
 /**
  * Print a warning
  *
  * @param msg the warning/message
  */
-void printWarning(char *msg);
+void jemPrintWarning(char *msg);
 
 /**
  * Print an alert
  *
  * @param msg the alert/message
  */
-void printAlert(char *msg);
+void jemPrintAlert(char *msg);
 
 /**
  * Set the terminal title
  *
  * @param title the terminal title
  */
-void setTermTitle(const char *title);
+void jemSetTermTitle(const char *title);
 
-void write(char *msg);
+void jemWrite(char *msg);

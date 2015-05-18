@@ -83,78 +83,78 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     switch(key) {
         case 'a':
             initEnvVMs();
-            jem_env.active_vm = getVM(jem_env.vms,arg);
+            jem_env.active_vm = jemVmGetVM(jem_env.vms,arg);
             break;
         case 'd':
             jem_with_dependencies = true;
             break;
         case 'n':
-            color_output = false;
+            jem_color_output = false;
             break;
         case 'J':
-            printExe("java");
+            jemPrintExe("java");
             return(1);
         case 'c':
-            printExe("javac");
+            jemPrintExe("javac");
             return(1);
         case 'j':
-            printExe("jar");
+            jemPrintExe("jar");
             return(1);
         case 't':
-            printToolsJar();
+            jemPrintToolsJar();
             return(1);
         case 'f':
-            printActiveVM();
+            jemPrintActiveVM();
             return(1);
         case 'v':
-            printJavaVersion();
+            jemPrintJavaVersion();
             return(1);
         case 'g':
-            printValueFromActiveVM(arg);
+            jemPrintValueFromActiveVM(arg);
             return(1);
         case 'P':
-            printVMParams(arg);
+            jemPrintVMParams(arg);
             return(1);
         case 'e':
-            exeJavaBin(arg);
+            jemExeJavaBin(arg);
             return(1);
         case 'L':
-            listAvailableVMs();
+            jemListAvailableVMs();
             return(1);
         case 'S':
-            setSystemVM(arg);
+            jemSetSystemVM(arg);
             return(1);
         case 's':
-            setUserVM(arg);
+            jemSetUserVM(arg);
             return(1);
         case 'l':
-            listPackages();
+            jemListPackages();
             return(1);
         case 'p':
-            printPackageClasspath(arg);
+            jemPrintPackageClasspath(arg);
             return(1);
         case 'q':
             if(state->argv[4])
-                printValueFromPackage(state->argv[4],arg);
+                jemPrintValueFromPackage(state->argv[4],arg);
             return(1);
         case JEM_OPT_PACKAGE:
             if(state->argv[4])
-                printValueFromPackage(arg,state->argv[4]);
+                jemPrintValueFromPackage(arg,state->argv[4]);
             return(1);
         case 'i':
-            printValueFromPackage(arg,"LIBRARY_PATH");
+            jemPrintValueFromPackage(arg,"LIBRARY_PATH");
             return(1);
         case 'r':
-            printValueFromActiveVM("BOOTCLASSPATH");
+            jemPrintValueFromActiveVM("BOOTCLASSPATH");
             return(1);
         case 'O':
-            printValueFromActiveVM("JAVA_HOME");
+            jemPrintValueFromActiveVM("JAVA_HOME");
             return(1);
         case 'o':
-            printValueFromActiveVM("JAVA_HOME");
+            jemPrintValueFromActiveVM("JAVA_HOME");
             return(1);
         case JEM_OPT_VIRT_PROVIDERS:
-            printVirtualProviders(arg);
+            jemPrintVirtualProviders(arg);
             return(1);
         case ARGP_KEY_NO_ARGS:
             if(!state->argv[1])
@@ -170,12 +170,12 @@ int main(int argc, char **argv) {
     struct args args;
     args.color = true;
 
-    initEnv(&jem_env);
+    jemInitEnv(&jem_env);
 
     argp_parse(&argp, argc, argv, ARGP_NO_EXIT, 0, &args);
 
     /* Invalid argument checks */
 
-    atexit(cleanup);
-    exit(my_exit_status);
+    atexit(jemCleanup);
+    exit(jem_exit_status);
 }
