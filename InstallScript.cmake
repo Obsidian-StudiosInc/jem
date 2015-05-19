@@ -65,6 +65,4 @@ foreach(T ${JAVA_BIN_TOOLS})
 	endif()
 	execute_process(COMMAND ln -sfv run-java-tool.bash ${T}
 			WORKING_DIRECTORY ${MY_PREFFIX}/usr/bin)
-	install(FILES ${MY_PREFFIX}/usr/bin/${T}
-		DESTINATION usr/bin/)
 endforeach()
