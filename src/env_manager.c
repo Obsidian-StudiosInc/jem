@@ -112,7 +112,7 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     struct jem_vm *vm = NULL;
     char *vm_name = NULL;
     if((vm_name = getenv("JEM_VM")))
-        vm = getVM(env->vms,vm_name);
+        vm = jemVmGetVM(env->vms,vm_name);
     else {
         int i;
         char **vm_links = jemVmGetVMLinks();
