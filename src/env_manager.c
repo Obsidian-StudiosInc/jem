@@ -110,26 +110,31 @@ void jemInitEnv(struct jem_env *env) {
  */
 struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     struct jem_vm *vm = NULL;
-    int i;
-    char **vm_links = jemVmGetVMLinks();
-    for(i=0;vm_links[i];i++) {
-        char *abs_file = calloc(JEM_BASE_NAME_SIZE+1,sizeof(char));
-        if(readlink(vm_links[i],abs_file,JEM_BASE_NAME_SIZE)<0) {
-            if(errno==EACCES)
-                jemPrintError("VM link not readable"); // might need to be changed to throw an exception
-            else if(errno==EINVAL)
-                jemPrintError("VM file is not a symlink"); // might need to be changed to throw an exception
-            else if(errno==EIO)
-                jemPrintError("A hardware error has occurred"); // might need to be changed to throw an exception
+    char *vm_name = NULL;
+    if((vm_name = getenv("JEM_VM")))
+        vm = getVM(env->vms,vm_name);
+    else {
+        int i;
+        char **vm_links = jemVmGetVMLinks();
+        for(i=0;vm_links[i];i++) {
+            char *abs_file = calloc(JEM_BASE_NAME_SIZE+1,sizeof(char));
+            if(readlink(vm_links[i],abs_file,JEM_BASE_NAME_SIZE)<0) {
+                if(errno==EACCES)
+                    jemPrintError("VM link not readable"); // might need to be changed to throw an exception
+                else if(errno==EINVAL)
+                    jemPrintError("VM file is not a symlink"); // might need to be changed to throw an exception
+                else if(errno==EIO)
+                    jemPrintError("A hardware error has occurred"); // might need to be changed to throw an exception
+                free(abs_file);
+                continue;
+            }
+            vm = jemVmGetVM(env->vms,basename(abs_file));
             free(abs_file);
-            continue;
+            if(vm)
+                break;
         }
-        vm = jemVmGetVM(env->vms,basename(abs_file));
-        free(abs_file);
-        if(vm)
-            break;
+        jemFreeVMLinks(vm_links);
     }
-    jemFreeVMLinks(vm_links);
     if(vm)
         env->active_vm = vm;
     return(vm);
