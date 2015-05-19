@@ -61,9 +61,10 @@ install(FILES ${PROJECT_SOURCE_DIR}/etc/profile.d/jem.csh
 		${PROJECT_SOURCE_DIR}/etc/profile.d/jem.sh
 		DESTINATION etc/profile.d/)
 
-install(FILES ${PROJECT_SOURCE_DIR}/usr/bin/run-java-tool.sh
+install(FILES ${PROJECT_SOURCE_DIR}/usr/bin/run-java-tool.bash
 		DESTINATION usr/bin/)
 
+install(SCRIPT InstallScript.cmake)
 
 # add a target to generate man page documentation with help2man
 find_program(HELP2MAN "help2man")
