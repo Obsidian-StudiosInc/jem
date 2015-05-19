@@ -53,12 +53,17 @@ target_link_libraries(jem-test jem)
 install(TARGETS jem jem-cli
 	RUNTIME DESTINATION usr/bin
 	LIBRARY DESTINATION usr/lib)
+
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/etc/jem
 		DESTINATION etc/)
 
 install(FILES ${PROJECT_SOURCE_DIR}/etc/profile.d/jem.csh
 		${PROJECT_SOURCE_DIR}/etc/profile.d/jem.sh
 		DESTINATION etc/profile.d/)
+
+install(FILES ${PROJECT_SOURCE_DIR}/usr/bin/run-java-tool.sh
+		DESTINATION usr/bin/)
+
 
 # add a target to generate man page documentation with help2man
 find_program(HELP2MAN "help2man")
