@@ -91,6 +91,39 @@ struct jem_vm *jemGetActiveVM(struct jem_env *env) {
 }
 
 /**
+ * Get vms matching name
+ *
+ * @param name a string name of a VM
+ * @return a jem_vm struct pointer array containing the value. The pointer 
+ *         array must be freed, but NOT the VM array elements
+ */
+struct jem_vm **jemFindVM(char *name) {
+    initEnvVMs();
+    struct jem_vm **vms = NULL;
+    int i;
+    int vm_count = 0;
+    for(i=0;jem_env.vms[i].filename;i++) {
+        char *vname = NULL;
+        asprintf(&vname,"%s-%s",name,jemVmGetVersion(jem_env.vms[i].params));
+        if(!name ||
+           strlen(name)==0 ||
+           strcmp(jemVmGetName(&(jem_env.vms[i])),name)==0 ||
+           strcmp(jemVmGetName(&(jem_env.vms[i])),vname)==0) {
+            struct jem_vm **tmp = realloc(vms,sizeof(struct jem_vm *)*(vm_count+2));
+            if(!tmp)
+                jemPrintError("Unable to reallocate memory for VM pointers");
+            vms = tmp;
+            vms[vm_count] = &(jem_env.vms[i]);
+            vms[vm_count+1] = NULL;
+            vm_count++;
+        }
+        if(vname)
+            free(vname);
+    }
+    return(vms);
+}
+
+/**
  * Initialize env struct
  *
  * @param env pointer to an uninitialized env structure

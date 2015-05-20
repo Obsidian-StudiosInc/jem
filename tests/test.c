@@ -383,9 +383,28 @@ testEnvManager() {
     
     if(avm)
         fprintf(stdout,"\navm->filename =%s\n",avm->filename);
-
+    
     fprintf(stdout,"\nvoid freeEnv(struct env *env)\n");
     jemFreeEnv(&env);
+
+    fprintf(stdout,"\nstruct jem_vm *found = jemFindVM(\"icedtea-bin\");\n");
+    struct jem_vm **found = jemFindVM("icedtea-bin");
+    if(found) {
+        for(i=0;found[i];i++)
+            fprintf(stdout,"\tvms[%d]->filename=%s\n",i,found[i]->filename);
+        free(found);
+    }
+
+    fprintf(stdout,"\nstruct jem_vm *found = jemFindVM(\"icedtea-bin-7\");\n");
+    found = jemFindVM("icedtea-bin-7");
+    if(found) {
+        for(i=0;found[i];i++)
+            fprintf(stdout,"\tvms[%d]->filename=%s\n",i,found[i]->filename);
+        free(found);
+    }
+
+    fprintf(stdout,"\ncleanup()\n");
+    jemCleanup();
 }
 
 int main(int argc, char **argv) {

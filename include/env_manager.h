@@ -62,6 +62,15 @@ void jemExeJavaBin(char *exe_name);
 struct jem_vm *jemGetActiveVM(struct jem_env *env);
 
 /**
+ * Get vms matching name
+ *
+ * @param name a string name of a VM
+ * @return a jem_vm struct pointer array containing the value. The pointer 
+ *         array must be freed, but NOT the VM array elements
+ */
+struct jem_vm **jemFindVM(char *name);
+
+/**
  * Initialize env struct
  *
  * @param env pointer to an uninitialized env structure
