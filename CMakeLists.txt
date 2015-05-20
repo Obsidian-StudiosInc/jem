@@ -47,6 +47,9 @@ include_directories(include)
 add_library(jem SHARED src/output_formatter.c src/file_parser.c src/vm.c src/package.c src/env_manager.c)
 add_executable(jem-cli src/main.c)
 add_executable(jem-test EXCLUDE_FROM_ALL tests/test.c)
+set_target_properties(jem PROPERTIES
+	SOVERSION ${JEM_VERSION_MAJOR}
+	VERSION ${JEM_VERSION_MAJOR}.${JEM_VERSION_MINOR})
 set_target_properties(jem-cli PROPERTIES OUTPUT_NAME jem)
 target_link_libraries(jem-cli jem)
 target_link_libraries(jem-test jem)
