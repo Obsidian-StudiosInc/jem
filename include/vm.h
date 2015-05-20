@@ -30,7 +30,7 @@
 #define JEM_SYSTEM_VM_LINK JEM_SYSTEM_CONFIG_PATH "vm"
 #define JEM_USER_SHARE "/usr/share/"
 #define JEM_USER_VM_LINK_SUFFIX ".java/vm"
-#define JEM_VMS_PATH JEM_SYSTEM_CONFIG_PATH "/vms.d"
+#define JEM_VMS_PATH JEM_SYSTEM_CONFIG_PATH "vms.d"
 
 /**
  * java virtual machine
