@@ -1,0 +1,8 @@
+TODO:
+	- add preffix support, for systems in systems, / in subdir
+	- code and implement a jdk/jre version checker/manager for packages
+	- code and implement a launcher that uses the version checker/manager
+	- address any open bugs with java-config
+	- integrate with package mangers, portage, rpm, dpkg, etc
+
+Please send patches to William L. Thomson Jr. <wlt@o-sinc.com>
