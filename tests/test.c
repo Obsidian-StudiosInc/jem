@@ -126,10 +126,10 @@ testPackage() {
     fprintf(stdout,"\nparams = parseFile(\"samples/usr/share/cglib-2.1/package.env\");\n");
     params = jemParseFile("samples/usr/share/cglib-2.1/package.env");
 
-    fprintf(stdout,"\nchar *gjpGetDescription(struct params *params) ->\n%s\n",jemPkgGetDescription(params));
-    fprintf(stdout,"\nchar *gjpGetClasspath(struct params *params) ->\n%s\n",jemPkgGetClasspath(params));
+    fprintf(stdout,"\nchar *jemPkgGetDescription(struct params *params) ->\n%s\n",jemPkgGetDescription(params));
+    fprintf(stdout,"\nchar *jemPkgGetClasspath(struct params *params) ->\n%s\n",jemPkgGetClasspath(params));
 
-    fprintf(stdout,"\nstruct dep *gjpGetDeps(struct params *params) ->\n");
+    fprintf(stdout,"\nstruct dep *jemPkgGetDeps(struct params *params) ->\n");
     struct jem_dep *deps = jemPkgGetDeps(params);
     if(deps) {
         int i;
@@ -158,7 +158,7 @@ testPackage() {
         free(jars);
     }
 
-    fprintf(stdout,"\nstruct dep *gjpGetBuildDeps(struct params *params) ->\n");
+    fprintf(stdout,"\nstruct dep *jemPkgGetBuildDeps(struct params *params) ->\n");
     struct jem_dep *build_deps = jemPkgGetBuildDeps(params);
     if(build_deps) {
         int i;
@@ -173,7 +173,7 @@ testPackage() {
         free(build_deps);
     }
 
-    fprintf(stdout,"\nstruct dep *gjpGetOptDeps(struct params *params) ->\n");
+    fprintf(stdout,"\nstruct dep *jemPkgGetOptDeps(struct params *params) ->\n");
     struct jem_dep *opt_deps = jemPkgGetOptDeps(params);
     if(opt_deps) {
         int i;
@@ -189,7 +189,7 @@ testPackage() {
     }
 
     fprintf(stdout,"\nDoesn't seem like any package.env file has this yet?");
-    fprintf(stdout,"\nchar **gjpGetProvides(params) ->\n");
+    fprintf(stdout,"\nchar **jemPkgGetProvides(params) ->\n");
 
     char **provides = jemPkgGetProvides(params);
     if(provides) {
@@ -201,17 +201,17 @@ testPackage() {
         free(provides);
     }
 
-    fprintf(stdout,"\nchar *gjpGetTarget(struct params *params) -> %s\n",jemPkgGetTarget(params));
+    fprintf(stdout,"\nchar *jemPkgGetTarget(struct params *params) -> %s\n",jemPkgGetTarget(params));
 
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
     jemFreeParams(params);
 
-    fprintf(stdout,"\nconst char *gjpGetVirtualProviders(\"javamail\",true)->\n");
+    fprintf(stdout,"\nconst char *jemPkgGetVirtualProviders(\"javamail\",true)->\n");
     char *virtual = jemPkgGetVirtualProviders("javamail",true);
     fprintf(stdout,"%s\n",virtual);
     free(virtual);
 
-    fprintf(stdout,"\nconst char *gjpGetActiveVirtualProvider(\"javamail\")->\n");
+    fprintf(stdout,"\nconst char *jemPkgGetActiveVirtualProvider(\"javamail\")->\n");
     virtual = jemPkgGetActiveVirtualProvider("javamail");
     fprintf(stdout,"%s\n",virtual);
     free(virtual);
@@ -226,46 +226,46 @@ testVM() {
     fprintf(stdout,"\nparams = parseFile(\"%s\");\n",VM_CONF_FILE);
     params = jemParseFile(VM_CONF_FILE);
 
-    fprintf(stdout,"\nchar *gjvmGetExec(params,\"javah\") ->\n");
+    fprintf(stdout,"\nchar *jemVmGetExec(params,\"javah\") ->\n");
     char *exec;
     if((exec = jemVmGetExec(params,"javah"))) {
         fprintf(stdout,"exec = %s\n",exec);
         free(exec);
     }
 
-    fprintf(stdout,"\nchar *gjvmGetExec(params,\"your_momma\") ->\n");
+    fprintf(stdout,"\nchar *jemVmGetExec(params,\"your_momma\") ->\n");
     if((exec = jemVmGetExec(params,"your_momma"))) {
         fprintf(stdout,"exec = %s\n",exec);
         free(exec);
     }
 
-//    fprintf(stdout,"\nchar *gjvmGetName(struct vm *vm) ->\n%s\n",gjvmGetName(params));
+//    fprintf(stdout,"\nchar *jemVmGetName(struct vm *vm) ->\n%s\n",jemVmGetName(params));
 
-    fprintf(stdout,"\nchar *gjvmGetProvidesType(struct params *params) ->\n%s\n",jemVmGetProvidesType(params));
+    fprintf(stdout,"\nchar *jemVmGetProvidesType(struct params *params) ->\n%s\n",jemVmGetProvidesType(params));
 
-    fprintf(stdout,"\nchar *gjvmGetVersion(struct params *params) ->\n%s\n",jemVmGetVersion(params));
+    fprintf(stdout,"\nchar *JemVmGetVersion(struct params *params) ->\n%s\n",jemVmGetVersion(params));
 
-    fprintf(stdout,"\nbool gjvmIsBuildOnly(struct params *params) ->\n");
+    fprintf(stdout,"\nbool jemVmIsBuildOnly(struct params *params) ->\n");
     if(jemVmIsBuildOnly(params))
         fprintf(stdout,"true\n");
     else
         fprintf(stdout,"false\n");
 
-    fprintf(stdout,"\nbool gjvmIsType(params,\"JDK\") ->\n");
+    fprintf(stdout,"\nbool jemVmIsType(params,\"JDK\") ->\n");
     if(jemVmIsType(params,"JDK"))
         fprintf(stdout,"true\n");
     else
         fprintf(stdout,"false\n");
 
-    fprintf(stdout,"\nbool gjvmIsJDK(struct *params) ->\n");
+    fprintf(stdout,"\nbool jemVmIsJDK(struct *params) ->\n");
     if(jemVmIsJDK(params))
         fprintf(stdout,"Yes its a JDK\n");
 
-    fprintf(stdout,"\nbool gjvmIsJRE(struct params *params) ->\n");
+    fprintf(stdout,"\nbool jemVmIsJRE(struct params *params) ->\n");
     if(jemVmIsJRE(params))
         fprintf(stdout,"Yes its a JRE\n");
 
-    fprintf(stdout,"\nchar **gjpGetProvides(struct params *params) ->\n");
+    fprintf(stdout,"\nchar **jemPkgGetProvides(struct params *params) ->\n");
     char **provides = jemPkgGetProvides(params);
     if(provides) {
         int i;
