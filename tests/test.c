@@ -25,7 +25,7 @@
 
 #include "../include/env_manager.h"
 
-#define VM_CONF_FILE "/usr/share/java-config-2/vm/icedtea-bin-7"
+#define VM_CONF_FILE "samples/dpkg/usr/share/jem/vm/openjdk-7"
 
 testOutputFormatter() {
     int i;
