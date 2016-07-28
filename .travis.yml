@@ -1,9 +1,9 @@
 language: c
 compiler: gcc
 sudo: required
-#install:
-#  - sudo apt-get update
-#  - DEBIAN_FRONTEND=noninteractive sudo apt-get install -y valgrind 
+install:
+  - sudo apt-get update
+  - sudo apt-get install -y openjdk-7-jdk valgrind 
 script: 
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
   - make install
