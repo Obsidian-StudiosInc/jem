@@ -6,5 +6,5 @@ install:
   - sudo apt-get install -y openjdk-7-jdk valgrind 
 script: 
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
-  - make install
+  - make
 #  - make jem-test
