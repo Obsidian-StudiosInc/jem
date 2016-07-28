@@ -25,6 +25,7 @@
 
 #include "../include/env_manager.h"
 
+#define JVM "/usr/lib/jvm/java-7-openjdk-amd64"
 #define VM_CONF_FILE "samples/dpkg/usr/share/jem/vm/openjdk-7"
 #define PKG_ENV_FILE "samples/usr/share/ant-core/package.env"
 
@@ -122,8 +123,8 @@ testPackage() {
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/idontexist/package.env\");\n");
     params = jemParseFile("/usr/share/idontexist/package.env");
 
-    fprintf(stdout,"\nparams = parseFile(\"/usr/share/cglib-2.2/package.env\");\n");
-    params = jemParseFile("/usr/share/cglib-2.2/package.env");
+    fprintf(stdout,"\nparams = parseFile(\"samples/usr/share/cglib-2.1/package.env\");\n");
+    params = jemParseFile("samples/usr/share/cglib-2.1/package.env");
 
     fprintf(stdout,"\nchar *gjpGetDescription(struct params *params) ->\n%s\n",jemPkgGetDescription(params));
     fprintf(stdout,"\nchar *gjpGetClasspath(struct params *params) ->\n%s\n",jemPkgGetClasspath(params));
@@ -346,22 +347,22 @@ testEnvManager() {
     else
         fprintf(stdout,"VM pointer is null\n");
 
-    fprintf(stdout,"\nvm = getVM(vms,\"/usr/share/jem-2/vm/icedtea-bin-7\") ->\n");
-    vm = jemVmGetVM(vms,"/usr/share/jem-2/vm/icedtea-bin-7");
+    fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",VM_CONF_FILE);
+    vm = jemVmGetVM(vms,VM_CONF_FILE);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
-    fprintf(stdout,"\nvm = getVM(vms,\"icedtea-bin-7\") ->\n");
-    vm = jemVmGetVM(vms,"icedtea-bin-7");
+    fprintf(stdout,"\nvm = getVM(vms,\"openjdk-7\") ->\n");
+    vm = jemVmGetVM(vms,"openjdk-7");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
-    fprintf(stdout,"\nvm = getVM(vms,\"/usr/lib/jvm/icedtea-bin-7\") ->\n");
-    vm = jemVmGetVM(vms,"/usr/lib/icedtea-bin-7");
+    fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",JVM);
+    vm = jemVmGetVM(vms,JVM);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
