@@ -1,7 +1,10 @@
 language: c
 compiler: gcc
 sudo: required
-install:
-  - sudo apt-get update
-  - DEBIAN_FRONTEND=noninteractive sudo apt-get install -y valgrind  
-script: cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ && make jem-test
+#install:
+#  - sudo apt-get update
+#  - DEBIAN_FRONTEND=noninteractive sudo apt-get install -y valgrind 
+script: 
+  - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
+  - make install
+#  - make jem-test
