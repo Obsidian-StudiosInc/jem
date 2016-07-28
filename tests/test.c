@@ -26,6 +26,7 @@
 #include "../include/env_manager.h"
 
 #define VM_CONF_FILE "samples/dpkg/usr/share/jem/vm/openjdk-7"
+#define PKG_ENV_FILE "samples/usr/share/ant-core/package.env"
 
 testOutputFormatter() {
     int i;
@@ -97,10 +98,10 @@ testFileParser() {
 
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
     jemFreeParams(params);
-    
+
     fprintf(stdout,"\nparse package.env");
-    fprintf(stdout,"\nparams = parseFile(\"/usr/share/ant-core/package.env\"); ->\n");
-    params = jemParseFile("/usr/share/ant-core/package.env");
+    fprintf(stdout,"\nparams = parseFile(\"%s\"); ->\n",PKG_ENV_FILE);
+    params = jemParseFile(PKG_ENV_FILE);
     for(i=0;params[i].name;i++)
         fprintf(stdout,"\tparams[%d]->name=%s\n\tparams[%d]->value=%s\n",i,params[i].name,i,params[i].value);
 
@@ -123,7 +124,7 @@ testPackage() {
 
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/cglib-2.2/package.env\");\n");
     params = jemParseFile("/usr/share/cglib-2.2/package.env");
-    
+
     fprintf(stdout,"\nchar *gjpGetDescription(struct params *params) ->\n%s\n",jemPkgGetDescription(params));
     fprintf(stdout,"\nchar *gjpGetClasspath(struct params *params) ->\n%s\n",jemPkgGetClasspath(params));
 
@@ -155,7 +156,7 @@ testPackage() {
         }
         free(jars);
     }
-    
+
     fprintf(stdout,"\nstruct dep *gjpGetBuildDeps(struct params *params) ->\n");
     struct jem_dep *build_deps = jemPkgGetBuildDeps(params);
     if(build_deps) {
@@ -238,7 +239,7 @@ testVM() {
     }
 
 //    fprintf(stdout,"\nchar *gjvmGetName(struct vm *vm) ->\n%s\n",gjvmGetName(params));
-    
+
     fprintf(stdout,"\nchar *gjvmGetProvidesType(struct params *params) ->\n%s\n",jemVmGetProvidesType(params));
 
     fprintf(stdout,"\nchar *gjvmGetVersion(struct params *params) ->\n%s\n",jemVmGetVersion(params));
@@ -284,10 +285,10 @@ testEnvManager() {
 
     fprintf(stdout,"\nstruct pkg *pkgs;\n");
     struct jem_pkg *pkgs;
- 
+
     fprintf(stdout,"\npkgs = loadPackages(false);\n");
     pkgs = jemPkgLoadPackages(false);
-    
+
     for(i=0;pkgs[i].filename;i++) {
         fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
         fprintf(stdout,"\tpkgs[%d]->name=%s\n",i,pkgs[i].name);
@@ -298,7 +299,7 @@ testEnvManager() {
 
     fprintf(stdout,"\npkgs = loadPackages(true);\n");
     pkgs = jemPkgLoadPackages(true);
-    
+
     for(i=0;pkgs[i].filename;i++) {
         fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
         fprintf(stdout,"\tpkgs[%d]->name=%s\n",i,pkgs[i].name);
@@ -306,7 +307,7 @@ testEnvManager() {
 
     fprintf(stdout,"\nvoid freePkgs(struct pkg *pkgs)\n");
     jemFreePkgs(pkgs);
-    
+
     fprintf(stdout,"\nchar *getSystemVMLink() ->\n%s\n",jemVmGetSystemVMLink());
 
     char *vm_name = jemVmGetSystemVMName();
@@ -328,7 +329,7 @@ testEnvManager() {
 
     fprintf(stdout,"\nstruct vm *vms;\n");
     struct jem_vm *vms;
- 
+
     fprintf(stdout,"\nvms = loadVMs();\n");
     vms = jemVmLoadVMs();
     for(i=0;vms[i].filename;i++)
@@ -344,14 +345,14 @@ testEnvManager() {
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
-    
+
     fprintf(stdout,"\nvm = getVM(vms,\"/usr/share/jem-2/vm/icedtea-bin-7\") ->\n");
     vm = jemVmGetVM(vms,"/usr/share/jem-2/vm/icedtea-bin-7");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
-    
+
     fprintf(stdout,"\nvm = getVM(vms,\"icedtea-bin-7\") ->\n");
     vm = jemVmGetVM(vms,"icedtea-bin-7");
     if(vm)
@@ -371,19 +372,19 @@ testEnvManager() {
 
     fprintf(stdout,"\nstruct env env;\n");
     struct jem_env env;
-    
+
     fprintf(stdout,"\ninitEnv(&env)\n");
     jemInitEnv(&env);
-    
+
     fprintf(stdout,"\nenv.vms = loadVMs()\n");
     env.vms = jemVmLoadVMs();
-    
+
     fprintf(stdout,"\nstruct vm *avm = getActiveVM(&env);\n");
     struct jem_vm *avm = jemGetActiveVM(&env);
-    
+
     if(avm)
         fprintf(stdout,"\navm->filename =%s\n",avm->filename);
-    
+
     fprintf(stdout,"\nvoid freeEnv(struct env *env)\n");
     jemFreeEnv(&env);
 
