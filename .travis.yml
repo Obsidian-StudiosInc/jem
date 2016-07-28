@@ -1,3 +1,7 @@
 language: c
 compiler: gcc
+install:
+  - apt-get update
+  - DEBIAN_FRONTEND=noninteractive apt-get install -y valgrind
+  
 script: cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ && make jem-test
