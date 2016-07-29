@@ -4,7 +4,11 @@ sudo: required
 install:
   - sudo apt-get update
   - sudo apt-get install -y openjdk-7-jdk valgrind
-  - pushd samples && sudo cp -Rv usr / && popd
+  - pushd samples
+  - sudo cp -Rv usr /
+  - cd dpkg
+  - sudo cp -Rv etc /
+  - popd
 script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
   - make
