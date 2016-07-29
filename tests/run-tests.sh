@@ -6,14 +6,40 @@ VG="${VG} --show-reachable=yes --track-origins=yes"
 
 cd ../dist
 
-${VG} jem-test
+check_rc() {
+	[[ ${1} -ne 0 ]] && exit ${1}
+}
 
-ARGS="c f j J l L o O r t v ? V"
+test_code() {
+	pwd
+	ls
+	${VG} ./jem-test
+}
+test_jem() {
 
-for arg in ${ARGS}; do
-	${VG} jem -${arg}
-	rc=$?
-	[[ ${rc} -ne 0 ]] && exit ${rc}
-done
+	ARGS="c f j J l L o O r t v ? V"
 
-${VG} jem -g LDPATH
+	for arg in ${ARGS}; do
+		${VG} jem -${arg}
+		check_rc $?
+	done
+
+	${VG} ./jem -g LDPATH
+}
+case "$1" in
+
+	-c | --code)
+		test_code
+		;;
+
+	-j | --jem)
+		test_jem
+		;;
+
+	*)
+		test_code
+		test_jem
+		;;
+
+esac
+
