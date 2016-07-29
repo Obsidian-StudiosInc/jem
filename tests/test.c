@@ -26,7 +26,7 @@
 #include "../include/env_manager.h"
 
 #define JVM "/usr/lib/jvm/java-7-openjdk-amd64"
-#define VM_CONF_FILE "samples/dpkg/usr/share/jem/vm/openjdk-7"
+#define VM_CONF_FILE "samples/dpkg/etc/jem/vms.d/openjdk-7"
 #define PKG_ENV_FILE "samples/usr/share/ant-core/package.env"
 
 testOutputFormatter() {
@@ -301,10 +301,13 @@ testEnvManager() {
     fprintf(stdout,"\npkgs = loadPackages(true);\n");
     pkgs = jemPkgLoadPackages(true);
 
-    for(i=0;pkgs[i].filename;i++) {
-        fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
-        fprintf(stdout,"\tpkgs[%d]->name=%s\n",i,pkgs[i].name);
-    }
+    if(pkgs) {
+        for(i=0;pkgs[i].filename;i++) {
+            fprintf(stdout,"\tpkgs[%d]->filename=%s\n",i,pkgs[i].filename);
+            fprintf(stdout,"\tpkgs[%d]->name=%s\n",i,pkgs[i].name);
+        }
+    } else
+	jemPrintError("^ Test failed!\nUnable to load virtual packages");
 
     fprintf(stdout,"\nvoid freePkgs(struct pkg *pkgs)\n");
     jemFreePkgs(pkgs);
@@ -333,8 +336,11 @@ testEnvManager() {
 
     fprintf(stdout,"\nvms = loadVMs();\n");
     vms = jemVmLoadVMs();
-    for(i=0;vms[i].filename;i++)
-        fprintf(stdout,"\tvms[%d]->filename=%s\n",i,vms[i].filename);
+    if(vms) {
+        for(i=0;vms[i].filename;i++)
+            fprintf(stdout,"\tvms[%d]->filename=%s\n",i,vms[i].filename);
+    } else
+	jemPrintError("^ Test failed!\nUnable to load VMs");
 
     fprintf(stdout,"\nstruct vm *vm;\n");
     struct jem_vm *vm;
