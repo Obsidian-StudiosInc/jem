@@ -9,4 +9,5 @@ script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
   - make
   - make jem-test
-
+notifications:
+  email: false
