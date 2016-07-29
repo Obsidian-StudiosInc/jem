@@ -19,7 +19,7 @@ test_jem() {
 	ARGS="c f j J l L o O r t v ? V"
 
 	for arg in ${ARGS}; do
-		${VG} jem -${arg}
+		${VG} ./dist/jem -${arg}
 		check_rc $?
 	done
 
