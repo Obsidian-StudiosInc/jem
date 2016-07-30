@@ -13,7 +13,7 @@ script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
   - make
   - make jem-test
-  - ./tests/run-tests.sh -j
+  - sudo ./tests/run-tests.sh -j
 notifications:
   email: false
 
