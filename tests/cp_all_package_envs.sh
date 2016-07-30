@@ -13,11 +13,21 @@ for pkg_env in $PKG_ENVS; do
 	[[ ! -f "../samples${pkg_env}" ]] && cp -v ${pkg_env} ${DIR}
 
 	# create fake jars, just need names not the contents for tests
-	pushd /usr/share/$(basename ${DIR})/lib/
+	pushd /usr/share/$(basename ${DIR})/lib/ > /dev/null
 	JARS=$(ls *.jar)
-	popd
+	popd > /dev/null
 	for jar in ${JARS}; do
 		[[ ! -f "${DIR}/lib/${jar}" ]] && touch ${DIR}/lib/${jar}
 	done
 
+done
+
+VDIR="../samples/etc/jem/virtuals.d"
+[[ ! -d ${VDIR} ]] && mkdir -p ${VDIR}
+
+VPATH="/etc/jem/virtuals.d/"
+VIRTUALS=$(ls ${VPATH})
+
+for virtual in ${VIRTUALS}; do
+	[[ ! -f ${VPATH}/${virtual} ]] && cp -v ${VPATH}/${virtual} ${VDIR}
 done
