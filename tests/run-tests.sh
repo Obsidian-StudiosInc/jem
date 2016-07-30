@@ -15,6 +15,7 @@ test_code() {
 	${VG} ./dist/jem-test
 }
 test_jem() {
+	${VG} ./dist/jem -S 0
 
 	ARGS="c f j J l L o O r t v ? V"
 
