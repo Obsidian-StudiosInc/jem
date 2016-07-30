@@ -5,7 +5,7 @@ install:
   - sudo apt-get update
   - sudo apt-get install -y openjdk-7-jdk rpm valgrind
   - pushd samples
-  - sudo cp -Rv usr /
+  - sudo cp -Rv etc usr /
   - cd dpkg
   - sudo cp -Rv etc /
   - popd
