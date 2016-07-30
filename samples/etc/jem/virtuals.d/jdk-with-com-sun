@@ -1,0 +1,2 @@
+VM="icedtea-bin-6 icedtea6-bin icedtea-6 icedtea6 icedtea-bin-6 icedtea-bin-7 icedtea-7 oracle-jdk-bin-1.7 oracle-jdk-bin-1.8 apple-jdk-bin-1.6 ibm-jdk-bin-1.6"
+MULTI_PROVIDER="FALSE"

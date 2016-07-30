@@ -1,0 +1,3 @@
+PROVIDERS="jsr67"
+VM=">=virtual/jre-1.6"
+MULTI_PROVIDER="FALSE"

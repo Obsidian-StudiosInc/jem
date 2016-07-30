@@ -1,0 +1,2 @@
+PROVIDERS="tomcat-servlet-api-3.0 resin-servlet-api-3.0"
+MULTI_PROVIDER="FALSE"

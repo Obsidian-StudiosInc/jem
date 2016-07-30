@@ -1,0 +1,2 @@
+PROVIDERS="oracle-javamail sun-javamail gnu-javamail-1"
+MULTI_PROVIDER="FALSE"

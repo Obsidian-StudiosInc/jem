@@ -1,0 +1,2 @@
+PROVIDERS="glassfish-transaction-api jta"
+MULTI_PROVIDER="FALSE"
