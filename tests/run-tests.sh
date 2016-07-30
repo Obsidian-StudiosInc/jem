@@ -17,7 +17,7 @@ test_code() {
 }
 
 test_jem() {
-	${VG} ./dist/jem -S 0
+	${VG} ./dist/jem -S 1
 	check_rc $?
 
 	ARGS="c f j J l L o O r t v ? V"
