@@ -12,6 +12,7 @@ install:
 script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
   - make
+  - ls -l dist
   - sudo dpkg -i dist/jem-0.1-1.x86_64.deb
   - make jem-test
   - sudo ./tests/run-tests.sh -j
