@@ -13,9 +13,12 @@ test_code() {
 	pwd
 	ls
 	${VG} ./dist/jem-test
+	check_rc $?
 }
+
 test_jem() {
 	${VG} ./dist/jem -S 0
+	check_rc $?
 
 	ARGS="c f j J l L o O r t v ? V"
 
@@ -25,7 +28,9 @@ test_jem() {
 	done
 
 	${VG} ./dist/jem -g LDPATH
+	check_rc $?
 }
+
 case "$1" in
 
 	-c | --code)
