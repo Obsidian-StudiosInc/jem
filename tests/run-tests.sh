@@ -3,7 +3,7 @@
 # run from root project directory, or will error
 
 VG="/usr/bin/valgrind --leak-check=yes --leak-check=full --read-var-info=yes"
-VG="${VG} --show-reachable=yes --track-origins=yes"
+VG="${VG} --show-reachable=yes --track-origins=yes --error-exitcode=1"
 
 check_rc() {
 	[[ ${1} -ne 0 ]] && exit ${1}
