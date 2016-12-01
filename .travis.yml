@@ -10,11 +10,20 @@ install:
   - sudo cp -Rv etc /
   - popd
 script:
-  - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ 
+  - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./
   - make package
   - sudo dpkg -i dist/jem-0.1-1.x86_64.deb
   - make jem-test
   - sudo ./tests/run-tests.sh -j
 notifications:
   email: false
-
+deploy:
+  provider: releases
+  api_key:
+    secure: CLBKURe0w+Gtr2AcNwn2/17+jc5QwFZCD2C/HaHqgAmoBsC3FpedDRUUH90skCTfNpu6O/xfS2Unoijd56zwNUtZpPcfxeJOaWqYxVrxNTsp8YYV9IDoG+x8EF1Cmp4SZa2vW+X72Y8FqzjzN8PVJJawLLQEWawF5hg87gBf24mGl8ow1Xq3jGnInsOz0mMU3hbtztZCrh3TU3rSv3Wcrbu4ZROdd5EdhCrd2NIv0QmkaL+/Uhv78m0fne5DdLlEGKBnhdToGZc93csCzxGQPg6fgSYyJO9t5372yeK+dY0Z0f20ciWoFutN7qB7MTapFw8MyM/trEz5ab/gaHJUQ9Dh/ctAXH9cRrCTQHVSF65eqMxu3rTLa8YTbwFObC2BsEOSOt7NXW+mk7M8AV/f89ywwnj1tOkPWlkmgAOudG776ar/wHTbDfJGr1Xbou0IVm5laYd4hnlgq+HIeT0Z+b9xtXFGxwiQcAS11ACQUpS8VZcNHP2FzfgpIlhWBi7kIqelwXT/rG9dKzukQlAgelXUDC0Jcf2TgmNO4yAtz5JKBVoCbiHfLywYgXg7YI2JJRQXKIn43BzxBBa2tCn83kuWnYdqveBdhWtjqz5bhfryCcFuDQOj43ogkLOxNx3MGaw1uVlUw+e0bqllNXOhQGyxlQNzby6a9QYNi1FX8Dk=
+  file:
+    - dist/jem-0.1-1.x86_64.deb
+    - dist/jem-0.1-1.x86_64.rpm
+  on:
+    repo: Obsidian-StudiosInc/jem
+    tags: true
