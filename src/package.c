@@ -222,9 +222,10 @@ struct jem_dep *_jemPkgGetDeps(struct jem_dep *deps,
                             if(!deps[i].jars[k])
                                 jemPrintError("Unable to allocate memory to hold dependency jar");
                         }
+                        free(jars[j]);
                     }
+                    free(jars);
                 }
-                free(jars);
             }
             continue;
         }
