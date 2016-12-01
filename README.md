@@ -1,10 +1,12 @@
-	jem - Java Environment Manager
+#	jem - Java Environment Manager
+[![License](http://img.shields.io/badge/license-GPLv3-blue.svg?style=plastic)](https://github.com/Obsidian-StudiosInc/jem/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/Obsidian-StudiosInc/jem.svg?branch=master)](https://travis-ci.org/Obsidian-StudiosInc/jem)
 
 These are the release notes for jem. Read them carefully,
 as they tell you what this is all about, explain how to install jem,
 and what to do if something goes wrong.
 
-WHAT IS JEM?
+##WHAT IS JEM?
 
   jem is a java environment manager, a re-write and port to C of 
   a program on Gentoo Linux called java-config, written in python and
@@ -18,18 +20,18 @@ WHAT IS JEM?
   things for a variety of uses. By using jem systems can have portable 
   and consistent access to java virtual machines and packages.
 
-DOCUMENTATION:
+##DOCUMENTATION:
 
   Documentation is generated from jem sources in the docs subdirectory 
   after compiling jem. API documentation is created using doxygen and 
   man page created from help2man.
 
-DOWNLOAD:
+##DOWNLOAD:
 
   jem binaries and sources are currently available for download at
   http://o-sinc.com/#/software/jem
 
-CONFIGURING:
+##CONFIGURING:
 
   In the root directory of the sources, run the following commands to 
   configure cmake sources.
@@ -44,7 +46,7 @@ CONFIGURING:
 
  - To build documentation add -D BUILD_DOC=ON to either
 
-COMPILING:
+##COMPILING:
 
  - After configuring via cmake, to compile jem run make as normal in 
    the root directory of the sources.
@@ -59,7 +61,7 @@ COMPILING:
 
    make jem-test
 
-INSTALLING:
+##INSTALLING:
 
   Installing jem should be done through the systems package manager. For 
   integration with package managers and/or manual installation you can 
@@ -67,7 +69,7 @@ INSTALLING:
 
   make install
 
-PACKAGING:
+##PACKAGING:
 
   jem's build system can also build DEB, RPM, and TBZ2 packages for 
   distribution. To build all the above targets (they cannot be build 
