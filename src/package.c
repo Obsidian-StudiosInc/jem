@@ -206,20 +206,22 @@ struct jem_dep *_jemPkgGetDeps(struct jem_dep *deps,
                 char **jars = jemPkgGetJarNames(pkg_name);
                 int j;
                 int k;
-                for(j=0;jars[j];j++) {
-                    bool exists = false;
-                    for(k=0;deps[i].jars[k];k++)
-                        if(strcmp(jars[j],deps[i].jars[k])==0)
-                            exists = true;
-                    if(!exists) {
-                        char **tmp_jars = realloc(deps[i].jars,sizeof(char *)*(k+2));
-                        if(!tmp_jars)
-                            jemPrintError("Unable to allocate memory to hold all dependency jars");
-                        deps[i].jars = tmp_jars;
-                        deps[i].jars[k+1]= NULL;
-                        asprintf(&(deps[i].jars[k]),"%s",jars[j]);
-                        if(!deps[i].jars[k])
-                            jemPrintError("Unable to allocate memory to hold dependency jar");
+                if(jars) {
+                    for(j=0;jars[j];j++) {
+                        bool exists = false;
+                        for(k=0;deps[i].jars[k];k++)
+                            if(strcmp(jars[j],deps[i].jars[k])==0)
+                                exists = true;
+                        if(!exists) {
+                            char **tmp_jars = realloc(deps[i].jars,sizeof(char *)*(k+2));
+                            if(!tmp_jars)
+                                jemPrintError("Unable to allocate memory to hold all dependency jars");
+                            deps[i].jars = tmp_jars;
+                            deps[i].jars[k+1]= NULL;
+                            asprintf(&(deps[i].jars[k]),"%s",jars[j]);
+                            if(!deps[i].jars[k])
+                                jemPrintError("Unable to allocate memory to hold dependency jar");
+                        }
                     }
                 }
                 free(jars);
