@@ -1,9 +1,8 @@
+#!/bin/bash
 # Copyright 2016 Obsidian-Studios, Inc.
 # Distributed under the terms of the GNU General Public License v3
 #
 # Original work Copyright 1999-2016 Gentoo Foundation
-
-#!/bin/bash
 
 tool=${0##*/}
 
