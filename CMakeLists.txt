@@ -101,13 +101,6 @@ if(BUILD_DOC)
 	endif()
 endif()
 
-# Tests
-#enable_testing()
-add_custom_command(TARGET jem-test
-	COMMAND /usr/bin/valgrind --leak-check=yes --leak-check=full
-			--read-var-info=yes --show-reachable=yes
-			--track-origins=yes --error-exitcode=1
-			${CMAKE_BINARY_DIR}/dist/jem-test)
 # Package Sources
 set(CPACK_SOURCE_GENERATOR "TBZ2")
 set(CPACK_SOURCE_IGNORE_FILES
