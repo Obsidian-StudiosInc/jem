@@ -6,7 +6,7 @@ VG="/usr/bin/valgrind --leak-check=yes --leak-check=full --read-var-info=yes"
 VG="${VG} --show-reachable=yes --track-origins=yes --error-exitcode=1"
 
 check_rc() {
-	[[ ${1} -ne 0 ]] && exit ${1}
+	[[ ${1} -ne 0 ]] && exit "${1}"
 }
 
 test_code() {
@@ -23,7 +23,7 @@ test_jem() {
 	ARGS="c f j J l L o O r t v ? V"
 
 	for arg in ${ARGS}; do
-		${VG} ./dist/jem -${arg}
+		${VG} ./dist/jem -"${arg}"
 		check_rc $?
 	done
 
