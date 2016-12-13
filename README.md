@@ -1,6 +1,7 @@
 #	jem - Java Environment Manager
 [![License](http://img.shields.io/badge/license-GPLv3-blue.svg?style=plastic)](https://github.com/Obsidian-StudiosInc/jem/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/Obsidian-StudiosInc/jem.svg?branch=master)](https://travis-ci.org/Obsidian-StudiosInc/jem)
+[![Build Status](https://img.shields.io/travis/Obsidian-StudiosInc/jem/master.svg?style=plastic)](https://travis-ci.org/Obsidian-StudiosInc/jem)
+[![Build Status](https://img.shields.io/shippable/5840e5d8112fc80f00e0cb41/master.svg?style=plastic)](https://app.shippable.com/projects/5840e5d8112fc80f00e0cb41/)
 
 These are the release notes for jem. Read them carefully,
 as they tell you what this is all about, explain how to install jem,
