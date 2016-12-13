@@ -16,7 +16,7 @@ script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./
   - make package
   - make jem-test
-  - sudo dpkg -i dist/jem-0.1-1.x86_64.deb
+  - sudo dpkg -i --force-all dist/jem-0.1-1.x86_64.deb
   - shellcheck usr/bin/run-java-tool.bash
   - shellcheck tests/run-tests.sh
   - sudo ./tests/run-tests.sh -j
