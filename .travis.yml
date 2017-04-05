@@ -32,3 +32,20 @@ deploy:
   on:
     repo: Obsidian-StudiosInc/jem
     tags: true
+
+env:
+  global:
+   - secure: "F0lXt9unZtjohT5NUZc4Zom9sUkXkIoQtOwVlDV2k0BFQJndmj+BqWucJZGxQomyujXlqgWukoEtWAVVb3L9zaetcymcsPNN18OYNjhO5updDnuq4UcKTyJ5ianothw3ApqVwR2GjEoLxSDMczpM7PsV70VYxWD9H1zo2mAJc15Q0Jq71J/uLDp2XIkVYWDSuK1nR/ehx/URs0MHu5cIJsAy02wzGAtpkrRn/HyPSmmBR3iSqZmrz0xfafIQcFVWKIVz/Tdu/taBI0272y9E2rUTwg5hUyCnyNJHYr+eRuPX/giCm7Yhun0NROIlNNdkVyzrqajVctoybNINJz1eKBFPyBcVHtBL8cMp83lWpAdpyvAc9Ehr/AeWzcs+VRxBer++dUV5p2EyyGX+h+C5B+kf0YvDyGhzn3OHRty+AUumiBdQgq+DsplySQLKQEMFq5RhzeVsj7JKodKbAWazadnWjG+fpadPkdFnADn+nJ5raD0cq157nVijHHNOMnBpBNciStqYeDdbaPeCeT8d5Ikj1mPPHvvSqiOJDE69diwspJMrhyg8lbBsGJUP9s8rKqJTMoaUDVYHmqI9vqBwmRu6a40BBMcPO2pcBE6ePbCyGp7jIKEUhA0PO+yKkVq2MWUONb9F6nfyG7Sa1tnn4xjX0UyaMgyoOcgvNIz4vZA="
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "Obsidian-StudiosInc/jem"
+      description: "Build submitted via Travis CI"
+    notification_email: wlt@o-sinc.com
+    build_command_prepend: "autoreconf -f -i && automake && ./configure; make clean"
+    build_command:   "make -j 4"
+    branch_pattern: master
