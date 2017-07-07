@@ -107,7 +107,7 @@ char *jemPkgGetClasspath(struct jem_param *params) {
  * @return a string array containing the value. The string must be freed!
  */
 char **jemPkgGetJarNames(char *pkg_name) {
-    DIR *dp;
+    DIR *dp = NULL;
     char **jars = NULL;
     int i = 0;
     char *path = NULL;
