@@ -363,9 +363,8 @@ struct jem_vm *jemVmLoadVMs() {
  *
  * @param vm pointer to an vm struct
  * @param target a string representing the vm symlink target
- * @return an array of vm structs. Which must be freed, including struct members!
  */
-bool jemVmSetVM(struct jem_vm *vm,char *target) {
+void jemVmSetVM(struct jem_vm *vm,char *target) {
     int basename_len = strlen(basename(target));
     int target_len = strlen(target);
     char *buffer = calloc(target_len+1,sizeof(char));
