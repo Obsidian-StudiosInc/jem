@@ -265,7 +265,7 @@ struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name) {
     if(strlen(vm_name)>=2) {
         unsigned int b = vm_name[1];
         if(isdigit(b)) {
-            char **end_ptr;
+            char **end_ptr = NULL;
             unsigned long l = strtol(vm_name,end_ptr,10) - 1;
             if(i<=vms_len)
                 return(&vms[l]);
