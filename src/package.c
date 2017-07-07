@@ -528,15 +528,16 @@ struct jem_pkg *jemPkgLoadPackages(bool virtual) {
                 pkg = jemPkgLoadPackage(file->d_name);
             if(pkg) {
                 struct jem_pkg *npkgs = realloc(pkgs,sizeof(struct jem_pkg)*(i+2));
-                if(!npkgs)
+                if(npkgs) {
+                    pkgs = npkgs;
+                    pkgs[i+1].filename = NULL;
+                    pkgs[i+1].name = NULL;
+                    pkgs[i+1].params = NULL;
+                    pkgs[i] = *pkg;
+                    free(pkg);
+                    i++;
+                } else
                     jemPrintError("Unable to allocate memory to hold all package.env files"); // needs to clean up and exit under error, not just print a message
-                pkgs = npkgs;
-                pkgs[i+1].filename = NULL;
-                pkgs[i+1].name = NULL;
-                pkgs[i+1].params = NULL;
-                pkgs[i] = *pkg;
-                free(pkg);
-                i++;
             }
         }
     } else {
