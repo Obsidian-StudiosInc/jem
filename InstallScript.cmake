@@ -31,6 +31,7 @@ set(JAVA_BIN_TOOLS
 	"jconsole"
 	"jcontrol"
 	"jdb"
+	"jdeps"
 	"jhat"
 	"jinfo"
 	"jmap"
