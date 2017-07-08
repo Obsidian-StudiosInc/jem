@@ -335,16 +335,19 @@ struct jem_vm *jemVmLoadVMs() {
                !strcmp(file->d_name,".."))
                 continue;
             struct jem_vm *nvms = realloc(vms,sizeof(struct jem_vm)*(i+2));
-            if(!nvms)
+            if(nvms) {
+                vms = nvms;
+                vms[i+1].filename = NULL;
+                vms[i+1].params = NULL;
+                asprintf(&(vms[i].filename),"%s/%s",JEM_VMS_PATH,file->d_name);
+                if(vms[i].filename)
+                    vms[i].params = jemParseFile(vms[i].filename);
+                else
+                    jemPrintError("Unable to allocate memory to hold VM config file name"); // needs to clean up and exit under error, not just print a message
+                
+                i++;
+            } else
                 jemPrintError("Unable to allocate memory to hold all VM config files"); // needs to clean up and exit under error, not just print a message
-            vms = nvms;
-            vms[i+1].filename = NULL;
-            vms[i+1].params = NULL;
-            asprintf(&(vms[i].filename),"%s/%s",JEM_VMS_PATH,file->d_name);
-            if(!vms[i].filename)
-                jemPrintError("Unable to allocate memory to hold VM config file name"); // needs to clean up and exit under error, not just print a message
-            vms[i].params = jemParseFile(vms[i].filename);
-            i++;
         }
     } else {
         if(errno==EACCES)
