@@ -374,7 +374,8 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
     memcpy(buffer,target,target_len-basename_len);
     struct stat st;
     char **dirs = calloc(3,sizeof(char *));
-    dirs[0] = dirname(strdup(buffer));
+    char *buffer_cpy_ptr = strdup(buffer);
+    dirs[0] = dirname(buffer_cpy_ptr);
     dirs[1] = buffer;
     int i;
     for(i=0;dirs[i];i++) {
@@ -389,7 +390,7 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
             }
         }
     }
-    free(dirs[0]);
+    free(buffer_cpy_ptr);
     free(dirs);
     memset(buffer,'\0',target_len);
     if(readlink(target,buffer,target_len)>0) // if symlinks exists, remove
