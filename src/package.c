@@ -119,12 +119,13 @@ char **jemPkgGetJarNames(char *pkg_name) {
                !strcmp(file->d_name,".."))
                 continue;
             char **tmp = realloc(jars,sizeof(char *)*(i+2));
-            if(!tmp)
+            if(tmp) {
+                jars = tmp;
+                jars[i+1] = NULL;
+                asprintf(&jars[i],"%s",file->d_name);
+                i++;
+            } else
                 jemPrintError("Unable to allocate memory to hold package jar names");
-            jars = tmp;
-            jars[i+1] = NULL;
-            asprintf(&jars[i],"%s",file->d_name);
-            i++;
         }
     } else {
         if(errno==EACCES)
