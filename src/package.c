@@ -464,16 +464,18 @@ struct jem_pkg *jemPkgLoadFile(char *filename, char *name) {
     struct stat st;
     if(stat(filename,&st)==0) {
         struct jem_pkg *npkg = calloc(1,sizeof(struct jem_pkg));
-        if(!npkg)
+        if(npkg) {
+            pkg = npkg;
+            asprintf(&(pkg->filename),"%s",filename);
+            if(pkg->filename)
+                pkg->params = jemParseFile(pkg->filename);
+            else
+                jemPrintError("Unable to allocate memory to hold package file name");
+            asprintf(&(pkg->name),"%s",name);
+            if(!pkg->name)
+                jemPrintError("Unable to allocate memory to hold package name");
+        } else
             jemPrintError("Unable to allocate memory to hold package");
-        pkg = npkg;
-        asprintf(&(pkg->filename),"%s",filename);
-        if(!pkg->filename)
-            jemPrintError("Unable to allocate memory to hold package file name");
-        asprintf(&(pkg->name),"%s",name);
-        if(!pkg->name)
-            jemPrintError("Unable to allocate memory to hold package name");
-        pkg->params = jemParseFile(pkg->filename);
     }
     return(pkg);
 }
