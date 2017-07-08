@@ -127,8 +127,10 @@ struct jem_param *jemParseFile(const char *file) {
                     if(var_name)
                         free(var_name);
                     var_name = calloc(var_len,sizeof(char));
-                    if(!var_name)
+                    if(!var_name) {
                         jemPrintError("Unable to allocate memory to hold all file parameter variable name"); // needs to clean up and exit under error, not just print a message
+                        break;
+                    }
                     memcpy(var_name,subptr+2,var_len-1);
                     var_value = jemGetValue(params,var_name);
                     if(!var_value)
