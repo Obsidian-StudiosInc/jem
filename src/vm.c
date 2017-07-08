@@ -385,7 +385,9 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
                     jemPrintError("Write permission denied for System VM link parent directory"); // needs to be changed to throw an exception
                 else
                     jemPrintError("Invalid VMs configuration directory"); // needs to be changed to throw an exception
+                free(buffer_cpy_ptr);
                 free(buffer);
+                free(dirs);
                 return;
             }
         }
