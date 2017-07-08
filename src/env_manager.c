@@ -110,12 +110,13 @@ struct jem_vm **jemFindVM(char *name) {
            strcmp(jemVmGetName(&(jem_env.vms[i])),name)==0 ||
            strcmp(jemVmGetName(&(jem_env.vms[i])),vname)==0) {
             struct jem_vm **tmp = realloc(vms,sizeof(struct jem_vm *)*(vm_count+2));
-            if(!tmp)
+            if(tmp) {
+                vms = tmp;
+                vms[vm_count] = &(jem_env.vms[i]);
+                vms[vm_count+1] = NULL;
+                vm_count++;
+            } else
                 jemPrintError("Unable to reallocate memory for VM pointers");
-            vms = tmp;
-            vms[vm_count] = &(jem_env.vms[i]);
-            vms[vm_count+1] = NULL;
-            vm_count++;
         }
         if(vname)
             free(vname);
