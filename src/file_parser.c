@@ -68,17 +68,14 @@ char *jemGetValue(struct jem_param *params,const char *name) {
  */
 struct jem_param *jemParseFile(const char *file) {
     struct jem_param *params = NULL;
-    struct stat st;
-    if(stat(file,&st)<0) {
+    FILE *fp = fopen(file,"r");
+    if(!fp) {
         if(errno==EACCES)
             jemPrintError("File not readable"); // needs to be changed to throw an exception
         else
             jemPrintError("Invalid file, does not exist"); // needs to be changed to throw an exception
         return(params);
     }
-    FILE *fp = fopen(file,"r");
-    if(!fp)
-        return(params);
     short bytes_read = 0;
     char *line = NULL;
     size_t line_size = 0;
