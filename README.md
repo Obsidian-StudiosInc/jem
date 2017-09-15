@@ -36,7 +36,9 @@ and what to do if something goes wrong.
 ## CONFIGURING:
 
   In the root directory of the sources, run the following commands to 
-  configure cmake sources.
+  configure cmake sources. cmake uses autotools by default. jem can be 
+  built with ninja instead of autotools for faster builds. Little chance 
+  of switching to meson build system.
 
  - To build jem with debugging symbols
 
@@ -50,10 +52,15 @@ cmake -D CMAKE_BUILD_TYPE=Release ./
 ```
  - To build documentation add -D BUILD_DOC=ON to either
 
-## COMPILING:
+ - To build using ninja instead of autotools add -G Ninja to either
 
- - After configuring via cmake, to compile jem run make as normal in 
-   the root directory of the sources.
+
+## COMPILING:
+jem can be compiled via autotools or ninja
+
+### Autotools
+After configuring via cmake, to compile jem run make as normal in the 
+root directory of the sources.
 ```
    make
 ```
@@ -68,13 +75,35 @@ make help
 make jem-test
 ```
 
+### Ninja
+After configuring via cmake, to compile jem run ninja as normal in the
+root directory of the sources.
+```
+ninja
+```
+ - To compile and run tests
+
+```
+ninja jem-test
+```
+
 ## INSTALLING:
 
   Installing jem should be done through the systems package manager. For 
   integration with package managers and/or manual installation you can 
   run the following command.
 
-  make install
+### Autotools
+Install using autotools
+```
+make install
+```
+
+### Ninja
+Install using ninja
+```
+ninja install
+```
 
 ## PACKAGING:
 
@@ -82,5 +111,13 @@ make jem-test
   distribution. To build all the above targets (they cannot be build 
   individually at this time) run the following command.
 
+### Autotools
+```
   make package
+```
+
+### Ninja
+```
+  ninja package
+```
 
