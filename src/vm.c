@@ -380,17 +380,19 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
     dirs[1] = buffer;
     int i;
     for(i=0;dirs[i];i++) {
-        if(access(dirs[i],F_OK)==-1) {
-            if(mkdir(dirs[i], S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)<0) {  // create dir if doesn't exist mode 755
-                if(errno==EACCES)
-                    jemPrintError("Write permission denied for System VM link parent directory"); // needs to be changed to throw an exception
-                else
-                    jemPrintError("Invalid VMs configuration directory"); // needs to be changed to throw an exception
-                free(buffer_cpy_ptr);
-                free(buffer);
-                free(dirs);
-                return;
-            }
+        if(mkdir(dirs[i], S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)==-1) {  // create dir mode 755
+            if(errno==ENOTDIR)
+                jemPrintError("System VM link parent path is not a directory");
+            else if(errno==EEXIST)
+                continue;
+            else if(errno==EACCES)
+                jemPrintError("Write permission denied for System VM link parent directory"); // needs to be changed to throw an exception
+            else
+                jemPrintError("Invalid VMs configuration directory"); // needs to be changed to throw an exception
+            free(buffer_cpy_ptr);
+            free(buffer);
+            free(dirs);
+            return;
         }
     }
     free(buffer_cpy_ptr);
