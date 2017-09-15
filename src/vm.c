@@ -26,6 +26,7 @@
 #include <sys/dir.h>
 #include <sys/file.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "../include/package.h"
 #include "../include/vm.h"
@@ -373,14 +374,13 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
     int target_len = strlen(target);
     char *buffer = calloc(target_len+1,sizeof(char));
     memcpy(buffer,target,target_len-basename_len);
-    struct stat st;
     char **dirs = calloc(3,sizeof(char *));
     char *buffer_cpy_ptr = strdup(buffer);
     dirs[0] = dirname(buffer_cpy_ptr);
     dirs[1] = buffer;
     int i;
     for(i=0;dirs[i];i++) {
-        if(stat(dirs[i],&st)<0) {
+        if(access(dirs[i],F_OK)==-1) {
             if(mkdir(dirs[i], S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)<0) {  // create dir if doesn't exist mode 755
                 if(errno==EACCES)
                     jemPrintError("Write permission denied for System VM link parent directory"); // needs to be changed to throw an exception
