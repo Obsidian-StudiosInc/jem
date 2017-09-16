@@ -149,11 +149,13 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     int len;
     if((tainted = getenv("JEM_VM"))) {
         len = strlen(tainted);
-        vm_name = calloc(len+1,sizeof(char));
-        if(vm_name) {
-            snprintf(vm_name,len,"%s",tainted);
-            vm = jemVmGetVM(env->vms,vm_name);
-            free(vm_name);
+        if(len>0) {
+            vm_name = calloc(len+1,sizeof(char));
+            if(vm_name) {
+                snprintf(vm_name,len,"%s",tainted);
+                vm = jemVmGetVM(env->vms,vm_name);
+                free(vm_name);
+            }
         }
     } else {
         int i;
