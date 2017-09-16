@@ -99,14 +99,18 @@ struct jem_param *jemParseFile(const char *file) {
                 memset(line+bytes_read-1,'\0',1); // end the string in case extra data in buffer
             }
             struct jem_param *nparams = realloc(params,sizeof(struct jem_param)*(i+3));
-            if(!nparams)
+            if(!nparams) {
                 jemPrintError("Unable to allocate memory to hold all file parameters"); // needs to clean up and exit under error, not just print a message
+                break;
+            }
             params = nparams;
             params[i+1].name = NULL;
             params[i+1].value = NULL;
             params[i].name = calloc(name_len,sizeof(char));
-            if(!params[i].name)
+            if(!params[i].name) {
                 jemPrintError("Unable to allocate memory to hold all file parameter names"); // needs to clean up and exit under error, not just print a message
+                break;
+            }
             memcpy(params[i].name,line,name_len-1);
             params[i].value = NULL;
             // Expand ${VAR} before storing value
@@ -136,8 +140,10 @@ struct jem_param *jemParseFile(const char *file) {
                 }
                 value_len += var_value_len - var_len - 2;
                 char *tmp = realloc(params[i].value,(value_len+1) * sizeof(char));
-                if(!tmp)
+                if(!tmp) {
                     jemPrintError("Unable to re-allocate memory while parsing file parameter variables"); // needs to clean up and exit under error, not just print a message
+                    break;
+                }
                 params[i].value = tmp;
                 if(cur_len>0)
                     cur_len -= sub_len-1;                                       // back up so we overwrite/start where the next variable starts
