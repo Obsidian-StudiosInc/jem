@@ -148,9 +148,9 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     char *vm_name = NULL;
     int len;
     if((tainted = getenv("JEM_VM"))) {
-        len = strlen(tainted)+1;
+        len = strlen(tainted)+2;
         if(len>1) {
-            vm_name = calloc(len,sizeof(char));
+            vm_name = (char *)calloc(len,sizeof(char));
             if(vm_name) {
                 snprintf(vm_name,len,"%s",tainted);
                 vm = jemVmGetVM(env->vms,vm_name);
