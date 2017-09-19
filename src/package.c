@@ -315,16 +315,13 @@ char **jemPkgGetProvides(struct jem_param *params) {
     int i;
     for(i=0;(provide = strsep(&cursor," "));i++) {
         char **tmp = realloc(provides,sizeof(char *)*(i+2));
-        if(!tmp)
+        if(!tmp) {
             jemPrintError("Unable to allocate memory to hold all provides"); // needs to clean up and exit under error, not just print a message
+            break;
+        }
         provides = tmp;
         provides[i+1] = NULL;
         asprintf(&provides[i],"%s",provide);
-/*
-        int plen = strlen(provide);
-        provides[i] = calloc(plen+1,sizeof(char));
-        memcpy(provides[i],provide,plen);
-*/
     }
     free(provides_str);
     return(provides);
