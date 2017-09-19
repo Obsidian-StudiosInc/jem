@@ -190,16 +190,20 @@ struct jem_dep *_jemPkgGetDeps(struct jem_dep *deps,
             }
         }
         struct jem_dep *tmp = realloc(deps,sizeof(struct jem_dep)*(i+2));
-        if(!tmp)
+        if(!tmp) {
             jemPrintError("Unable to allocate memory to hold all dependencies"); // needs to clean up and exit under error, not just print a message
+            break;
+        }
         deps = tmp;
         deps[i+1].name = NULL;
         deps[i+1].jars = NULL;
         deps[i+1].parsed_sub_deps = false;
         deps[i].jars = NULL;
         asprintf(&(deps[i].name),"%s",pkg_name);
-        if(!deps[i].name)
+        if(!deps[i].name) {
             jemPrintError("Unable to allocate memory to hold dependency name"); // needs to clean up and exit under error, not just print a message
+            break;
+        }
         deps[i].parsed_sub_deps = false;
         ADDJARS:
         if(!has_jar) {
@@ -241,13 +245,17 @@ struct jem_dep *_jemPkgGetDeps(struct jem_dep *deps,
         if(jar_added)
             continue;
         char **tmp_jars = realloc(deps[i].jars,sizeof(char *)*(j+2));
-        if(!tmp_jars)
+        if(!tmp_jars) {
             jemPrintError("Unable to allocate memory to hold all dependency jars"); // needs to clean up and exit under error, not just print a message
+            break;
+        }
         deps[i].jars = tmp_jars;
         deps[i].jars[j+1]= NULL;
         asprintf(&(deps[i].jars[j]),"%s",dep_name);
-        if(!deps[i].jars[j])
+        if(!deps[i].jars[j]) {
             jemPrintError("Unable to allocate memory to hold dependency jar"); // needs to clean up and exit under error, not just print a message
+            break;
+        }
     }
     if(deps) {
         for(i=0;deps[i].name && !deps[i].parsed_sub_deps;i++) {
