@@ -34,6 +34,7 @@ set(JAVA_BIN_TOOLS
 	"jdeps"
 	"jhat"
 	"jinfo"
+	"jlink"
 	"jmap"
 	"jps"
 	"jrunscript"
