@@ -1,11 +1,18 @@
 language: c
 compiler: gcc
 sudo: required
+dist: trusty
+env:
+  global:
+   - secure: "F0lXt9unZtjohT5NUZc4Zom9sUkXkIoQtOwVlDV2k0BFQJndmj+BqWucJZGxQomyujXlqgWukoEtWAVVb3L9zaetcymcsPNN18OYNjhO5updDnuq4UcKTyJ5ianothw3ApqVwR2GjEoLxSDMczpM7PsV70VYxWD9H1zo2mAJc15Q0Jq71J/uLDp2XIkVYWDSuK1nR/ehx/URs0MHu5cIJsAy02wzGAtpkrRn/HyPSmmBR3iSqZmrz0xfafIQcFVWKIVz/Tdu/taBI0272y9E2rUTwg5hUyCnyNJHYr+eRuPX/giCm7Yhun0NROIlNNdkVyzrqajVctoybNINJz1eKBFPyBcVHtBL8cMp83lWpAdpyvAc9Ehr/AeWzcs+VRxBer++dUV5p2EyyGX+h+C5B+kf0YvDyGhzn3OHRty+AUumiBdQgq+DsplySQLKQEMFq5RhzeVsj7JKodKbAWazadnWjG+fpadPkdFnADn+nJ5raD0cq157nVijHHNOMnBpBNciStqYeDdbaPeCeT8d5Ikj1mPPHvvSqiOJDE69diwspJMrhyg8lbBsGJUP9s8rKqJTMoaUDVYHmqI9vqBwmRu6a40BBMcPO2pcBE6ePbCyGp7jIKEUhA0PO+yKkVq2MWUONb9F6nfyG7Sa1tnn4xjX0UyaMgyoOcgvNIz4vZA="
+  matrix:
+    - MY_PV=0.1.1
+
 install:
   - sudo apt-get -qq update
   - sudo apt-get install -y openjdk-7-jdk cmake rpm libc6-dbg 
-  - wget https://launchpad.net/ubuntu/+source/valgrind/1:3.12.0-1ubuntu1/+build/11192226/+files/valgrind_3.12.0-1ubuntu1_amd64.deb
-  - wget https://launchpad.net/ubuntu/+source/shellcheck/0.4.4-4/+build/11197881/+files/shellcheck_0.4.4-4_amd64.deb
+  - wget https://launchpad.net/ubuntu/+source/valgrind/1:3.13.0-1ubuntu3/+build/13618072
+  - wget https://launchpad.net/ubuntu/+source/shellcheck/0.4.6-1/+build/13053646
   - sudo dpkg -i *.deb
   - pushd samples
   - sudo cp -Rv etc usr /
@@ -16,7 +23,7 @@ script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./
   - make package
   - make jem-test
-  - sudo dpkg -i --force-all dist/jem-0.1-1.x86_64.deb
+  - sudo dpkg -i --force-all dist/jem-${MY_PV}.x86_64.deb
   - shellcheck usr/bin/run-java-tool.bash
   - shellcheck tests/run-tests.sh
   - sudo ./tests/run-tests.sh -j
@@ -27,15 +34,13 @@ deploy:
   api_key:
     secure: CLBKURe0w+Gtr2AcNwn2/17+jc5QwFZCD2C/HaHqgAmoBsC3FpedDRUUH90skCTfNpu6O/xfS2Unoijd56zwNUtZpPcfxeJOaWqYxVrxNTsp8YYV9IDoG+x8EF1Cmp4SZa2vW+X72Y8FqzjzN8PVJJawLLQEWawF5hg87gBf24mGl8ow1Xq3jGnInsOz0mMU3hbtztZCrh3TU3rSv3Wcrbu4ZROdd5EdhCrd2NIv0QmkaL+/Uhv78m0fne5DdLlEGKBnhdToGZc93csCzxGQPg6fgSYyJO9t5372yeK+dY0Z0f20ciWoFutN7qB7MTapFw8MyM/trEz5ab/gaHJUQ9Dh/ctAXH9cRrCTQHVSF65eqMxu3rTLa8YTbwFObC2BsEOSOt7NXW+mk7M8AV/f89ywwnj1tOkPWlkmgAOudG776ar/wHTbDfJGr1Xbou0IVm5laYd4hnlgq+HIeT0Z+b9xtXFGxwiQcAS11ACQUpS8VZcNHP2FzfgpIlhWBi7kIqelwXT/rG9dKzukQlAgelXUDC0Jcf2TgmNO4yAtz5JKBVoCbiHfLywYgXg7YI2JJRQXKIn43BzxBBa2tCn83kuWnYdqveBdhWtjqz5bhfryCcFuDQOj43ogkLOxNx3MGaw1uVlUw+e0bqllNXOhQGyxlQNzby6a9QYNi1FX8Dk=
   file:
-    - dist/jem-0.1-1.x86_64.deb
-    - dist/jem-0.1-1.x86_64.rpm
+    - dist/jem-${MY_PV}.x86_64.deb
+    - dist/jem-${MY_PV}.x86_64.rpm
   on:
     repo: Obsidian-StudiosInc/jem
+    branch: master
     tags: true
-
-env:
-  global:
-   - secure: "F0lXt9unZtjohT5NUZc4Zom9sUkXkIoQtOwVlDV2k0BFQJndmj+BqWucJZGxQomyujXlqgWukoEtWAVVb3L9zaetcymcsPNN18OYNjhO5updDnuq4UcKTyJ5ianothw3ApqVwR2GjEoLxSDMczpM7PsV70VYxWD9H1zo2mAJc15Q0Jq71J/uLDp2XIkVYWDSuK1nR/ehx/URs0MHu5cIJsAy02wzGAtpkrRn/HyPSmmBR3iSqZmrz0xfafIQcFVWKIVz/Tdu/taBI0272y9E2rUTwg5hUyCnyNJHYr+eRuPX/giCm7Yhun0NROIlNNdkVyzrqajVctoybNINJz1eKBFPyBcVHtBL8cMp83lWpAdpyvAc9Ehr/AeWzcs+VRxBer++dUV5p2EyyGX+h+C5B+kf0YvDyGhzn3OHRty+AUumiBdQgq+DsplySQLKQEMFq5RhzeVsj7JKodKbAWazadnWjG+fpadPkdFnADn+nJ5raD0cq157nVijHHNOMnBpBNciStqYeDdbaPeCeT8d5Ikj1mPPHvvSqiOJDE69diwspJMrhyg8lbBsGJUP9s8rKqJTMoaUDVYHmqI9vqBwmRu6a40BBMcPO2pcBE6ePbCyGp7jIKEUhA0PO+yKkVq2MWUONb9F6nfyG7Sa1tnn4xjX0UyaMgyoOcgvNIz4vZA="
+  skip_cleanup: true
 
 before_install:
       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
