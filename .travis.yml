@@ -8,6 +8,9 @@ env:
   matrix:
     - MY_PV=0.1.1
 
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
 install:
   - sudo apt-get -qq update
   - sudo apt-get install -y openjdk-7-jdk cmake rpm libc6-dbg 
@@ -19,16 +22,19 @@ install:
   - cd dpkg
   - sudo cp -Rv etc /
   - popd
+
 script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./
   - make package
   - make jem-test
-  - sudo dpkg -i --force-all dist/jem-${MY_PV}.x86_64.deb
+  - sudo dpkg -i --force-all dist/jem-*.x86_64.deb
   - shellcheck usr/bin/run-java-tool.bash
   - shellcheck tests/run-tests.sh
   - sudo ./tests/run-tests.sh -j
+
 notifications:
   email: false
+
 deploy:
   provider: releases
   api_key:
@@ -41,9 +47,6 @@ deploy:
     branch: master
     tags: true
   skip_cleanup: true
-
-before_install:
-      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 addons:
   coverity_scan:
