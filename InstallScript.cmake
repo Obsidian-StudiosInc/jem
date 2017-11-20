@@ -33,6 +33,7 @@ set(JAVA_BIN_TOOLS
 	"jdb"
 	"jdeps"
 	"jhat"
+	"jimage"
 	"jinfo"
 	"jlink"
 	"jmap"
