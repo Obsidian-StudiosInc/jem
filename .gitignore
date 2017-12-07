@@ -6,7 +6,9 @@ CPackSourceConfig.cmake
 CTestTestfile.cmake
 Makefile
 Testing
+build/
 cmake_install.cmake
 dist/
 docs/
 install_manifest.txt
+nbproject/
