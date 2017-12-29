@@ -57,11 +57,11 @@ install(TARGETS jem jem-cli
 	RUNTIME DESTINATION usr/bin
 	LIBRARY DESTINATION usr/lib)
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/etc/jem
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/etc/jem
 		DESTINATION etc/)
 
-install(FILES ${PROJECT_SOURCE_DIR}/etc/profile.d/jem.csh
-		${PROJECT_SOURCE_DIR}/etc/profile.d/jem.sh
+install(FILES ${PROJECT_SOURCE_DIR}/data/etc/profile.d/jem.csh
+		${PROJECT_SOURCE_DIR}/data/etc/profile.d/jem.sh
 		DESTINATION etc/profile.d/)
 
 install(FILES ${PROJECT_SOURCE_DIR}/data/run-java-tool.bash
