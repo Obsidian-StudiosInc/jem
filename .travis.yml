@@ -18,9 +18,9 @@ install:
   - wget https://launchpad.net/ubuntu/+source/shellcheck/0.4.6-1/+build/13053646/+files/shellcheck_0.4.6-1_amd64.deb
   - sudo dpkg -i *.deb
   - pushd samples
-  - sudo cp -Rv etc usr /
+  - sudo cp -r etc usr /
   - cd dpkg
-  - sudo cp -Rv etc /
+  - sudo cp -r etc /
   - popd
 
 script:
@@ -28,7 +28,7 @@ script:
   - make package
   - make jem-test
   - sudo dpkg -i --force-all dist/jem-*.x86_64.deb
-  - shellcheck usr/bin/run-java-tool.bash
+  - shellcheck data/run-java-tool.bash
   - shellcheck tests/run-tests.sh
   - sudo ./tests/run-tests.sh -j
 
