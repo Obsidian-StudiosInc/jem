@@ -239,7 +239,7 @@ void jemPrintMsg(const char *preffix,
  * @param msg the error/message
  */
 void jemPrintError(char *msg) {
-    jemPrintMsg("%H%R","!!! ERROR: ",msg,"%$\n");
+    jemPrintMsg("%H%R","!!! ERROR: ",msg,"%$");
     jem_exit_status = EXIT_FAILURE;
 }
 
@@ -249,7 +249,7 @@ void jemPrintError(char *msg) {
  * @param msg the warning/message
  */
 void jemPrintWarning(char *msg) {
-    jemPrintMsg("%H%Y","!!! WARNING: ",msg,"%$\n");
+    jemPrintMsg("%H%Y","!!! WARNING: ",msg,"%$");
 }
 
 /**
@@ -258,7 +258,7 @@ void jemPrintWarning(char *msg) {
  * @param msg the alert/message
  */
 void jemPrintAlert(char *msg) {
-    jemPrintMsg("%H%C","!!! ALERT: ",msg,"%$\n");
+    jemPrintMsg("%H%C","!!! ALERT: ",msg,"%$");
 }
 
 /**
