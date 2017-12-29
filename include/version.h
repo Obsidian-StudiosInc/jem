@@ -26,7 +26,7 @@
 
 #define JEM_CONTACT "Obsidian-Studios, Inc. <jem@o-sinc.com>"
 #define JEM_VERSION_MAJOR 0
-#define JEM_VERSION_MINOR 1
+#define JEM_VERSION_MINOR 2
 #define JEM_VERSION_SEPARATOR "."
 #define JEM_VERSION_NUMERIC STR(JEM_VERSION_MAJOR) "." STR(JEM_VERSION_MINOR)
 #define JEM_VERSION_STR "jem, v" JEM_VERSION_NUMERIC
