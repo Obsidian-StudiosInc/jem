@@ -30,8 +30,6 @@ bool jem_console_title = true;
 bool jem_auto_indent = true;
 bool jem_exit_status = EXIT_SUCCESS;
 
-const char *jem_terms[] = {"xterm", "Eterm", "aterm", "rxvt"};
-
 /**
  * array of terminal codes
  */
@@ -56,7 +54,6 @@ struct jem_term_code jem_term_codes[] = {
 };
 
 int jem_codes_count = sizeof(jem_term_codes) / sizeof(struct jem_term_code);
-int jem_terms_count = sizeof(jem_terms) / sizeof(jem_terms[0]);
 
 /**
  * Returns the value of a code from a static array of code structs
@@ -78,13 +75,8 @@ char *jemGetTermCode(char key) {
  * @return true if valid terminal, false otherwise
  */
 bool jemIsValidTerm() {
-    char *term = getenv("TERM");
-    if(term) {
-        int i;
-        for(i=0;i<jem_terms_count;i++)
-            if(strcasecmp(term,jem_terms[i])==0)
-                return(true);
-    }
+    if(getenv("LS_COLORS") || getenv("XTERM_256_COLORS"))
+       return(true);
     return(false);
 }
 
