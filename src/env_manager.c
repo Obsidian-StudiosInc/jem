@@ -191,7 +191,7 @@ void jemListAvailableVMs() {
     initEnvVMs();
     struct jem_vm *avm = jemGetActiveVM(&jem_env);
     bool has_build_only = false;
-    jemPrint("%HThe following VMs are available:%$");
+    jemPrintMsg(stdout, "%H", NULL, "The following VMs are available:", "%$");
     int i;
     for(i=0;jem_env.vms[i].filename;i++) {
         char *msg;
@@ -221,12 +221,16 @@ void jemListAvailableVMs() {
                          jemVmGetName(&(jem_env.vms[i])));
         }
         if(msg) {
-            jemPrint(msg);
+            jemPrint(stdout,msg);
             free(msg);
         }
     }
     if(has_build_only)
-        jemPrint("\n%rVMs marked as Build Only may contain Security Vulnerabilities and/or be EOL.%$");
+        jemPrintMsg(stdout,
+                    "\n%r",
+                    NULL,
+                    "VMs marked as Build Only may contain Security Vulnerabilities and/or be EOL.",
+                    "%$");
 }
 
 /**
@@ -281,7 +285,7 @@ void jemPrintActiveVM() {
     initEnvVMs();
     struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm)
-        jemPrint(jemVmGetName(avm));
+        jemPrint(stdout,jemVmGetName(avm));
 }
 
 /**
@@ -307,7 +311,7 @@ void jemPrintExe(const char *exe) {
     if(avm) {
         char *e = jemVmGetExec(avm->params,exe);
         if(e) {
-            jemPrint(e);
+            jemPrint(stdout,e);
             free(e);
         }
     }
@@ -399,7 +403,7 @@ void jemPrintPackageClasspath(const char *name) {
     }
     if(classpath) {
         if(package_found)
-            jemPrint(classpath);
+            jemPrint(stdout,classpath);
         free(classpath);
     }
     free(pkgs_str);
@@ -418,7 +422,7 @@ void jemPrintToolsJar() {
         if(path) {
             struct stat st;
             if(stat(path,&st)==0)
-                jemPrint(path);
+                jemPrint(stdout,path);
             free(path);
         }
     }
@@ -440,7 +444,7 @@ void jemPrintValueFromActiveVM(const char *name) {
         while((var = strsep(&cursor,","))) {
             char *value = jemGetValue(avm->params,var);
             if(value)
-                jemPrint(value);
+                jemPrint(stdout,value);
             else
                 jemPrintError("Value could not be found in the active VM environment");
         }
@@ -469,9 +473,9 @@ void jemPrintValueFromPackage(const char *name,const char *param) {
             while((var = strsep(&cursor,","))) {
                 char *value = jemGetValue(pkg->params,var);
                 if(value)
-                    jemPrint(value);
+                    jemPrint(stdout,value);
                 else
-                    jemPrint("");
+                    jemPrint(stdout,"");
             }
             free(vars_str);
             jemFreePkg(pkg);
@@ -491,7 +495,7 @@ void jemPrintValueFromPackage(const char *name,const char *param) {
 void jemPrintVirtualProviders(const char *virtual) {
     char *providers = jemPkgGetVirtualProviders(virtual,true);
     if(providers) {
-        jemPrint(providers);
+        jemPrint(stdout,providers);
         free(providers);
     }
 }

@@ -189,9 +189,9 @@ char *jemIndent(const char *preffix,const char *msg) {
  *
  * @param msg the message
  */
-void jemPrint(char *msg) {
+void jemPrint(FILE *stream, char *msg) {
     char *cmsg = jemAddTermColor(msg);
-    fprintf(stdout,gettext("%s\n"),cmsg);
+    fprintf(stream,gettext("%s\n"),cmsg);
     free(cmsg);
 }
 
@@ -203,7 +203,8 @@ void jemPrint(char *msg) {
  * @param msg the message to print
  * @param suffix the message suffix, used for terminal codes (not required)
  */
-void jemPrintMsg(const char *preffix,
+void jemPrintMsg(FILE *stream,
+                 const char *preffix,
                  const char *title,
                  char *msg,
                  const char *suffix) {
@@ -222,7 +223,7 @@ void jemPrintMsg(const char *preffix,
         asprintf(&pmsg,"%s%s",pmsg,suffix);
         free(tmp_msg);
     }
-    jemPrint(pmsg);
+    jemPrint(stream,pmsg);
     free(pmsg);
 }
 
@@ -232,7 +233,7 @@ void jemPrintMsg(const char *preffix,
  * @param msg the error/message
  */
 void jemPrintError(char *msg) {
-    jemPrintMsg("%H%R","!!! ERROR: ",msg,"%$");
+    jemPrintMsg(stderr,"%H%R","!!! ERROR: ",msg,"%$");
     jem_exit_status = EXIT_FAILURE;
 }
 
@@ -242,7 +243,7 @@ void jemPrintError(char *msg) {
  * @param msg the warning/message
  */
 void jemPrintWarning(char *msg) {
-    jemPrintMsg("%H%Y","!!! WARNING: ",msg,"%$");
+    jemPrintMsg(stderr,"%H%Y","!!! WARNING: ",msg,"%$");
 }
 
 /**
@@ -251,7 +252,7 @@ void jemPrintWarning(char *msg) {
  * @param msg the alert/message
  */
 void jemPrintAlert(char *msg) {
-    jemPrintMsg("%H%C","!!! ALERT: ",msg,"%$");
+    jemPrintMsg(stderr,"%H%C","!!! ALERT: ",msg,"%$");
 }
 
 /**
@@ -266,5 +267,5 @@ void jemSetTermTitle(const char *title) {
 }
 
 void jemWrite(char *msg) {
-    jemPrint(msg); // Need to add strip() functionality
+    jemPrint(stdout,msg); // Need to add strip() functionality
 }

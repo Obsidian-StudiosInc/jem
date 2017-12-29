@@ -23,6 +23,7 @@
 
 #include <errno.h>
 #include <libgen.h>
+#include <stdio.h>
 #include <sys/dir.h>
 #include <sys/file.h>
 #include <sys/stat.h>
@@ -417,7 +418,7 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
         if(strncasecmp(target,jemVmGetSystemVMLink(),target_len)!=0)
             vm_type = "user";
         asprintf(&msg, "Now using %s as your %s JVM", jemVmGetName(vm),vm_type);
-        jemPrint(msg);
+        jemPrint(stdout,msg);
         free(msg);
         if(jemVmIsBuildOnly(vm->params)) {
             asprintf(&msg,

@@ -96,7 +96,7 @@ char *jemIndent(const char *preffix,const char *msg);
  *
  * @param msg the message
  */
-void jemPrint(char *msg);
+void jemPrint(FILE *stream, char *msg);
 
 /**
  * Print a message with colors and formatting
@@ -106,7 +106,8 @@ void jemPrint(char *msg);
  * @param msg the message to print
  * @param suffix the message suffix, used for terminal codes (not required)
  */
-void jemPrintMsg(const char *preffix,
+void jemPrintMsg(FILE *stream,
+                 const char *preffix,
                  const char *title,
                  char *msg,
                  const char *suffix);
