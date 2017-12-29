@@ -215,16 +215,17 @@ void jemPrintMsg(const char *preffix,
                  const char *title,
                  char *msg,
                  const char *suffix) {
+    bool color = jemIsValidTerm();
     if(title)
         msg = jemIndent(title,msg);
     char *pmsg;
-    if(preffix)
+    if(preffix && color)
         asprintf(&pmsg,"%s%s",preffix,msg);
     else
         asprintf(&pmsg,"%s",msg);
     if(title)
         free(msg);
-    if(suffix) {
+    if(suffix && color) {
         char *tmp_msg = pmsg;
         asprintf(&pmsg,"%s%s",pmsg,suffix);
         free(tmp_msg);
