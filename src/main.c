@@ -68,7 +68,7 @@ static struct argp_option options[] = {
     {"classpath", 'p', "PACKAGE(s)", 0, "Print entries in the environment classpath for these packages", 3},
     {"package", JEM_OPT_PACKAGE, "PACKAGE(s)", 0, "Retrieve a value from a package(s) package.env file, value is specified by --query", 3},
     {"query", 'q', "PARAM(s)", 0, "Parameter(s) value(s) to retrieve from package(s) package.env file, specified by --package", 3},
-    {"library", 'i', "LIRBARY(s)", 0, "Print java library paths for these packages", 3},
+    {"library", 'i', "LIBRARY(s)", 0, "Print java library paths for these packages", 3},
     {"get-virtual-providers", JEM_OPT_VIRT_PROVIDERS, "PACKAGE(S)", 0, "Return a list of packages that provide a virtual", 3},
     {0,0,0,0,"GNU Options:", 4},
     {0}
