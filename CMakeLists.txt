@@ -55,7 +55,7 @@ target_link_libraries(jem-cli jem)
 target_link_libraries(jem-test jem)
 install(TARGETS jem jem-cli
 	RUNTIME DESTINATION usr/bin
-	LIBRARY DESTINATION usr/lib)
+	LIBRARY DESTINATION usr/lib${LIB_SUFFIX})
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/etc/jem
 		DESTINATION etc/)
