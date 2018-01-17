@@ -1,4 +1,4 @@
-# Copyright 2015 Obsidian-Studios, Inc.
+# Copyright 2015-2018 Obsidian-Studios, Inc.
 # Distributed under the terms of the GNU General Public License, v3 or later
 
 set user_vm = "${HOME}/.java/vm"

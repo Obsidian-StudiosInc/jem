@@ -1,5 +1,5 @@
 /***************************************************************************
- *  Copyright 2015 Obsidian-Studios, Inc.
+ *  Copyright 2015-2018 Obsidian-Studios, Inc.
  *  Author William L. Thomson Jr.
  *         wlt@o-sinc.com
  ****************************************************************************/
@@ -34,7 +34,7 @@
 const char *argp_program_version = JEM_VERSION_STR;
 const char *argp_program_bug_address = JEM_CONTACT;
 static char doc[] = "\nJava Environment Manager\n"
-                    "Copyright 2015 Obsidian-Studios, Inc.\n"
+                    "Copyright 2015-2018 Obsidian-Studios, Inc.\n"
                     "Distributed under the terms of the GNU General Public License v3";
 /* Unused arguments description*/
 static char args_doc[] = "";

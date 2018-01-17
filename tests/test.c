@@ -1,5 +1,5 @@
 /***************************************************************************
- *  Copyright 2015 Obsidian-Studios, Inc.
+ *  Copyright 2015-2018 Obsidian-Studios, Inc.
  *  Author William L. Thomson Jr.
  *         wlt@o-sinc.com
  ****************************************************************************/
