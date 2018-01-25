@@ -15,22 +15,13 @@
 
 cmake_minimum_required (VERSION 2.6)
 project (jem)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 2)
+set(VERSION_PATCH 0)
+set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-file(STRINGS "${PROJECT_SOURCE_DIR}/include/version.h"
-	JEM_BUILD_SPEC REGEX "^[ \t]*#define[ \t]+JEM_VERSION_[A-Z]+[ \t]+[0-9]+.*$")
-
-if(JEM_BUILD_SPEC)
-	message(STATUS "${JEM_BUILD_SPEC}")
-	foreach(item IN ITEMS MAJOR MINOR PATCH)
-		string(REGEX REPLACE ".*#define[ \t]+JEM_VERSION_${item}[ \t]+([0-9]+).*"
-			"\\1" XYZ ${JEM_BUILD_SPEC})
-		set("JEM_VERSION_${item}" ${XYZ} CACHE STRING "Jem version")
-	endforeach()
-else()
-	message(FATAL_ERROR "Version unavilable")
-endif()
-
-set(VERSION "${JEM_VERSION_MAJOR}.${JEM_VERSION_MINOR}")
+configure_file ("${PROJECT_SOURCE_DIR}/include/version.h.in"
+                "${PROJECT_SOURCE_DIR}/include/version.h" )
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
@@ -48,8 +39,8 @@ add_library(jem SHARED src/output_formatter.c src/file_parser.c src/vm.c src/pac
 add_executable(jem-cli src/main.c)
 add_executable(jem-test EXCLUDE_FROM_ALL tests/test.c)
 set_target_properties(jem PROPERTIES
-	SOVERSION ${JEM_VERSION_MAJOR}
-	VERSION ${JEM_VERSION_MAJOR}.${JEM_VERSION_MINOR})
+	SOVERSION ${VERSION_MAJOR}
+	VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set_target_properties(jem-cli PROPERTIES OUTPUT_NAME jem)
 target_link_libraries(jem-cli jem)
 target_link_libraries(jem-test jem)
