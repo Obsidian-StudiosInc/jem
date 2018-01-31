@@ -146,8 +146,10 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     struct jem_vm *vm = NULL;
     char *tainted = NULL;
     char vm_name[1024];
+    int len;
     if((tainted = getenv("JEM_VM"))) {
-        if(strlen(tainted)<1024) { 
+        len = strlen(tainted);
+        if(len>1 && len<1024) { 
             snprintf(vm_name,1023,"%s",tainted);
             vm = jemVmGetVM(env->vms,vm_name);
         }
