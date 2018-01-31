@@ -399,7 +399,7 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
     free(buffer_cpy_ptr);
     free(buffer);
     free(dirs);
-    int sym_fd = open(target, O_RDWR);
+    int sym_fd = open(target, O_RDONLY);
     if(sym_fd!=-1) { // if symlinks exists, lock and remove
         if(flock(sym_fd, LOCK_SH)!=-1) {
             unlink(target);
