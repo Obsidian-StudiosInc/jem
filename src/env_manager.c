@@ -145,18 +145,11 @@ void jemInitEnv(struct jem_env *env) {
 struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     struct jem_vm *vm = NULL;
     char *tainted = NULL;
-    char *vm_name = NULL;
-    int len;
+    char vm_name[1024];
     if((tainted = getenv("JEM_VM"))) {
-        len = strlen(tainted)+2;
-        if(len>2) {
-            vm_name = (char *)calloc(len,sizeof(char));
-            if(vm_name) {
-                snprintf(vm_name,len,"%s",tainted);
-                vm = jemVmGetVM(env->vms,vm_name);
-                free(vm_name);
-            }
-        }
+        snprintf(vm_name,1023,"%s",tainted);
+        vm = jemVmGetVM(env->vms,vm_name);
+        free(vm_name);
     } else {
         int i;
         char **vm_links = jemVmGetVMLinks();
