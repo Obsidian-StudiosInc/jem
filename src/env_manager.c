@@ -145,7 +145,7 @@ void jemInitEnv(struct jem_env *env) {
 struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     struct jem_vm *vm = NULL;
     char *tainted = NULL;
-    char vm_name[1024];
+    char vm_name[1024] = {0};
     int len;
     if((tainted = getenv("JEM_VM"))) {
         len = strlen(tainted);
