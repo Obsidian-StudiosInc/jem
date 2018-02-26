@@ -99,7 +99,6 @@ char *jemAddTermColor(char *msg) {
         if(jem_color_output &&
            msg[i]=='%' &&
            (c = jemGetTermCode(msg[i+1])) &&
-           c &&
            c[0]!=msg[i+1]) {
             i++;
             memcpy(nmsg+nlen,c,strlen(c));
