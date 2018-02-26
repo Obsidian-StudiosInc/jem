@@ -21,6 +21,7 @@
  *  along with jem.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ctype.h>
 #include <errno.h>
 #include <libgen.h>
 #include <stdio.h>
