@@ -6,10 +6,6 @@ env:
   matrix:
     - MY_PV=0.2.2
 
-cache:
-  directories:
-    - $HOME/.sonar/cache
-
 install:
   - sudo apt-get -qq update
   - sudo apt-get install -y openjdk-7-jdk cmake rpm libc6-dbg 
@@ -38,6 +34,9 @@ jobs:
           tags: true
         skip_cleanup: true
     - stage: SonarQube Scan
+      cache:
+        directories:
+          - $HOME/.sonar/cache
       addons:
         sonarcloud:
           organization: obsidian-studiosinc-github
