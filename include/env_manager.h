@@ -49,6 +49,11 @@ void jemCleanup();
 void jemFreeEnv(struct jem_env *env);
 
 /**
+ * Initialize env vms (virtual machines)
+ */
+void initEnvVMs();
+
+/**
  * Execute something which is in JAVA_HOME
  */
 void jemExeJavaBin(char *exe_name);
