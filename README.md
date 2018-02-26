@@ -3,6 +3,7 @@
 [![Build Status](https://img.shields.io/travis/Obsidian-StudiosInc/jem/master.svg?colorA=9977bb&style=plastic)](https://travis-ci.org/Obsidian-StudiosInc/jem)
 [![Build Status](https://img.shields.io/shippable/5840e5d8112fc80f00e0cb41/master.svg?colorA=9977bb&style=plastic)](https://app.shippable.com/projects/5840e5d8112fc80f00e0cb41/)
 [![Code Quality](https://img.shields.io/coverity/scan/12326.svg?colorA=9977bb&style=plastic)](https://scan.coverity.com/projects/obsidian-studiosinc-jem)
+[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=jem&metric=alert_status)](https://sonarcloud.io/dashboard?id=jem)
 
 ## About
 
