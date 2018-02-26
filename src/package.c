@@ -522,9 +522,7 @@ struct jem_pkg *jemPkgLoadPackages(bool virtual) {
     DIR *dp;
     struct jem_pkg *pkgs = NULL;
     int i = 0;
-    char *path = JEM_PKG_PATH;
-    if(virtual)
-        path = JEM_PKG_VIRTUAL_PATH;
+    char *path = virtual ? JEM_PKG_VIRTUAL_PATH : JEM_PKG_PATH;
     if((dp = opendir(path))) {
         struct dirent *file;
         while((file = readdir(dp))) {
@@ -550,6 +548,7 @@ struct jem_pkg *jemPkgLoadPackages(bool virtual) {
                     jemPrintError("Unable to allocate memory to hold all package.env files"); // needs to clean up and exit under error, not just print a message
             }
         }
+        closedir(dp);
     } else {
         if(errno==EACCES)
             jemPrintError("Package directory not readable"); // needs to be changed to throw an exception
@@ -558,8 +557,6 @@ struct jem_pkg *jemPkgLoadPackages(bool virtual) {
     }
     if(pkgs)
         qsort(pkgs,i+2,sizeof(struct jem_pkg),jemPkgLoadPackagesCompare);
-    if(dp)
-        closedir(dp);
     return(pkgs);
 }
 
