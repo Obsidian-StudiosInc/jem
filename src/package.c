@@ -442,11 +442,11 @@ char *jemPkgGetVirtualProviders(const char *virtual,bool ignore_vm) {
                         char *p_cursor = pkgs_str;
                         memcpy(p_cursor,providers,strlen(providers));
                         while((provide = strsep(&p_cursor," "))) {
-                            if(provide && packages) {
+                            if(packages) {
                                 char *old_packages = packages;
                                 asprintf(&packages,"%s,%s",packages,provide);
                                 free(old_packages);
-                            } else if(provide)
+                            } else
                                 asprintf(&packages,"%s",provide);
                         }
                         free(pkgs_str);
