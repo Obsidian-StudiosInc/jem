@@ -79,7 +79,6 @@ struct args {
 };
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
-    struct args *args = state->input;
     switch(key) {
         case 'a':
             initEnvVMs();
