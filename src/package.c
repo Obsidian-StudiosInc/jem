@@ -170,10 +170,10 @@ struct jem_dep *_jemPkgGetDeps(struct jem_dep *deps,
     char *cursor = deps_str;
     memcpy(cursor,value,strlen(value));
     int i = 0;
-    while(dep_name = strsep(&cursor,":")) {
+    while((dep_name = strsep(&cursor,":"))) {
         bool has_jar = false;
         char *pkg_name = dep_name;
-        if(pkg_name = strstr(pkg_name,"@")) {
+        if((pkg_name = strstr(pkg_name,"@"))) {
             pkg_name++; // skip @
             memset(dep_name+strlen(dep_name)-strlen(pkg_name)-1,'\0',1); // set dep_name to jar name
             if(strstr(jemPkgGetClasspath(params),dep_name))
