@@ -367,7 +367,7 @@ void jemPrintPackageClasspath(const char *name) {
                                     char *old_cp = classpath;
                                     asprintf(&classpath,"%s:/usr/share/%s/lib/%s",classpath,deps[i].name,deps[i].jars[j]);
                                     free(old_cp);
-                                } else if (!classpath)
+                                } else
                                     asprintf(&classpath,"/usr/share/%s/lib/%s",deps[i].name,deps[i].jars[j]);
                             }
                         } else {
