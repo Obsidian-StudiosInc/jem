@@ -134,7 +134,8 @@ char **jemPkgGetJarNames(char *pkg_name) {
             jemPrintError("Invalid package directory");
     }
     free(path);
-    closedir(dp);
+    if(dp)
+        closedir(dp);
     if(jars)
         qsort(jars,i+1,sizeof(char *),jemPkgCmpJarNames);
     return(jars);
@@ -556,7 +557,8 @@ struct jem_pkg *jemPkgLoadPackages(bool virtual) {
     }
     if(pkgs)
         qsort(pkgs,i+2,sizeof(struct jem_pkg),jemPkgLoadPackagesCompare);
-    closedir(dp);
+    if(dp)
+        closedir(dp);
     return(pkgs);
 }
 
