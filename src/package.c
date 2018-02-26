@@ -148,7 +148,7 @@ char **jemPkgGetJarNames(char *pkg_name) {
  */
 int jemPkgCmpJarNames(const void *v1, const void *v2) {
     const char **j1 = (const char **)v1;
-    const char **j2 = (const char **)v1;
+    const char **j2 = (const char **)v2;
     return strcmp(*j1, *j2);
 }
 
