@@ -25,6 +25,7 @@
 #include <error.h>
 #include <libgen.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <sys/dir.h>
 #include <sys/stat.h>
 #include "../include/env_manager.h"
