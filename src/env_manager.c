@@ -337,7 +337,7 @@ void jemPrintJavaVersion() {
  *             multiple comma separated package names can be specified
  */
 void jemPrintPackageClasspath(const char *name) {
-    bool package_found = false;
+    bool package_found;
     char *pkg_name = NULL;
     char *pkgs_str = calloc(strlen(name)+1,sizeof(char));
     char *cursor = pkgs_str;
@@ -346,11 +346,11 @@ void jemPrintPackageClasspath(const char *name) {
     int i;
     memcpy(cursor,name,strlen(name));
     while((pkg_name = strsep(&cursor,","))) {
+        package_found = false;
         pkg_name_len = strlen(pkg_name);
         for( i=0; i<pkg_name_len; i++)
             if(pkg_name[i] == ':')
                 pkg_name[i] = '-';
-        package_found = false;
         struct jem_pkg *pkg = jemPkgLoadPackage(pkg_name);
         if(pkg) {
             char *pkg_classpath = jemPkgGetClasspath(pkg->params);
