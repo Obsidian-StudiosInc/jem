@@ -147,8 +147,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             jemPrintValueFromActiveVM("BOOTCLASSPATH");
             return(1);
         case 'O':
-            jemPrintValueFromActiveVM("JAVA_HOME");
-            return(1);
         case 'o':
             jemPrintValueFromActiveVM("JAVA_HOME");
             return(1);
