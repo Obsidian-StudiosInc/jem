@@ -41,7 +41,7 @@ jobs:
         sonarcloud:
           organization: obsidian-studiosinc-github
           token:
-            secure: rIa5hu68TVvlaxltAOoe2zQTYHr1MsCLSk8kYWxbXCD+J9eMXW9irFoGEQTecbBp4sSAt4BQKTlP9LLI/jK0SIqGjljrWBsRP1TDQjSkylZothBfBOU9WJtI5onOLAw6PVegk18SrXM28plcj/VQ/bNyxO8v3ON0nU7EXVUugF5pgv41A6oxIEMf2Xcj/1qkbHJ4/cBvRXcEgulxZ1ILbZ+YJS8wBZn8pDsBkQbtQIcavD9S8YhYXuJO7vBXRI1ZilEg9zvCzugz5IZXiBpUxSFxzAwJqXbWm9QmCTzyAqNLbq5rZ5EwmBmShJSqSUSG7uzo/F6m3kVaT2wWyWgtDbrvD0szBLoLf1VjM/TeZSp4Tyz+7UoReaaHuPutN74Vj7uwr/+Iqv4udqNZLBZUb8yGGHEjObgqfwGfg1hdO9eXd/Rle1agySq00LqHQIIWa46LNj/702wKnCEaUMvrFunaYpWqTSegN4/Hm+g8n54+qyHW4NQSpsuIWaRjZ5w/ZlyyhdyfSlrk+vSzfAZV9JrPzFnzxr+whRDFSEi7/rYPtjwpY66MUJs1nHsiKs5H29LAQPjLmmJTOWIuzt0QWDxmTwYXA/zV1BBciCFSC1N4iH2jcb034Y6BpUSA7qjSsBzR+5P5fQSsHKFdNbqH3DM0bZRax5XpBz0W6akwiJQ=
+            secure: MUdFKjOdltZ5t2rRBRaXavZmUsO90rY2KcW2d+900d3Ybw/VwIVc4wJr8kovuWX3L6pHLRiOq774iQjnvaGFfZ2o8dpS1ozxfpQo4NGw7HB4/qhRP74uqIrcO2YBOHuMu8MKsha6WXOLlFPcvVtA4pmiHW96iB2/PTah9n6vwYtQ/WOj5W3LN/TKQARGVTa82t84gCUXs0fbtTQSZNpoP9BWZjjunJD9mTrexQ4oJrTEdZNZV4bnOfMn6i9EJcaFR4hbGRIAjE51hdKDMHrqzdog/yryYPSoCdFHlKvrhTo8xNBsrHYPXTTbOgZ/TcO/JmzIuljWuMmCsoGDAuSu+W3vFqK5sglra+60/apoG1PHX2LpWgujDSbTqockNwEcTpZpu98CNjjlp9lkXfKi9IRz0EjumhGzVmTUUm92Uh8QDJ/CAu8yABXiq8dBi+IerqjtK1IWqRC4OsBUPv+S9ElxWRuhZvT4F4v5XCtWt+U6YvFozW9YC2S4tB0tu4yrhtm8ZOH1ke4rW/cfhD5PKiCjUEv9YBEh3uRUsE2HVVBV9ibOVg9cRVJK37ryei22sskRnReP4laBUxHUeKGBVVZpGzzoptDwzlLRDyPTL9LNU39jd7lbXjdDSvGfsb1SQENiAO43qDXfxD8ctU8zjmgRL9kQaYYkDO0tvdWLavs=
       script:
         - cmake -D CMAKE_BUILD_TYPE=Debug ./
         - build-wrapper-linux-x86-64 --out-dir bw-output make
