@@ -3,13 +3,12 @@ compiler: gcc
 sudo: required
 dist: trusty
 env:
-  global:
-   - secure: "F0lXt9unZtjohT5NUZc4Zom9sUkXkIoQtOwVlDV2k0BFQJndmj+BqWucJZGxQomyujXlqgWukoEtWAVVb3L9zaetcymcsPNN18OYNjhO5updDnuq4UcKTyJ5ianothw3ApqVwR2GjEoLxSDMczpM7PsV70VYxWD9H1zo2mAJc15Q0Jq71J/uLDp2XIkVYWDSuK1nR/ehx/URs0MHu5cIJsAy02wzGAtpkrRn/HyPSmmBR3iSqZmrz0xfafIQcFVWKIVz/Tdu/taBI0272y9E2rUTwg5hUyCnyNJHYr+eRuPX/giCm7Yhun0NROIlNNdkVyzrqajVctoybNINJz1eKBFPyBcVHtBL8cMp83lWpAdpyvAc9Ehr/AeWzcs+VRxBer++dUV5p2EyyGX+h+C5B+kf0YvDyGhzn3OHRty+AUumiBdQgq+DsplySQLKQEMFq5RhzeVsj7JKodKbAWazadnWjG+fpadPkdFnADn+nJ5raD0cq157nVijHHNOMnBpBNciStqYeDdbaPeCeT8d5Ikj1mPPHvvSqiOJDE69diwspJMrhyg8lbBsGJUP9s8rKqJTMoaUDVYHmqI9vqBwmRu6a40BBMcPO2pcBE6ePbCyGp7jIKEUhA0PO+yKkVq2MWUONb9F6nfyG7Sa1tnn4xjX0UyaMgyoOcgvNIz4vZA="
   matrix:
     - MY_PV=0.2.2
 
-before_install:
-      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+cache:
+  directories:
+    - $HOME/.sonar/cache
 
 install:
   - sudo apt-get -qq update
@@ -23,6 +22,48 @@ install:
   - sudo cp -r etc /
   - popd
 
+jobs:
+  include:
+    - stage: Test build
+      deploy:
+        provider: releases
+        api_key:
+          secure: p/dWgK6qv942D3u/DQ6tLoEd1Qv/xKQ79oiacEsoA60LUcmNxcO9Ls62KBmJ/W1PwFZFsepijZvuvb3XPhRVSd0pXXete5vkG9fmZ+cJe+5w28KgLN2gRWvToiVkZ98atKCGkh4IqKc07y+gk632bGBfPNsqGZD/FOhV5GLIbopvuN+vK3BWXJB/XZeKrBt43odM4DrSTLXi6drkO1stHk5lqMo07Sa6VtF3Zml6Lxy7eFz5rRXAQH32KoiNKObyNS3k8PgofJ2o1hFpcGLCmDDRFqLH2bSQ2QW3xPyoHN+pYeQBe8n0Trnin9wvHcUIIJyubwXThguSI0wHha6ZZMSL6Cin9C2i9t8COfWHpHUGWdJ98rum46iRTffD6lG3hA+ACfHO4CDcuP8ezWzhYCX8Bwkztd5XYDJ5fBC6HzElyFUAyoyu97R4LUgxLn1KXM6WoTaMTwGgQNL8ZtnypJeDzSefZNzIIayZJMCDyqPJwVEKibntvrKtHeJUpS/sKh4nL53eQiMzXgvjlu9nZer1nOx9GXrBgzdtRkjSmmbpQI50VUnwhHf7mnVVDBJ5QsuG3V5m0n2Ft6W5T3wOexgvhfdzewVpMbMhmPlGF1eiKsKapGkTtnNs6vYlc6ThtRJfSUKX4fgr7EIGeSIg/XgBTy7yjtu3IlZj4w7IGjk=
+        file:
+          - dist/jem-${MY_PV}.x86_64.deb
+          - dist/jem-${MY_PV}.x86_64.rpm
+        on:
+          repo: Obsidian-StudiosInc/jem
+          branch: master
+          tags: true
+        skip_cleanup: true
+    - stage: SonarQube Scan
+      addons:
+        sonarcloud:
+          organization: obsidian-studiosinc-github
+          token:
+            secure: rIa5hu68TVvlaxltAOoe2zQTYHr1MsCLSk8kYWxbXCD+J9eMXW9irFoGEQTecbBp4sSAt4BQKTlP9LLI/jK0SIqGjljrWBsRP1TDQjSkylZothBfBOU9WJtI5onOLAw6PVegk18SrXM28plcj/VQ/bNyxO8v3ON0nU7EXVUugF5pgv41A6oxIEMf2Xcj/1qkbHJ4/cBvRXcEgulxZ1ILbZ+YJS8wBZn8pDsBkQbtQIcavD9S8YhYXuJO7vBXRI1ZilEg9zvCzugz5IZXiBpUxSFxzAwJqXbWm9QmCTzyAqNLbq5rZ5EwmBmShJSqSUSG7uzo/F6m3kVaT2wWyWgtDbrvD0szBLoLf1VjM/TeZSp4Tyz+7UoReaaHuPutN74Vj7uwr/+Iqv4udqNZLBZUb8yGGHEjObgqfwGfg1hdO9eXd/Rle1agySq00LqHQIIWa46LNj/702wKnCEaUMvrFunaYpWqTSegN4/Hm+g8n54+qyHW4NQSpsuIWaRjZ5w/ZlyyhdyfSlrk+vSzfAZV9JrPzFnzxr+whRDFSEi7/rYPtjwpY66MUJs1nHsiKs5H29LAQPjLmmJTOWIuzt0QWDxmTwYXA/zV1BBciCFSC1N4iH2jcb034Y6BpUSA7qjSsBzR+5P5fQSsHKFdNbqH3DM0bZRax5XpBz0W6akwiJQ=
+      script:
+        - cmake -D CMAKE_BUILD_TYPE=Debug ./
+        - build-wrapper-linux-x86-64 --out-dir bw-output make
+        - sonar-scanner
+    - stage: Coverity Scan
+      env:
+        - secure: F0lXt9unZtjohT5NUZc4Zom9sUkXkIoQtOwVlDV2k0BFQJndmj+BqWucJZGxQomyujXlqgWukoEtWAVVb3L9zaetcymcsPNN18OYNjhO5updDnuq4UcKTyJ5ianothw3ApqVwR2GjEoLxSDMczpM7PsV70VYxWD9H1zo2mAJc15Q0Jq71J/uLDp2XIkVYWDSuK1nR/ehx/URs0MHu5cIJsAy02wzGAtpkrRn/HyPSmmBR3iSqZmrz0xfafIQcFVWKIVz/Tdu/taBI0272y9E2rUTwg5hUyCnyNJHYr+eRuPX/giCm7Yhun0NROIlNNdkVyzrqajVctoybNINJz1eKBFPyBcVHtBL8cMp83lWpAdpyvAc9Ehr/AeWzcs+VRxBer++dUV5p2EyyGX+h+C5B+kf0YvDyGhzn3OHRty+AUumiBdQgq+DsplySQLKQEMFq5RhzeVsj7JKodKbAWazadnWjG+fpadPkdFnADn+nJ5raD0cq157nVijHHNOMnBpBNciStqYeDdbaPeCeT8d5Ikj1mPPHvvSqiOJDE69diwspJMrhyg8lbBsGJUP9s8rKqJTMoaUDVYHmqI9vqBwmRu6a40BBMcPO2pcBE6ePbCyGp7jIKEUhA0PO+yKkVq2MWUONb9F6nfyG7Sa1tnn4xjX0UyaMgyoOcgvNIz4vZA=
+      before_install:
+         - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+      addons:
+        coverity_scan:
+          project:
+            name: "Obsidian-StudiosInc/jem"
+            description: "Build submitted via Travis CI"
+          notification_email: wlt@o-sinc.com
+          build_command_prepend: "cmake -D CMAKE_BUILD_TYPE=Debug ./"
+          build_command: "make -j 4"
+          branch_pattern: master
+      script:
+        - true // avoid coverity double build
+
 script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./
   - make package
@@ -34,26 +75,3 @@ script:
 
 notifications:
   email: false
-
-deploy:
-  provider: releases
-  api_key:
-    secure: p/dWgK6qv942D3u/DQ6tLoEd1Qv/xKQ79oiacEsoA60LUcmNxcO9Ls62KBmJ/W1PwFZFsepijZvuvb3XPhRVSd0pXXete5vkG9fmZ+cJe+5w28KgLN2gRWvToiVkZ98atKCGkh4IqKc07y+gk632bGBfPNsqGZD/FOhV5GLIbopvuN+vK3BWXJB/XZeKrBt43odM4DrSTLXi6drkO1stHk5lqMo07Sa6VtF3Zml6Lxy7eFz5rRXAQH32KoiNKObyNS3k8PgofJ2o1hFpcGLCmDDRFqLH2bSQ2QW3xPyoHN+pYeQBe8n0Trnin9wvHcUIIJyubwXThguSI0wHha6ZZMSL6Cin9C2i9t8COfWHpHUGWdJ98rum46iRTffD6lG3hA+ACfHO4CDcuP8ezWzhYCX8Bwkztd5XYDJ5fBC6HzElyFUAyoyu97R4LUgxLn1KXM6WoTaMTwGgQNL8ZtnypJeDzSefZNzIIayZJMCDyqPJwVEKibntvrKtHeJUpS/sKh4nL53eQiMzXgvjlu9nZer1nOx9GXrBgzdtRkjSmmbpQI50VUnwhHf7mnVVDBJ5QsuG3V5m0n2Ft6W5T3wOexgvhfdzewVpMbMhmPlGF1eiKsKapGkTtnNs6vYlc6ThtRJfSUKX4fgr7EIGeSIg/XgBTy7yjtu3IlZj4w7IGjk=
-  file:
-    - dist/jem-${MY_PV}.x86_64.deb
-    - dist/jem-${MY_PV}.x86_64.rpm
-  on:
-    repo: Obsidian-StudiosInc/jem
-    branch: master
-    tags: true
-  skip_cleanup: true
-
-addons:
-  coverity_scan:
-    project:
-      name: "Obsidian-StudiosInc/jem"
-      description: "Build submitted via Travis CI"
-    notification_email: wlt@o-sinc.com
-    build_command_prepend: "cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./ ; make clean"
-    build_command:   "make -j 4"
-    branch_pattern: master
