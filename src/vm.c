@@ -360,7 +360,8 @@ struct jem_vm *jemVmLoadVMs() {
     }
     if(vms)
         qsort(vms,i+2,sizeof(struct jem_vm),jemVmCompareVMs);
-    closedir(dp);
+    if(dp)
+        closedir(dp);
     return(vms);
 }
 
