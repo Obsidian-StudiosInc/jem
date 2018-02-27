@@ -40,10 +40,10 @@ test_jem() {
 	${VG} ./dist/jem -i jna
 	check_rc $?
 
-	${VG} ./dist/jem -dp tomcat-server
+	${VG} ./dist/jem -dp tomcat-server-9
 	check_rc $?
 
-	${VG} ./dist/jem --package tomcat-server -q DEPEND
+	${VG} ./dist/jem --package tomcat-server-9 -q DEPEND
 	check_rc $?
 
 	${VG} ./dist/jem -P ${VM}
