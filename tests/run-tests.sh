@@ -4,6 +4,7 @@
 
 VG="/usr/bin/valgrind --leak-check=yes --leak-check=full --read-var-info=yes"
 VG="${VG} --show-reachable=yes --track-origins=yes --error-exitcode=1"
+VM="oraclejdk-7"
 
 check_rc() {
 	[[ ${1} -ne 0 ]] && exit "${1}"
@@ -27,7 +28,25 @@ test_jem() {
 		check_rc $?
 	done
 
+	${VG} ./dist/jem -a ${VM} -g JAVA_HOME
+	check_rc $?
+
+	${VG} ./dist/jem -e jar
+	check_rc $?
+
 	${VG} ./dist/jem -g LDPATH
+	check_rc $?
+
+	${VG} ./dist/jem -i jna
+	check_rc $?
+
+	${VG} ./dist/jem -dp tomcat-server
+	check_rc $?
+
+	${VG} ./dist/jem --package tomcat-server -q DEPEND
+	check_rc $?
+
+	${VG} ./dist/jem -P ${VM}
 	check_rc $?
 }
 
