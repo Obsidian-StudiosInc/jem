@@ -421,45 +421,43 @@ char *jemPkgGetVirtualProviders(const char *virtual,bool ignore_vm) {
     char *v_cursor = virtual_str;
     memcpy(v_cursor,virtual,strlen(virtual));
     while((virtual_name = strsep(&v_cursor,","))) {
-        if(virtual_name) {
-            char *virtual_file = NULL;
-            asprintf(&virtual_file,"%s%s",JEM_PKG_VIRTUAL_PATH,virtual_name);
-            struct stat st;
-            if(virtual_file) {
-                struct jem_param *params = NULL;
-                if(stat(virtual_file,&st)==0) // no output if file exist, remove for error if it does not
-                    params = jemParseFile(virtual_file);
-                if(params) {
-                    char *providers = jemGetValue(params,"PROVIDERS");
-                    char *vvm_version = jemGetValue(params,"VM");
-                    if(vvm_version && !ignore_vm) {
-                        while (*vvm_version && !isdigit(*vvm_version)) // skip through non-digit/alpha characters
-                            vvm_version++;
-                        initEnvVMs();
-                        struct jem_vm *vm = jemGetActiveVM(&jem_env);
-                        float vm_version = atof(jemVmGetProvidesVersion(vm->params));
-                        if(atof(vvm_version)<=vm_version)
-                            providers = "";
-                    }
-                    if(providers) {
-                        char *provide = NULL;
-                        char *pkgs_str = calloc(strlen(providers)+1,sizeof(char));
-                        char *p_cursor = pkgs_str;
-                        memcpy(p_cursor,providers,strlen(providers));
-                        while((provide = strsep(&p_cursor," "))) {
-                            if(packages) {
-                                char *old_packages = packages;
-                                asprintf(&packages,"%s,%s",packages,provide);
-                                free(old_packages);
-                            } else
-                                asprintf(&packages,"%s",provide);
-                        }
-                        free(pkgs_str);
-                    }
-                    jemFreeParams(params);
+        char *virtual_file = NULL;
+        asprintf(&virtual_file,"%s%s",JEM_PKG_VIRTUAL_PATH,virtual_name);
+        struct stat st;
+        if(virtual_file) {
+            struct jem_param *params = NULL;
+            if(stat(virtual_file,&st)==0) // no output if file exist, remove for error if it does not
+                params = jemParseFile(virtual_file);
+            if(params) {
+                char *providers = jemGetValue(params,"PROVIDERS");
+                char *vvm_version = jemGetValue(params,"VM");
+                if(vvm_version && !ignore_vm) {
+                    while (*vvm_version && !isdigit(*vvm_version)) // skip through non-digit/alpha characters
+                        vvm_version++;
+                    initEnvVMs();
+                    struct jem_vm *vm = jemGetActiveVM(&jem_env);
+                    float vm_version = atof(jemVmGetProvidesVersion(vm->params));
+                    if(atof(vvm_version)<=vm_version)
+                        providers = "";
                 }
-                free(virtual_file);
+                if(providers) {
+                    char *provide = NULL;
+                    char *pkgs_str = calloc(strlen(providers)+1,sizeof(char));
+                    char *p_cursor = pkgs_str;
+                    memcpy(p_cursor,providers,strlen(providers));
+                    while((provide = strsep(&p_cursor," "))) {
+                        if(packages) {
+                            char *old_packages = packages;
+                            asprintf(&packages,"%s,%s",packages,provide);
+                            free(old_packages);
+                        } else
+                            asprintf(&packages,"%s",provide);
+                    }
+                    free(pkgs_str);
+                }
+                jemFreeParams(params);
             }
+            free(virtual_file);
         }
     }
     free(virtual_str);
