@@ -34,6 +34,8 @@ jobs:
           tags: true
         skip_cleanup: true
     - stage: SonarQube Scan
+      env:
+        - SONAR="build-wrapper-linux-x86-64 --out-dir bw-output"
       cache:
         directories:
           - $HOME/.sonar/cache
@@ -42,12 +44,6 @@ jobs:
           organization: obsidian-studiosinc-github
           token:
             secure: MUdFKjOdltZ5t2rRBRaXavZmUsO90rY2KcW2d+900d3Ybw/VwIVc4wJr8kovuWX3L6pHLRiOq774iQjnvaGFfZ2o8dpS1ozxfpQo4NGw7HB4/qhRP74uqIrcO2YBOHuMu8MKsha6WXOLlFPcvVtA4pmiHW96iB2/PTah9n6vwYtQ/WOj5W3LN/TKQARGVTa82t84gCUXs0fbtTQSZNpoP9BWZjjunJD9mTrexQ4oJrTEdZNZV4bnOfMn6i9EJcaFR4hbGRIAjE51hdKDMHrqzdog/yryYPSoCdFHlKvrhTo8xNBsrHYPXTTbOgZ/TcO/JmzIuljWuMmCsoGDAuSu+W3vFqK5sglra+60/apoG1PHX2LpWgujDSbTqockNwEcTpZpu98CNjjlp9lkXfKi9IRz0EjumhGzVmTUUm92Uh8QDJ/CAu8yABXiq8dBi+IerqjtK1IWqRC4OsBUPv+S9ElxWRuhZvT4F4v5XCtWt+U6YvFozW9YC2S4tB0tu4yrhtm8ZOH1ke4rW/cfhD5PKiCjUEv9YBEh3uRUsE2HVVBV9ibOVg9cRVJK37ryei22sskRnReP4laBUxHUeKGBVVZpGzzoptDwzlLRDyPTL9LNU39jd7lbXjdDSvGfsb1SQENiAO43qDXfxD8ctU8zjmgRL9kQaYYkDO0tvdWLavs=
-      script:
-        - cmake -D CMAKE_BUILD_TYPE=Test ./
-        - build-wrapper-linux-x86-64 --out-dir bw-output make
-        - 'ls -l CMakeFiles/jem.dir/src/'
-        - 'find . -name ''*.gcno'' -exec sh -c ''gcov -b {} -o $(dirname {})'' \;'
-        - sonar-scanner
     - stage: Coverity Scan
       env:
         - secure: F0lXt9unZtjohT5NUZc4Zom9sUkXkIoQtOwVlDV2k0BFQJndmj+BqWucJZGxQomyujXlqgWukoEtWAVVb3L9zaetcymcsPNN18OYNjhO5updDnuq4UcKTyJ5ianothw3ApqVwR2GjEoLxSDMczpM7PsV70VYxWD9H1zo2mAJc15Q0Jq71J/uLDp2XIkVYWDSuK1nR/ehx/URs0MHu5cIJsAy02wzGAtpkrRn/HyPSmmBR3iSqZmrz0xfafIQcFVWKIVz/Tdu/taBI0272y9E2rUTwg5hUyCnyNJHYr+eRuPX/giCm7Yhun0NROIlNNdkVyzrqajVctoybNINJz1eKBFPyBcVHtBL8cMp83lWpAdpyvAc9Ehr/AeWzcs+VRxBer++dUV5p2EyyGX+h+C5B+kf0YvDyGhzn3OHRty+AUumiBdQgq+DsplySQLKQEMFq5RhzeVsj7JKodKbAWazadnWjG+fpadPkdFnADn+nJ5raD0cq157nVijHHNOMnBpBNciStqYeDdbaPeCeT8d5Ikj1mPPHvvSqiOJDE69diwspJMrhyg8lbBsGJUP9s8rKqJTMoaUDVYHmqI9vqBwmRu6a40BBMcPO2pcBE6ePbCyGp7jIKEUhA0PO+yKkVq2MWUONb9F6nfyG7Sa1tnn4xjX0UyaMgyoOcgvNIz4vZA=
@@ -67,12 +63,15 @@ jobs:
 
 script:
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ./
+  - ${SONAR} make
   - make package
   - make jem-test
   - sudo dpkg -i --force-all dist/jem-*.x86_64.deb
   - shellcheck data/run-java-tool.bash
   - shellcheck tests/run-tests.sh
   - sudo ./tests/run-tests.sh -j
+  - if [ "${SONAR}" ]; then find . -name '*.gcno' -exec sh -c 'gcov -b {} -o $(dirname {})' \;; fi
+  - if [ "${SONAR}" ]; then sonar-scanner; fi
 
 notifications:
   email: false
