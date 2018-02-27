@@ -24,10 +24,13 @@ configure_file ("${PROJECT_SOURCE_DIR}/include/version.h.in"
                 "${PROJECT_SOURCE_DIR}/include/version.h" )
 
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -g")
+set(CMAKE_C_FLAGS_TEST "${CMAKE_C_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall")
 IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE")
 ENDIF()
+
+set(CMAKE_EXE_LINKER_FLAGS_TEST "-fprofile-arcs -ftest-coverage")
 
 set(CMAKE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
@@ -38,7 +41,11 @@ set(CMAKE_INSTALL_PREFIX "/")
 
 include_directories(include)
 
-add_library(jem SHARED src/output_formatter.c src/file_parser.c src/vm.c src/package.c src/env_manager.c)
+add_library(jem SHARED
+	src/output_formatter.c
+	src/file_parser.c
+	src/vm.c src/package.c
+	src/env_manager.c)
 add_executable(jem-cli src/main.c)
 add_executable(jem-test EXCLUDE_FROM_ALL tests/test.c)
 set_target_properties(jem PROPERTIES
