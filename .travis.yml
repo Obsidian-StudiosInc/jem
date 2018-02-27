@@ -45,6 +45,7 @@ jobs:
       script:
         - cmake -D CMAKE_BUILD_TYPE=Test ./
         - build-wrapper-linux-x86-64 --out-dir bw-output make
+        - 'ls -l CMakeFiles/jem.dir/src/'
         - 'find . -name ''*.gcno'' -exec sh -c ''gcov -b {} -o $(dirname {})'' \;'
         - sonar-scanner
     - stage: Coverity Scan
