@@ -28,7 +28,7 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall")
 
 IF (${CMAKE_BUILD_TYPE} MATCHES "Test")
      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
-     set(CMAKE_EXE_LINKER_FLAGS "-lgcov -fprofile-arcs -ftest-coverage")
+     set(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
      set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 ENDIF()
 
