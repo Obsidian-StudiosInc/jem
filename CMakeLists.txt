@@ -24,14 +24,17 @@ configure_file ("${PROJECT_SOURCE_DIR}/include/version.h.in"
                 "${PROJECT_SOURCE_DIR}/include/version.h" )
 
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -g")
-set(CMAKE_C_FLAGS_TEST "${CMAKE_C_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall")
+
+IF (${CMAKE_BUILD_TYPE} MATCHES "Test")
+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+     set(CMAKE_EXE_LINKER_FLAGS "-lgcov -fprofile-arcs -ftest-coverage")
+     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+ENDIF()
+
 IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE")
 ENDIF()
-
-set(CMAKE_EXE_LINKER_FLAGS_TEST "-lgcov -fprofile-arcs -ftest-coverage")
-set(CMAKE_SHARED_LINKER_FLAGS_TEST "${CMAKE_EXE_LINKER_FLAGS_TEST}")
 
 set(CMAKE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY})
