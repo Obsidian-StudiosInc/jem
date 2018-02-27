@@ -31,7 +31,7 @@ test_jem() {
 	${VG} ./dist/jem -a ${VM} -g JAVA_HOME
 	check_rc $?
 
-	${VG} ./dist/jem -e jar
+	${VG} ./dist/jem -e javac
 	check_rc $?
 
 	${VG} ./dist/jem -g LDPATH
