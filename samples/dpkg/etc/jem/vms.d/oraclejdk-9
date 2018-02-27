@@ -1,0 +1,15 @@
+# Copyright 2018 Obsidian-Studios, Inc.
+# Distributed under the terms of the GNU General Public License v2
+
+VERSION="Oracle JDK 9"
+JAVA_HOME="/usr/lib/jvm/java-9-oracle"
+JDK_HOME="/usr/lib/jvm/java-9-oracle"
+JAVAC=${JAVA_HOME}/bin/javac
+PATH="${JAVA_HOME}/bin"
+ROOTPATH="${JAVA_HOME}/bin"
+LDPATH="${JAVA_HOME}/lib/:${JAVA_HOME}/lib/server/"
+PROVIDES_TYPE="JDK JRE"
+PROVIDES_VERSION="9"
+ENV_VARS="JAVA_HOME JDK_HOME JAVAC PATH ROOTPATH LDPATH"
+VMHANDLE="oraclejdk-9"
+BUILD_ONLY="FALSE"
