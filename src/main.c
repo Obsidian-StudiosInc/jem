@@ -157,6 +157,8 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             if(!state->argv[1])
                 argp_usage(state);
             return(1);
+        default:
+            return ARGP_ERR_UNKNOWN;
     }
     return(0);
 }
