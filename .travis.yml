@@ -43,7 +43,7 @@ jobs:
           token:
             secure: MUdFKjOdltZ5t2rRBRaXavZmUsO90rY2KcW2d+900d3Ybw/VwIVc4wJr8kovuWX3L6pHLRiOq774iQjnvaGFfZ2o8dpS1ozxfpQo4NGw7HB4/qhRP74uqIrcO2YBOHuMu8MKsha6WXOLlFPcvVtA4pmiHW96iB2/PTah9n6vwYtQ/WOj5W3LN/TKQARGVTa82t84gCUXs0fbtTQSZNpoP9BWZjjunJD9mTrexQ4oJrTEdZNZV4bnOfMn6i9EJcaFR4hbGRIAjE51hdKDMHrqzdog/yryYPSoCdFHlKvrhTo8xNBsrHYPXTTbOgZ/TcO/JmzIuljWuMmCsoGDAuSu+W3vFqK5sglra+60/apoG1PHX2LpWgujDSbTqockNwEcTpZpu98CNjjlp9lkXfKi9IRz0EjumhGzVmTUUm92Uh8QDJ/CAu8yABXiq8dBi+IerqjtK1IWqRC4OsBUPv+S9ElxWRuhZvT4F4v5XCtWt+U6YvFozW9YC2S4tB0tu4yrhtm8ZOH1ke4rW/cfhD5PKiCjUEv9YBEh3uRUsE2HVVBV9ibOVg9cRVJK37ryei22sskRnReP4laBUxHUeKGBVVZpGzzoptDwzlLRDyPTL9LNU39jd7lbXjdDSvGfsb1SQENiAO43qDXfxD8ctU8zjmgRL9kQaYYkDO0tvdWLavs=
       script:
-        - cmake -D CMAKE_BUILD_TYPE=Test -G Ninja ./
+        - sudo cmake -D CMAKE_BUILD_TYPE=Test -G Ninja ./
         - build-wrapper-linux-x86-64 --out-dir bw-output ninja
         - 'find . -name ''*.gcno'' -exec sh -c ''gcov {} -o $(dirname {})'' \;'
         - sonar-scanner
@@ -65,7 +65,7 @@ jobs:
         - true // avoid coverity double build
 
 script:
-  - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON -G Ninja ./
+  - sudo cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON -G Ninja ./
   - ninja package
   - ninja jem-test
   - sudo dpkg -i --force-all dist/jem-*.x86_64.deb
