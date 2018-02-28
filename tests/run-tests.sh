@@ -24,7 +24,7 @@ test_jem() {
 		check_rc $?
 	fi
 
-	ARGS="c f j J l L o O r t v ? V"
+	ARGS="c f j J l L o O t v ? V"
 
 	for arg in ${ARGS}; do
 		${VG} "${JEM}" -"${arg}"
