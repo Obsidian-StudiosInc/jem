@@ -6,54 +6,58 @@ VG="/usr/bin/valgrind --leak-check=yes --leak-check=full --read-var-info=yes"
 VG="${VG} --show-reachable=yes --track-origins=yes --error-exitcode=1"
 VM="oraclejdk-7"
 
+JEM_TEST="$(find .  | grep 'dist/jem-test')"
+JEM="${JEM_TEST%%-*}"
+
 check_rc() {
 	[[ ${1} -ne 0 ]] && exit "${1}"
 }
 
 test_code() {
-	pwd
-	ls
-	${VG} ./dist/jem-test
+	${VG} "${JEM_TEST}" "$@"
 	check_rc $?
 }
 
 test_jem() {
-	${VG} ./dist/jem -S 1
-	check_rc $?
+	if [[ ${UID} -eq 0 ]]; then
+		${VG} "${JEM}" -S 1
+		check_rc $?
+	fi
 
 	ARGS="c f j J l L o O r t v ? V"
 
 	for arg in ${ARGS}; do
-		${VG} ./dist/jem -"${arg}"
+		${VG} "${JEM}" -"${arg}"
 		check_rc $?
 	done
 
-	${VG} ./dist/jem -a ${VM} -g JAVA_HOME
+	${VG} "${JEM}" -a ${VM} -g JAVA_HOME
 	check_rc $?
 
-	${VG} ./dist/jem -e javac
+	${VG} "${JEM}" -e javac
 	check_rc $?
 
-	${VG} ./dist/jem -g LDPATH
+	${VG} "${JEM}" -g LDPATH
 	check_rc $?
 
-	${VG} ./dist/jem -i jna
+	${VG} "${JEM}" -i jna
 	check_rc $?
 
-	${VG} ./dist/jem -dp tomcat-server-9
+	${VG} "${JEM}" -dp tomcat-server-9
 	check_rc $?
 
-	${VG} ./dist/jem --package tomcat-server-9 -q DEPEND
+	${VG} "${JEM}" --package tomcat-server-9 -q DEPEND
 	check_rc $?
 
-	${VG} ./dist/jem -P ${VM}
+	${VG} "${JEM}" -P ${VM}
 	check_rc $?
 }
 
 case "$1" in
 
 	-c | --code)
-		test_code
+		shift
+		test_code "$@"
 		;;
 
 	-j | --jem)
@@ -61,7 +65,7 @@ case "$1" in
 		;;
 
 	*)
-		test_code
+		test_code "$@"
 		test_jem
 		;;
 
