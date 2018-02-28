@@ -124,8 +124,8 @@ void testPackage() {
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/idontexist/package.env\");\n");
     params = jemParseFile("/usr/share/idontexist/package.env");
 
-    fprintf(stdout,"\nparams = parseFile(\"samples/usr/share/cglib-2.1/package.env\");\n");
-    params = jemParseFile("samples/usr/share/cglib-2.1/package.env");
+    fprintf(stdout,"\nparams = parseFile(\"samples/usr/share/jaxme/package.env\");\n");
+    params = jemParseFile("samples/usr/share/jaxme/package.env");
 
     fprintf(stdout,"\nchar *jemPkgGetDescription(struct params *params) ->\n%s\n",jemPkgGetDescription(params));
     fprintf(stdout,"\nchar *jemPkgGetClasspath(struct params *params) ->\n%s\n",jemPkgGetClasspath(params));
