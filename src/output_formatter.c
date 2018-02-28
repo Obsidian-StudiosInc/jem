@@ -260,7 +260,3 @@ void jemSetTermTitle(const char *title) {
        jemIsValidTerm())
         fprintf(stdout,gettext("\x1b]1;\x07\x1b]2;%s\x07"),title); // Presently not working no effect :(
 }
-
-void jemWrite(char *msg) {
-    jemPrint(stdout,msg); // Need to add strip() functionality
-}
