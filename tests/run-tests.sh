@@ -65,8 +65,8 @@ case "$1" in
 		;;
 
 	*)
-		test_code "$@"
 		test_jem
+		test_code "$@"
 		;;
 
 esac
