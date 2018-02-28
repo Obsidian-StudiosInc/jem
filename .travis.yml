@@ -19,6 +19,8 @@ install:
   - cd dpkg
   - sudo cp -r etc /
   - popd
+  - ls -l /usr/lib/jvm
+  - ls -l /usr/lib/jvm/*
 
 jobs:
   include:
