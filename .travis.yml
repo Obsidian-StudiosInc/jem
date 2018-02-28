@@ -9,8 +9,11 @@ jdk:
   - oraclejdk9
 
 install:
+  - if [ "${SHIPPABLE}" ]; then add-apt-repository -y ppa:webupd8team/java ; fi
   - sudo apt-get -qq update
   - sudo apt-get install -y cmake rpm libc6-dbg
+  - if [ "${SHIPPABLE}" ]; then echo oracle-java9-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections ; fi
+  - if [ "${SHIPPABLE}" ]; then apt-get install -y oracle-java9-installer ; fi
   - wget https://launchpad.net/ubuntu/+source/valgrind/1:3.13.0-1ubuntu3/+build/13618072/+files/valgrind_3.13.0-1ubuntu3_amd64.deb
   - wget https://launchpad.net/ubuntu/+source/shellcheck/0.4.6-1/+build/13053646/+files/shellcheck_0.4.6-1_amd64.deb
   - sudo dpkg -i *.deb
@@ -71,8 +74,7 @@ script:
   - sudo dpkg -i --force-all dist/jem-*.x86_64.deb
   - shellcheck data/run-java-tool.bash
   - shellcheck tests/run-tests.sh
-  - if [ "${SHIPPABLE}" ]; then sudo ./tests/run-tests.sh openjdk-7 /usr/lib/jvm/java-7-openjdk-amd64 samples/dpkg/etc/jem/vms.d/openjdk-7 samples/usr/share/ant-core/package.env; fi
-  - if [ ! "${SHIPPABLE}" ]; then sudo ./tests/run-tests.sh oraclejdk-9 /usr/lib/jvm/java-9-oracle samples/dpkg/etc/jem/vms.d/oraclejdk-9 samples/usr/share/ant-core/package.env ; fi
+  - sudo ./tests/run-tests.sh oraclejdk-9 /usr/lib/jvm/java-9-oracle samples/dpkg/etc/jem/vms.d/oraclejdk-9 samples/usr/share/ant-core/package.env
   - if [ "${SONAR}" ]; then find . -name '*.gcno' -exec sh -c 'gcov -b {} -o $(dirname {})' \;; fi
   - if [ "${SONAR}" ]; then sonar-scanner; fi
 
