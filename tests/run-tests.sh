@@ -4,7 +4,6 @@
 
 VG="/usr/bin/valgrind --leak-check=yes --leak-check=full --read-var-info=yes"
 VG="${VG} --show-reachable=yes --track-origins=yes --error-exitcode=1"
-VM="oraclejdk-7"
 
 JEM_TEST="$(find .  | grep 'dist/jem-test')"
 JEM="${JEM_TEST%%-*}"
@@ -43,10 +42,10 @@ test_jem() {
 	${VG} "${JEM}" -i jna
 	check_rc $?
 
-	${VG} "${JEM}" -dp tomcat-server-9
+	${VG} "${JEM}" -dp xom
 	check_rc $?
 
-	${VG} "${JEM}" --package tomcat-server-9 -q DEPEND
+	${VG} "${JEM}" --package xom -q DEPEND
 	check_rc $?
 
 	${VG} "${JEM}" -P ${VM}
