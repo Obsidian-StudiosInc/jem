@@ -25,11 +25,12 @@
 
 #include "../include/env_manager.h"
 
-#define JVM "/usr/lib/jvm/java-7-openjdk-amd64"
-#define VM_CONF_FILE "samples/dpkg/etc/jem/vms.d/openjdk-7"
-#define PKG_ENV_FILE "samples/usr/share/ant-core/package.env"
+char *jvm;
+char *vm_home;
+char *vm_conf_file;
+char *pkg_env_file;
 
-testOutputFormatter() {
+void testOutputFormatter() {
     int i;
 
     fprintf(stdout,"Testing output_formatter.h functions\n\n"
@@ -83,15 +84,15 @@ testOutputFormatter() {
 
 }
 
-testFileParser() {
+void testFileParser() {
     fprintf(stdout,"\nTesting file_parser.h functions\n");
     int i;
     fprintf(stdout,"\nstruct param *params;\n");
     struct jem_param *params = NULL;
 
     fprintf(stdout,"\nparse vm config (also tests/fills in variables in values)");
-    fprintf(stdout,"\nparams = parseFile(\"%s\"); ->\n",VM_CONF_FILE);
-    params = jemParseFile(VM_CONF_FILE);
+    fprintf(stdout,"\nparams = parseFile(\"%s\"); ->\n",vm_conf_file);
+    params = jemParseFile(vm_conf_file);
     for(i=0;params[i].name;i++)
         fprintf(stdout,"\tparams[%d]->name=%s\n\tparams[%d]->value=%s\n",i,params[i].name,i,params[i].value);
 
@@ -101,8 +102,8 @@ testFileParser() {
     jemFreeParams(params);
 
     fprintf(stdout,"\nparse package.env");
-    fprintf(stdout,"\nparams = parseFile(\"%s\"); ->\n",PKG_ENV_FILE);
-    params = jemParseFile(PKG_ENV_FILE);
+    fprintf(stdout,"\nparams = parseFile(\"%s\"); ->\n",pkg_env_file);
+    params = jemParseFile(pkg_env_file);
     for(i=0;params[i].name;i++)
         fprintf(stdout,"\tparams[%d]->name=%s\n\tparams[%d]->value=%s\n",i,params[i].name,i,params[i].value);
 
@@ -115,7 +116,7 @@ testFileParser() {
 
 }
 
-testPackage() {
+void testPackage() {
     fprintf(stdout,"\nTesting package.h functions\n");
     fprintf(stdout,"\nstruct param *params;\n");
     struct jem_param *params = NULL;
@@ -218,13 +219,13 @@ testPackage() {
 
 }
 
-testVM() {
+void testVM() {
     fprintf(stdout,"\nTesting vm.h functions\n");
     fprintf(stdout,"\nstruct param *params;\n");
     struct jem_param *params = NULL;
 
-    fprintf(stdout,"\nparams = parseFile(\"%s\");\n",VM_CONF_FILE);
-    params = jemParseFile(VM_CONF_FILE);
+    fprintf(stdout,"\nparams = parseFile(\"%s\");\n",vm_conf_file);
+    params = jemParseFile(vm_conf_file);
 
     fprintf(stdout,"\nchar *jemVmGetExec(params,\"javah\") ->\n");
     char *exec;
@@ -280,7 +281,7 @@ testVM() {
     jemFreeParams(params);
 }
 
-testEnvManager() {
+void testEnvManager() {
     fprintf(stdout,"\nTesting env_manager.h functions\n");
     int i;
 
@@ -353,22 +354,22 @@ testEnvManager() {
     else
         fprintf(stdout,"VM pointer is null\n");
 
-    fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",VM_CONF_FILE);
-    vm = jemVmGetVM(vms,VM_CONF_FILE);
+    fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",jvm);
+    vm = jemVmGetVM(vms,jvm);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
-    fprintf(stdout,"\nvm = getVM(vms,\"openjdk-7\") ->\n");
-    vm = jemVmGetVM(vms,"openjdk-7");
+    fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",vm_conf_file);
+    vm = jemVmGetVM(vms,vm_conf_file);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
-    fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",JVM);
-    vm = jemVmGetVM(vms,JVM);
+    fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",vm_home);
+    vm = jemVmGetVM(vms,vm_home);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
@@ -416,6 +417,16 @@ testEnvManager() {
 }
 
 int main(int argc, char **argv) {
+
+    if(argc<5) {
+        fprintf(stdout,"Missing args <vm> <vm_home> <vm_conf_file> <pkg_env_file>\n");
+        exit(EXIT_FAILURE);
+    }
+
+    jvm = argv[1];
+    vm_home = argv[2];
+    vm_conf_file = argv[3];
+    pkg_env_file = argv[4];
 
     fprintf(stdout,"\n\\********** Starting jem tests **********\\\n\n");
 
