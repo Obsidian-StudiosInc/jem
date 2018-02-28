@@ -14,7 +14,6 @@ check_rc() {
 }
 
 test_code() {
-	export JEM_VM="${JEM}"
 	${VG} "${JEM_TEST}" "$@"
 	check_rc $?
 }
