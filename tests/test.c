@@ -235,10 +235,7 @@ void testVM() {
     }
 
     fprintf(stdout,"\nchar *jemVmGetExec(params,\"your_momma\") ->\n");
-    if((exec = jemVmGetExec(params,"your_momma"))) {
-        fprintf(stdout,"exec = %s\n",exec);
-        free(exec);
-    }
+    exec = jemVmGetExec(params,"your_momma");
 
 //    fprintf(stdout,"\nchar *jemVmGetName(struct vm *vm) ->\n%s\n",jemVmGetName(params));
 
