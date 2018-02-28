@@ -138,7 +138,7 @@ char **jemPkgGetJarNames(char *pkg_name) {
     if(dp)
         closedir(dp);
     if(jars)
-        qsort(jars,i+1,sizeof(char *),jemPkgCmpJarNames);
+        qsort(jars,i,sizeof(char *),jemPkgCmpJarNames);
     return(jars);
 }
 
@@ -148,9 +148,7 @@ char **jemPkgGetJarNames(char *pkg_name) {
  * @return an integer -1, 0, or 1.
  */
 int jemPkgCmpJarNames(const void *v1, const void *v2) {
-    const char **j1 = (const char **)v1;
-    const char **j2 = (const char **)v2;
-    return strcmp(*j1, *j2);
+    return strcmp(v1,v2);
 }
 
 /**
