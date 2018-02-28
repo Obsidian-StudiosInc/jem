@@ -20,7 +20,7 @@ test_code() {
 
 test_jem() {
 	if [[ ${UID} -eq 0 ]]; then
-		${VG} "${JEM}" -S 1
+		${VG} "${JEM}" -S "${VM}"
 		check_rc $?
 	fi
 
