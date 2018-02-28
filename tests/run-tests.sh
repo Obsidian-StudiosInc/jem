@@ -14,6 +14,7 @@ check_rc() {
 }
 
 test_code() {
+	JEM_VM="${JEM}"
 	${VG} "${JEM_TEST}" "$@"
 	check_rc $?
 }
