@@ -392,7 +392,7 @@ void testEnvManager() {
 
     fprintf(stdout,"\nvoid freeEnv(struct env *env)\n");
     jemFreeEnv(&env);
-
+/*
     fprintf(stdout,"\nstruct jem_vm *found = jemFindVM(\"%s\");\n",jvm);
     struct jem_vm **found = jemFindVM(jvm);
     if(found) {
@@ -400,7 +400,7 @@ void testEnvManager() {
             fprintf(stdout,"\tvms[%d]->filename=%s\n",i,found[i]->filename);
         free(found);
     }
-
+*/
     fprintf(stdout,"\ncleanup()\n");
     jemCleanup();
 }
