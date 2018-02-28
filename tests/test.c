@@ -400,9 +400,11 @@ void testEnvManager() {
             fprintf(stdout,"\tvms[%d]->filename=%s\n",i,found[i]->filename);
         free(found);
     }
-*/
+
     fprintf(stdout,"\ncleanup()\n");
     jemCleanup();
+ */
+
 }
 
 int main(int argc, char **argv) {
