@@ -346,11 +346,16 @@ void testEnvManager() {
     struct jem_vm *vm;
 
     fprintf(stdout,"\nstruct vm *getVM(struct vm *vms,const char *vm_name);\n");
-    fprintf(stdout,"\nvm = getVM(vms,\"2\") ->\n");
-    vm = jemVmGetVM(vms,"2");
+    fprintf(stdout,"\nvm = getVM(vms,\"1\") ->\n");
+    vm = jemVmGetVM(vms,"1");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
+        fprintf(stdout,"VM pointer is null\n");
+
+    fprintf(stdout,"\nvm = getVM(vms,\"10\") ->\n");
+    vm = jemVmGetVM(vms,"10");
+    if(!vm)
         fprintf(stdout,"VM pointer is null\n");
 
     fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",jvm);
