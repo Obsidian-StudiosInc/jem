@@ -189,6 +189,7 @@ void testPackage() {
         free(opt_deps);
     }
 
+/*
     fprintf(stdout,"\nDoesn't seem like any package.env file has this yet?");
     fprintf(stdout,"\nchar **jemPkgGetProvides(params) ->\n");
 
@@ -201,6 +202,7 @@ void testPackage() {
         }
         free(provides);
     }
+*/
 
     fprintf(stdout,"\nchar *jemPkgGetTarget(struct params *params) -> %s\n",jemPkgGetTarget(params));
 
@@ -262,7 +264,7 @@ void testVM() {
     fprintf(stdout,"\nbool jemVmIsJRE(struct params *params) ->\n");
     if(jemVmIsJRE(params))
         fprintf(stdout,"Yes its a JRE\n");
-
+/*
     fprintf(stdout,"\nchar **jemPkgGetProvides(struct params *params) ->\n");
     char **provides = jemPkgGetProvides(params);
     if(provides) {
@@ -273,7 +275,7 @@ void testVM() {
         }
         free(provides);
     }
-
+*/
     fprintf(stdout,"\nvoid freeParams(struct params *params)\n");
     jemFreeParams(params);
 }
