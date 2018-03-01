@@ -14,7 +14,7 @@
 #  along with jem.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required (VERSION 2.6)
-project (jem)
+project (jem C)
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 2)
 set(VERSION_PATCH 2)
