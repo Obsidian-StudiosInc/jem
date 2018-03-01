@@ -14,6 +14,8 @@ if [[ "${TRAVIS}" ]] || [[ "${SHIPPABLE}" ]]; then
 	export COLOR=0
 fi
 
+printenv | grep -i color
+
 check_rc() {
 	[[ ${1} -ne 0 ]] && exit "${1}"
 }
