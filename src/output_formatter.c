@@ -249,14 +249,3 @@ void jemPrintWarning(char *msg) {
 void jemPrintAlert(char *msg) {
     jemPrintMsg(stderr,"%H%C","!!! ALERT: ",msg,"%$");
 }
-
-/**
- * Set the terminal title
- *
- * @param title the terminal title
- */
-void jemSetTermTitle(const char *title) {
-    if(jem_console_title &&
-       jemIsValidTerm())
-        fprintf(stdout,gettext("\x1b]1;\x07\x1b]2;%s\x07"),title); // Presently not working no effect :(
-}

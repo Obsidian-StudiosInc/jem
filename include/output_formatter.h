@@ -132,10 +132,3 @@ void jemPrintWarning(char *msg);
  * @param msg the alert/message
  */
 void jemPrintAlert(char *msg);
-
-/**
- * Set the terminal title
- *
- * @param title the terminal title
- */
-void jemSetTermTitle(const char *title);
