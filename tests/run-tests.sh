@@ -9,6 +9,11 @@ VM="${1}"
 JEM_TEST="$(find .  | grep 'dist/jem-test')"
 JEM="${JEM_TEST%%-*}"
 
+# For CI only
+if [[ "${TRAVIS}" ]] || [[ "${SHIPPABLE}" ]]; then
+	export COLOR=0
+fi
+
 check_rc() {
 	[[ ${1} -ne 0 ]] && exit "${1}"
 }
