@@ -23,11 +23,11 @@ test_code() {
 
 test_jem() {
 	if [[ "${CI}" ]]; then
-		${VG} "${JEM}" -s "${VM}"
+		${VG} "${JEM}" -S "${VM}"
 		check_rc $?
 
 		# shellcheck disable=2086
-		sudo ${VG} "${JEM}" -S "${VM}"
+		sudo ${VG} "${JEM}" -s "${VM}"
 		check_rc $?
 	fi
 
