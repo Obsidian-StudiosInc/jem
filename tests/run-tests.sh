@@ -9,6 +9,7 @@ VM="${1}"
 JEM_TEST="$(find .  | grep 'dist/jem-test')"
 JEM="${JEM_TEST%%-*}"
 
+[[ "${CI}" ]] && export COLORS=1
 printenv | grep -i color
 
 check_rc() {
@@ -21,15 +22,11 @@ test_code() {
 }
 
 test_jem() {
-	local set_vm
-
 	if [[ "${CI}" ]]; then
-		if [[ ${UID} -eq 0 ]]; then
-			set_vm="S"
-		else
-			set_vm="s"
-		fi
-		${VG} "${JEM}" -"${set_vm}" "${VM}"
+		${VG} "${JEM}" -s "${VM}"
+		check_rc $?
+
+		sudo ${VG} "${JEM}" -S "${VM}"
 		check_rc $?
 	fi
 
