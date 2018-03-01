@@ -9,6 +9,8 @@ VM="${1}"
 JEM_TEST="$(find .  | grep 'dist/jem-test')"
 JEM="${JEM_TEST%%-*}"
 
+printenv | grep -i color
+
 check_rc() {
 	[[ ${1} -ne 0 ]] && exit "${1}"
 }
