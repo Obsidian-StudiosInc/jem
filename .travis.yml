@@ -74,7 +74,7 @@ script:
   - sudo dpkg -i --force-all dist/jem-*.x86_64.deb
   - shellcheck data/run-java-tool.bash
   - shellcheck tests/run-tests.sh
-  - sudo ./tests/run-tests.sh oraclejdk-9 /usr/lib/jvm/java-9-oracle samples/dpkg/etc/jem/vms.d/oraclejdk-9 samples/usr/share/ant-core/package.env
+  - ./tests/run-tests.sh oraclejdk-9 /usr/lib/jvm/java-9-oracle samples/dpkg/etc/jem/vms.d/oraclejdk-9 samples/usr/share/ant-core/package.env
   - if [ "${SONAR}" ]; then find . -name '*.gcno' -exec sh -c 'gcov -b {} -o $(dirname {})' \;; fi
   - if [ "${SONAR}" ]; then sonar-scanner; fi
 
