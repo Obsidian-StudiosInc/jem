@@ -21,14 +21,19 @@ test_code() {
 }
 
 test_jem() {
+
 	if [[ "${CI}" ]]; then
 		if [[ ! "${SHIPPABLE}" ]]; then
 			${VG} "${JEM}" -s "${VM}"
 			check_rc $?
-		fi
 
-		${VG} "${JEM}" -S "${VM}"
-		check_rc $?
+			# shellcheck disable=SC2086
+			sudo ${VG} "${JEM}" -S "${VM}"
+			check_rc $?
+		else
+			${VG} "${JEM}" -S "${VM}"
+			check_rc $?
+		fi
 	fi
 
 	ARGS="c f j J l L o O t v ? V"
