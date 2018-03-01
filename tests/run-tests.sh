@@ -9,13 +9,6 @@ VM="${1}"
 JEM_TEST="$(find .  | grep 'dist/jem-test')"
 JEM="${JEM_TEST%%-*}"
 
-# For CI only
-if [[ "${TRAVIS}" ]] || [[ "${SHIPPABLE}" ]]; then
-	export COLOR=0
-fi
-
-printenv | grep -i color
-
 check_rc() {
 	[[ ${1} -ne 0 ]] && exit "${1}"
 }
@@ -26,8 +19,15 @@ test_code() {
 }
 
 test_jem() {
-	if [[ ${UID} -eq 0 ]]; then
-		${VG} "${JEM}" -S "${VM}"
+	local set_vm
+
+	if [[ "${CI}" ]]; then
+		if [[ ${UID} -eq 0 ]]; then
+			set_vm="S"
+		else
+			set_vm="s"
+		fi
+		${VG} "${JEM}" -"${set_vm}" "${VM}"
 		check_rc $?
 	fi
 
