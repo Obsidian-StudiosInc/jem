@@ -25,7 +25,8 @@ install:
 
 jobs:
   include:
-    - stage: Test build and SonarQube Scan
+    - stage: Test build
+    - stage: SonarQube Scan
       env:
         - SONAR="build-wrapper-linux-x86-64 --out-dir bw-output"
       cache:
