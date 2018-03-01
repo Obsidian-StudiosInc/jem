@@ -26,7 +26,6 @@
 #include "../include/output_formatter.h"
 
 bool jem_color_output = true;
-bool jem_console_title = true;
 bool jem_auto_indent = true;
 bool jem_exit_status = EXIT_SUCCESS;
 
