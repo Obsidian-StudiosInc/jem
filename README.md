@@ -22,11 +22,66 @@ and consistent access to java virtual machines and packages.
 
 ## Documentation:
 
-Documentation is generated from jem sources in the docs subdirectory  
+Documentation is generated from jem sources in the docs subdirectory 
 after compiling jem. API documentation is created using doxygen and man 
-page created from help2man. At some point a version will be placed 
-online. For time being need to generation documentation yourself as 
-needed. Or part of a system package.
+page created from help2man.
+
+### Help Output
+
+```bash
+# jem --help
+Usage: jem [OPTION...]
+
+Java Environment Manager
+Copyright 2015-2018 Obsidian-Studios, Inc.
+Distributed under the terms of the GNU General Public License v3
+
+ Global Options:
+  -n, --nocolor              Disable color output
+
+ VM Options:
+  -a, --active-vm=VM, --select-vm=VM
+                             Use this vm instead of the active vm when
+                             returning information
+  -c, --javac                Print the location of the javac executable
+  -e, --exec_cmd=COMMAND     Execute something which is in JAVA_HOME
+  -f, --show-active-vm       Print the active Virtual Machine
+  -g, --get-env=VAR          Print an environment variable from the active VM
+  -j, --jar                  Print the location of the jar executable
+  -J, --java                 Print the location of the java executable
+  -L, --list-vms, --list-available-vms
+                             List available Java Virtual Machines
+  -o, --jre-home             Print the location of the active JAVA_HOME
+  -O, --jdk-home             Print the location of the active JAVA_HOME
+  -P, --print=VM             Print the environment for the specified VM
+  -r, --runtime              Print the runtime classpath
+  -s, --set-user-vm=VM       Set the default Java VM for the user
+  -S, --set-system-vm=VM     Set the default Java VM for the system
+  -t, --tools                Print the path to tools.jar
+  -v, --java-version         Print version information for the active VM
+
+ Package Options:
+  -d, --with-dependencies    Include package dependencies in --classpath and
+                             --library calls
+      --get-virtual-providers=PACKAGE(S)
+                             Return a list of packages that provide a virtual
+  -i, --library=LIBRARY(s)   Print java library paths for these packages
+  -l, --list-packages, --list-available-packages
+                             List all available packages on the system
+  -p, --classpath=PACKAGE(s) Print entries in the environment classpath for
+                             these packages
+      --package=PACKAGE(s)   Retrieve a value from a package(s) package.env
+                             file, value is specified by --query
+  -q, --query=PARAM(s)       Parameter(s) value(s) to retrieve from package(s)
+                             package.env file, specified by --package
+
+ GNU Options:
+
+  -?, --help                 Give this help list
+      --usage                Give a short usage message
+  -V, --version              Print program version
+
+```
 
 ## Download:
 
