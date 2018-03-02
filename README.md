@@ -11,14 +11,17 @@ jem is a Java Environment Manager, a re-write and port to C of a
 program on Gentoo Linux called 
 [java-config](https://github.com/gentoo/java-config), written in 
 python, specific to Gentoo Linux and derivatives. jem being in C, is 
-Linux distro agnostic and should work for any POSIX compliant 
+Linux distro agnostic and should work for any GNU, eventually POSIX, compliant 
 operating system. The intention is to standardize java management and 
 tools for scripts and programs.
 
-jem provides means to manage and set system and user virtual machines 
+jem provides means to manage and set active, system, and user virtual machines 
 independently. Along with ability to build package classpath and other 
-things for a variety of uses. By using jem systems can have portable  
-and consistent access to java virtual machines and packages.
+things for a variety of uses. By using jem systems can have portable and 
+consistent access to java virtual machines and packages.
+
+jem is available as a cli ```jem``` and shared object library (libjem.so) 
+for usage in other languages or applications.
 
 ## Documentation:
 
