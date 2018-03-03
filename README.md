@@ -31,12 +31,17 @@ the system and user vm. Along with runtime vm selection via ```JEM_VM```
 environment variable. Which overrides the system and user vm just for 
 that environment.
 
-jem also provides a wrapper shell script symlinked to all binaries 
+jem also provides a wrapper shell script
+[run-java-tool.bash](https://github.com/Obsidian-StudiosInc/jem/blob/master/data/run-java-tool.bash) 
+symlinked to 
+[all binaries](https://github.com/Obsidian-StudiosInc/jem/blob/master/InstallScript.cmake#L16) 
 provided  in a virtual machine. This allows the script to determine 
 which VM should be used at that time, active, system, or user VM.
 
 Finally of course jem also manages and sets ```JAVA_HOME``` environment 
-variable and others needed for standard Java usage.
+variable and others needed for standard Java usage via 
+[profile.d shell files](https://github.com/Obsidian-StudiosInc/jem/tree/master/data/etc/profile.d) 
+sourced at start of a shell session.
 
 ### File locations
 The files jem needs to operate are stored in the following locations
