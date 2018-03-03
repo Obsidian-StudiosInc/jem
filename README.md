@@ -56,7 +56,7 @@ All package operations of jem depend on these ```package.env``` files.
 /usr/share/jetty-server-9.4/package.env
 ```
 
-#### Virual Machine
+#### Virtual Machine
 Virtual Machine properties files are stored in the following location. 
 One for each virtual machine on a system. All VM operations of jem 
 depend on these vm properties files.
