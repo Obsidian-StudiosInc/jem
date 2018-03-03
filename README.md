@@ -20,7 +20,7 @@ independently. Along with ability to build package classpath and other
 things for a variety of uses. By using jem systems can have portable and 
 consistent access to java virtual machines and packages.
 
-jem is available as a cli ```jem``` and shared object library (libjem.so) 
+jem is available as a cli ```jem``` and shared object library ```libjem.so```
 for usage in other languages or applications.
 
 ## How it works
