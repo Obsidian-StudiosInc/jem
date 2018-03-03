@@ -28,5 +28,5 @@ fi
 
 export MANPATH="${JAVA_HOME}/man:${MANPATH}"
 export JDK_HOME=${JAVA_HOME}
-export JAVAC=${JDK_HOME}/bin${HOME}c
+export JAVAC=${JDK_HOME}/bin/javac
 unset user_vm system_vm user_id

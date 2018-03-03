@@ -16,5 +16,5 @@ unset user_vm system_vm
 if ( $?JAVA_HOME ) then
 	setenv MANPATH "${JAVA_HOME}/man:${MANPATH}"
 	setenv JDK_HOME $JAVA_HOME
-	setenv JAVAC ${JDK_HOME}/bin${HOME}c
+	setenv JAVAC ${JDK_HOME}/bin/javac
 endif
