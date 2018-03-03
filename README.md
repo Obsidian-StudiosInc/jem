@@ -46,6 +46,7 @@ sourced at start of a shell session.
 ### File locations
 The files jem needs to operate are stored in the following locations
 
+#### Packages package.env
 Package files are stored in the following location for each package. 
 All package operations of jem depend on these ```package.env``` files. 
 ```
@@ -55,9 +56,10 @@ All package operations of jem depend on these ```package.env``` files.
 /usr/share/jetty-server-9.4/package.env
 ```
 
-Virtual Machine and Virtual Package properties files are stored in the 
-following location. One for each virtual machine on a system. All VM 
-operations of jem depend on these vm properties files.
+### Virual Machine
+Virtual Machine properties files are stored in the following location. 
+One for each virtual machine on a system. All VM operations of jem 
+depend on these vm properties files.
 ```
 /etc/jem/vms.d/<vm-package>(?-<slot>)
 
@@ -65,6 +67,7 @@ operations of jem depend on these vm properties files.
 /etc/jem/vms.d/oracle-jdk-bin-10
 ```
 
+### Virtual packages
 Virtual Packages files, that contain package names for all providers of 
 a given virtual. Used by jem to match an actual package with a virtual.
 ```
@@ -73,7 +76,7 @@ a given virtual. Used by jem to match an actual package with a virtual.
 # example
 /etc/jem/virtuals.d/servlet-api-4.0
 ```
-
+### Virtual packages configuration
 Virtuals preference configuration file. Used to bind a virtual package 
 to a specific package of your choosing, or change default order.
 ```
