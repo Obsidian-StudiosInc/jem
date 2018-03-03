@@ -23,6 +23,58 @@ consistent access to java virtual machines and packages.
 jem is available as a cli ```jem``` and shared object library (libjem.so) 
 for usage in other languages or applications.
 
+## How it works
+jem operates using properties style files for packages, vm, and 
+virtuals. These are stored in various locations. Along with some 
+configuration files for finer control. jem sets and manages symlinks for 
+the system and user vm. Along with runtime vm selection via ```JEM_VM``` 
+environment variable. Which overrides the system and user vm just for 
+that environment.
+
+jem also provides a wrapper shell script symlinked to all binaries 
+provided  in a virtual machine. This allows the script to determine 
+which VM should be used at that time, active, system, or user VM.
+
+Finally of course jem also manages and sets ```JAVA_HOME``` environment 
+variable and others needed for standard Java usage.
+
+### File locations
+The files jem needs to operate are stored in the following locations
+
+Package files are stored in the following location for each package. 
+All package operations of jem depend on these ```package.env``` files. 
+```
+/usr/share/<package>(?-<slot>)/package.env
+
+# example
+/usr/share/jetty-server-9.4/package.env
+```
+
+Virtual Machine and Virtual Package properties files are stored in the 
+following location. One for each virtual machine on a system. All VM 
+operations of jem depend on these vm properties files.
+```
+/etc/jem/vms.d/<vm-package>(?-<slot>)
+
+# example
+/etc/jem/vms.d/oracle-jdk-bin-10
+```
+
+Virtual Packages files, that contain package names for all providers of 
+a given virtual. Used by jem to match an actual package with a virtual.
+```
+/etc/jem/virtuals.d/<virtual-package>(?-<slot>)
+
+# example
+/etc/jem/virtuals.d/servlet-api-4.0
+```
+
+Virtuals preference configuration file. Used to bind a virtual package 
+to a specific package of your choosing, or change default order.
+```
+/etc/jem/virtuals.conf
+```
+
 ## Documentation:
 
 Documentation is generated from jem sources in the docs subdirectory 
@@ -91,7 +143,11 @@ Distributed under the terms of the GNU General Public License v3
 jem binaries and sources are currently available for download via 
 [releases](https://github.com/Obsidian-StudiosInc/jem/releases).
 
-## Configuring:
+## Build:
+jem can be compiled via autotools or ninja, based on which generator is 
+used for cmake
+
+### Configure:
 
 In the root directory of the sources, run the following commands to  
 configure cmake sources. cmake uses autotools by default. jem can be  
@@ -103,50 +159,49 @@ of switching to meson build system.
 ```
 cmake -D CMAKE_BUILD_TYPE=Debug ./
 ```
+
  - To build jem as normal
 
 ```
 cmake -D CMAKE_BUILD_TYPE=Release ./
 ```
  - To build documentation add -D BUILD_DOC=ON to either
-
  - To build using ninja instead of autotools add -G Ninja to either
 
+### Compiling:
+After configuring via cmake, to compile jem run make or ninja as normal 
+in the root directory of the sources.
 
-## Compiling:
-jem can be compiled via autotools or ninja
-
-### Autotools
-After configuring via cmake, to compile jem run make as normal in the 
-root directory of the sources.
+####Autotools
 ```
-   make
+make
 ```
- - To see all make targets
 
+To see all make targets
 ```
 make help
 ``` 
- - To compile and run tests
 
+To build tests
 ```
 make jem-test
 ```
-
-### Ninja
-After configuring via cmake, to compile jem run ninja as normal in the
-root directory of the sources.
+####Ninja
 ```
 ninja
 ```
- - To compile and run tests
 
+To see all make targets
+```
+ninja help
+``` 
+
+To build tests
 ```
 ninja jem-test
 ```
 
 ## Installing:
-
 Installing jem should be done through the systems package manager. For 
 integration with package managers and/or manual installation you can 
 run the following command.
