@@ -122,7 +122,7 @@ void testPackage() {
     struct jem_param *params = NULL;
 
     fprintf(stdout,"\nparams = parseFile(\"/usr/share/idontexist/package.env\");\n");
-    params = jemParseFile("/usr/share/idontexist/package.env");
+    jemParseFile("/usr/share/idontexist/package.env");
 
     fprintf(stdout,"\nparams = parseFile(\"samples/usr/share/jaxme/package.env\");\n");
     params = jemParseFile("samples/usr/share/jaxme/package.env");
@@ -237,7 +237,7 @@ void testVM() {
     }
 
     fprintf(stdout,"\nchar *jemVmGetExec(params,\"your_momma\") ->\n");
-    exec = jemVmGetExec(params,"your_momma");
+    jemVmGetExec(params,"your_momma");
 
 //    fprintf(stdout,"\nchar *jemVmGetName(struct vm *vm) ->\n%s\n",jemVmGetName(params));
 
