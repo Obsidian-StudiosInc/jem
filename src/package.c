@@ -113,7 +113,11 @@ char **jemPkgGetJarNames(char *pkg_name) {
     int i = 0;
     char *path = NULL;
     asprintf(&path,"%s%s/lib",JEM_USER_SHARE,pkg_name);
-    if(path && (dp = opendir(path))) {
+    if(!path) {
+        jemPrintError("Unable to allocate memory to hold package jar names");
+        return(NULL);
+    }    
+    if((dp = opendir(path))) {
         struct dirent *file;
         while((file = readdir(dp))) {
             if(!strcmp(file->d_name,".") ||
