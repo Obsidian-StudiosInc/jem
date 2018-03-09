@@ -95,10 +95,8 @@ char *jemAddTermColor(char *msg) {
     int i;
     for(i=0;i<len;i++) {
         char *c;
-        if(jem_color_output &&
-           msg[i]=='%' &&
-           (c = jemGetTermCode(msg[i+1])) &&
-           c[0]!=msg[i+1]) {
+        c = jemGetTermCode(msg[i+1]);
+        if(jem_color_output && msg[i]=='%' && c && c[0]!=msg[i+1]) {
             i++;
             memcpy(nmsg+nlen,c,strlen(c));
             nlen += strlen(c);
