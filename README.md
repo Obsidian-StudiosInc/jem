@@ -180,7 +180,7 @@ cmake -D CMAKE_BUILD_TYPE=Release ./
 After configuring via cmake, to compile jem run make or ninja as normal 
 in the root directory of the sources.
 
-####Autotools
+#### Autotools
 ```
 make
 ```
@@ -194,7 +194,7 @@ To build tests
 ```
 make jem-test
 ```
-####Ninja
+#### Ninja
 ```
 ninja
 ```
