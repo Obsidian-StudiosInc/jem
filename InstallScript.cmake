@@ -52,7 +52,6 @@ set(JAVA_BIN_TOOLS
 	"rmiregistry"
 	"serialver"
 	"unpack200"
-	"xjc"
 )
 
 foreach(T ${JAVA_BIN_TOOLS})
