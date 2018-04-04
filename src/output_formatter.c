@@ -118,13 +118,16 @@ char *jemAddTermColor(char *msg) {
  */
 char *jemAppendStrs(char* cur_str,char *sep_str,char *add_str) {
     char *new_str = NULL;
-    if(cur_str && add_str) {
-        char *old_str = cur_str;
-        if(sep_str)
-            asprintf(&new_str,"%s%s%s",cur_str,sep_str,add_str);
-        else
-            asprintf(&new_str,"%s%s",cur_str,add_str);
-        free(old_str);
+    if(add_str) {
+        if(cur_str) {
+            char *old_str = cur_str;
+            if(sep_str)
+                asprintf(&new_str,"%s%s%s",cur_str,sep_str,add_str);
+            else
+                asprintf(&new_str,"%s%s",cur_str,add_str);
+            free(old_str);
+        } else
+            asprintf(&new_str,"%s",add_str);
     }
     return(new_str);
 }
