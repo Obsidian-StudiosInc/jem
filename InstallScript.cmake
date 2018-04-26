@@ -15,7 +15,6 @@
 
 set(JAVA_BIN_TOOLS
 	"appletviewer"
-	"idlj"
 	"jaotc"
 	"jar"
 	"jarsigner"
