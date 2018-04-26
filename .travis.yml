@@ -4,7 +4,7 @@ sudo: required
 dist: trusty
 env:
   global:
-    - MY_PV=0.2.4
+    - MY_PV=0.2.5
 jdk:
   - oraclejdk9
 
