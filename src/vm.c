@@ -414,6 +414,7 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
     char *vm_name = jemVmGetName(vm);
     char *symlnk;
     asprintf(&symlnk,"/usr/lib/jvm/%s",vm_name);
+    unlink(target);
     if(symlink(symlnk,target)<0)
         jemPrintError("Failed to create symlink, unable to set VM"); // needs to be changed to throw an exception
     else {
