@@ -257,6 +257,8 @@ char *jemVmGetUserVMLink() {
  */
 struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name) {
     unsigned int i = vm_name[0];
+    if(!vms)
+        return(NULL);
     size_t vms_len = sizeof(struct jem_vm) / sizeof(vms);
     if(strlen(vm_name)==1 &&
        isdigit(i)) {

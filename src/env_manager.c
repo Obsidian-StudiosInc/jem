@@ -186,6 +186,11 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
 void jemListAvailableVMs() {
     initEnvVMs();
     struct jem_vm *avm = jemGetActiveVM(&jem_env);
+    if(!jem_env.vms) {
+        jemPrintError("No vms were found in "JEM_VMS_PATH);
+        return;
+    }
+
     bool has_build_only = false;
     jemPrintMsg(stdout, "%H", NULL, "The following VMs are available:", "%$");
     int i;
