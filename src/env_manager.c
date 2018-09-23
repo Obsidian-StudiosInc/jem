@@ -33,7 +33,7 @@
 /**
  * Cleanup call before program exit, clean up env, free memory, etc
  */
-void jemCleanup() {
+void jemCleanup(void) {
     jemFreeEnv(&jem_env);
 }
 
@@ -52,7 +52,7 @@ void jemFreeEnv(struct jem_env *env) {
 /**
  * Initialize env vms (virtual machines)
  */
-void initEnvVMs() {
+void initEnvVMs(void) {
     if(!jem_env.vms)
         jem_env.vms = jemVmLoadVMs();
 }
@@ -183,7 +183,7 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
 /**
  * Print a list of the Available VMs
  */
-void jemListAvailableVMs() {
+void jemListAvailableVMs(void) {
     initEnvVMs();
     struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(!jem_env.vms) {
@@ -237,7 +237,7 @@ void jemListAvailableVMs() {
 /**
  * Print a list of installed Packages
  */
-void jemListPackages() {
+void jemListPackages(void) {
     jem_env.pkgs = jemPkgLoadPackages(false);
     if(jem_env.pkgs) {
         int i;
@@ -282,7 +282,7 @@ void jemListPackages() {
 /**
  * Print the active VM
  */
-void jemPrintActiveVM() {
+void jemPrintActiveVM(void) {
     initEnvVMs();
     struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm)
@@ -321,7 +321,7 @@ void jemPrintExe(const char *exe) {
 /**
  * Print the active VM java version
  */
-void jemPrintJavaVersion() {
+void jemPrintJavaVersion(void) {
     initEnvVMs();
     struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm) {
@@ -418,7 +418,7 @@ void jemPrintPackageClasspath(const char *name) {
 /**
  * Print the active VM absolute path to tools.jar
  */
-void jemPrintToolsJar() {
+void jemPrintToolsJar(void) {
     initEnvVMs();
     struct jem_vm *avm = jemGetActiveVM(&jem_env);
     if(avm &&

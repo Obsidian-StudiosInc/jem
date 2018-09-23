@@ -39,7 +39,7 @@ struct jem_env jem_env;
 /**
  * Cleanup call before program exit, clean up env, free memory, etc
  */
-void jemCleanup();
+void jemCleanup(void);
 
 /**
  * Frees the allocated memory in a env struct
@@ -51,7 +51,7 @@ void jemFreeEnv(struct jem_env *env);
 /**
  * Initialize env vms (virtual machines)
  */
-void initEnvVMs();
+void initEnvVMs(void);
 
 /**
  * Execute something which is in JAVA_HOME
@@ -94,17 +94,17 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env);
 /**
  * Print a list of the Available VMs
  */
-void jemListAvailableVMs();
+void jemListAvailableVMs(void);
 
 /**
  * Print a list of installed Packages
  */
-void jemListPackages();
+void jemListPackages(void);
 
 /**
  * Print the active VM
  */
-void jemPrintActiveVM();
+void jemPrintActiveVM(void);
 
 /**
  * Print the active VM parameters
@@ -121,7 +121,7 @@ void jemPrintExe(const char *exe);
 /**
  * Print the active VM java version
  */
-void jemPrintJavaVersion();
+void jemPrintJavaVersion(void);
 
 /**
  * Print one or more package classpath values from the package.env file
@@ -134,7 +134,7 @@ void jemPrintPackageClasspath(const char *name);
 /**
  * Print the active VM absolute path to tools.jar
  */
-void jemPrintToolsJar();
+void jemPrintToolsJar(void);
 
 /**
  * Print one or more parameter values from the active VM config file
