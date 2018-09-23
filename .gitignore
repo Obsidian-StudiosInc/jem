@@ -10,5 +10,6 @@ build/
 cmake_install.cmake
 dist/
 docs/
+include/version.h
 install_manifest.txt
 nbproject/
