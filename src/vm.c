@@ -206,7 +206,7 @@ void jemFreeVMLinks(char **vm_links) {
  *
  * @return a string containing the value. The string must NOT be freed!
  */
-char *jemVmGetSystemVMLink() {
+char *jemVmGetSystemVMLink(void) {
     return(JEM_SYSTEM_VM_LINK); // might do some checking or change to calculated in future
 }
 
@@ -215,7 +215,7 @@ char *jemVmGetSystemVMLink() {
  *
  * @return a string containing the value. The string must be freed!
  */
-char *jemVmGetSystemVMName() {
+char *jemVmGetSystemVMName(void) {
     char *abs_file = calloc(JEM_BASE_NAME_SIZE+1,sizeof(char));
     if(readlink(jemVmGetSystemVMLink(),abs_file,JEM_BASE_NAME_SIZE)<0) {
         if(errno==EACCES)
@@ -239,7 +239,7 @@ char *jemVmGetSystemVMName() {
  *
  * @return a string containing the value. The string must be freed!
  */
-char *jemVmGetUserVMLink() {
+char *jemVmGetUserVMLink(void) {
     char *home = NULL;
     char *user_vm = NULL;
     if((home = getenv("HOME"))) 
@@ -296,7 +296,7 @@ struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name) {
  * @return a pointer to an array of strings containing the user and/or system
  * vm links, or null if not found. Array and links must be freed!
  */
-char **jemVmGetVMLinks() {
+char **jemVmGetVMLinks(void) {
     char *user_vm = NULL;
     char **links = NULL;
     int c = 0;
@@ -330,7 +330,7 @@ int jemVmCompareVMs(const void *v1, const void *v2) {
  *
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-struct jem_vm *jemVmLoadVMs() {
+struct jem_vm *jemVmLoadVMs(void) {
     DIR *dp;
     struct jem_vm *vms = NULL;
     int i = 0;

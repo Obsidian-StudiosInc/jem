@@ -131,21 +131,21 @@ void jemFreeVMLinks(char **vm_links);
  *
  * @return a string containing the value. The string must NOT be freed!
  */
-char *jemVmGetSystemVMLink();
+char *jemVmGetSystemVMLink(void);
 
 /**
  * Get the system VM's name by returning the basename of the system VM link
  *
  * @return a string containing the value. The string must be freed!
  */
-char *jemVmGetSystemVMName();
+char *jemVmGetSystemVMName(void);
 
 /**
  * Get the user VM's link
  *
  * @return a string containing the value. The string must be freed!
  */
-char *jemVmGetUserVMLink();
+char *jemVmGetUserVMLink(void);
 
 /**
  * Get a VM by index, filename, VM name including partial match, or JAVA_HOME
@@ -163,7 +163,7 @@ struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name);
  * @return a pointer to an array of strings containing the user and/or system
  * vm links, or null if not found. Array and links must be freed!
  */
-char **jemVmGetVMLinks();
+char **jemVmGetVMLinks(void);
 
 /**
  * Compares the filenames of two vms, used soley by qsort in loadVMs()
@@ -179,7 +179,7 @@ int jemVmCompareVMs(const void *v1, const void *v2);
  *
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-struct jem_vm *jemVmLoadVMs();
+struct jem_vm *jemVmLoadVMs(void);
 
 /**
  * Set the VM, create a symlink for the given vm to target
