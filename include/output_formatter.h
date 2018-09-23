@@ -62,7 +62,7 @@ char *jemGetTermCode(char key);
  *
  * @return true if valid terminal, false otherwise
  */
-bool jemIsValidTerm();
+bool jemIsValidTerm(void);
 
 /**
  * Adds terminal color codes to a message

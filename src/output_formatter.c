@@ -73,7 +73,7 @@ char *jemGetTermCode(char key) {
  *
  * @return true if valid terminal, false otherwise
  */
-bool jemIsValidTerm() {
+bool jemIsValidTerm(void) {
     if(getenv("COLORS") || getenv("LS_COLORS") || getenv("XTERM_256_COLORS"))
        return(true);
     return(false);
