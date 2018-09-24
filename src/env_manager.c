@@ -297,10 +297,11 @@ void jemPrintActiveVM(void) {
 void jemPrintVMParams(const char *vm_name) {
     initEnvVMs();
     struct jem_vm *vm = jemVmGetVM(jem_env.vms,vm_name);
-    int i;
-    if(vm)
+    if(vm) {
+        int i;
         for(i=0;vm->params[i].name;i++)
             fprintf(stdout,"%s=%s\n",vm->params[i].name,vm->params[i].value);
+    }
 }
 
 /**
@@ -367,8 +368,8 @@ void jemPrintPackageClasspath(const char *name) {
                 if(deps) {
                     int i;
                     for(i=0;deps[i].name;i++) {
-                        int j;
                         if(deps[i].jars) {
+                            int j;
                             for(j=0;deps[i].jars[j];j++) {
                                 if(classpath) {
                                     char *old_cp = classpath;
