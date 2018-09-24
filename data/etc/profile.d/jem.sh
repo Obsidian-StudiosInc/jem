@@ -1,3 +1,4 @@
+#!/bin/sh
 # Copyright 2015-2018 Obsidian-Studios, Inc.
 # Distributed under the terms of the GNU General Public License, v3 or later
 
@@ -9,6 +10,7 @@ system_vm="/etc/jem/vm"
 # See https://bugs.gentoo.org/show_bug.cgi?id=169925
 # for more details"
 
+# shellcheck disable=SC2039
 if [ -z "${UID}" ] ; then
 	# id lives in /usr/bin which might not be mounted
 	if type id >/dev/null 2>/dev/null ; then
@@ -19,7 +21,7 @@ if [ -z "${UID}" ] ; then
 fi
 
 # The root user uses the system vm
-if [ "${user_id}" != 0 -a -L "${user_vm}" ]; then
+if [ "${user_id}" != 0 ] && [ -L "${user_vm}" ]; then
 	export JAVA_HOME=${user_vm}
 # Otherwise set to the current system vm
 elif [ -L "/etc/jem/vm" ]; then
