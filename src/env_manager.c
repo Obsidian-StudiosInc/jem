@@ -264,14 +264,16 @@ void jemListPackages(void) {
                 struct jem_vm *vm = jemGetActiveVM(&jem_env);
                 active = jemVmGetName(vm);
             }
-            fprintf(stdout,
-                    "[%s] Using: %s; Providers: %s (%s)\n",
-                    jem_env.pkgs[i].name,
-                    active,
-                    providers,
-                    jem_env.pkgs[i].filename);
-            if(active && free_active)
-                free(active);
+            if(active) {
+                fprintf(stdout,
+                        "[%s] Using: %s; Providers: %s (%s)\n",
+                        jem_env.pkgs[i].name,
+                        active,
+                        providers,
+                        jem_env.pkgs[i].filename);
+                if(free_active)
+                    free(active);
+            }
             if(providers)
                 free(providers);
         }
