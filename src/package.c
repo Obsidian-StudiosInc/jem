@@ -215,9 +215,9 @@ struct jem_dep *_jemPkgGetDeps(struct jem_dep *deps,
         if(!has_jar) {
             if(deps[i].jars) {
                 char **jars = jemPkgGetJarNames(pkg_name);
-                int j;
-                int k;
                 if(jars) {
+                    int j;
+                    int k;
                     for(j=0;jars[j];j++) {
                         bool exists = false;
                         for(k=0;deps[i].jars[k];k++)
