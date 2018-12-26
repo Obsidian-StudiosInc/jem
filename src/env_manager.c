@@ -22,7 +22,11 @@
  */
 
 #include <errno.h>
+#ifdef HAVE_MUSL
+#include <err.h>
+#else
 #include <error.h>
+#endif
 #include <libgen.h>
 #include <stdio.h>
 #include <unistd.h>
