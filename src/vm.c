@@ -28,6 +28,9 @@
 #include <sys/dir.h>
 #include <sys/file.h>
 #include <sys/stat.h>
+#ifdef HAVE_MUSL
+#include <fcntl.h>
+#endif
 #include <unistd.h>
 
 #include "../include/package.h"
@@ -403,7 +406,11 @@ void jemVmSetVM(struct jem_vm *vm,char *target) {
     free(buffer_cpy_ptr);
     free(buffer);
     free(dirs);
+#ifdef HAVE_MUSL
+    int sym_fd = popen(target, O_RDONLY);
+#else
     int sym_fd = open(target, O_RDONLY);
+#endif
     if(sym_fd!=-1) { // if symlinks exists, lock and remove
         if(flock(sym_fd, LOCK_SH)!=-1) {
             unlink(target);
