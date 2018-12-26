@@ -26,8 +26,14 @@ configure_file ("${PROJECT_SOURCE_DIR}/include/version.h.in"
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -g -fprofile-arcs -ftest-coverage")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall")
 
+option(HAVE_MUSL "Set -DHAVE_MUSL=ON/TRUE to use musl instead of glibc" OFF)
+
 IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE")
+    if(HAVE_MUSL)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -largp")
+    else()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE")
+    endif()
 ENDIF()
 
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-fprofile-arcs -ftest-coverage")
