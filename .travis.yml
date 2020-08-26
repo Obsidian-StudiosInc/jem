@@ -23,7 +23,7 @@ jobs:
     - stage: Test build musl
       env:
         - CC="musl-gcc"
-        - OPTS="-D HAVE_MUSL=true"
+        - OPTS="-D HAVE_MUSL=ON"
     - stage: SonarQube Scan
       env:
         - SONAR="build-wrapper-linux-x86-64 --out-dir bw-output"
