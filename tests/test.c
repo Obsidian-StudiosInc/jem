@@ -336,7 +336,8 @@ void testEnvManager() {
     struct jem_vm *vms;
 
     fprintf(stdout,"\nvms = loadVMs();\n");
-    vms = jemVmLoadVMs();
+    unsigned short vm_count;
+    vms = jemVmLoadVMs(&vm_count);
     if(vms) {
         for(i=0;vms[i].filename;i++)
             fprintf(stdout,"\tvms[%d]->filename=%s\n",i,vms[i].filename);
@@ -348,33 +349,33 @@ void testEnvManager() {
 
     fprintf(stdout,"\nstruct vm *getVM(struct vm *vms,const char *vm_name);\n");
     fprintf(stdout,"\nvm = getVM(vms,\"1\") ->\n");
-    vm = jemVmGetVM(vms,"1");
+    vm = jemVmGetVM(vms,&vm_count,"1");
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
     fprintf(stdout,"\nvm = getVM(vms,\"10\") ->\n");
-    vm = jemVmGetVM(vms,"10");
+    vm = jemVmGetVM(vms,&vm_count,"10");
     if(!vm)
         fprintf(stdout,"VM pointer is null\n");
 
     fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",jvm);
-    vm = jemVmGetVM(vms,jvm);
+    vm = jemVmGetVM(vms,&vm_count,jvm);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
     fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",vm_conf_file);
-    vm = jemVmGetVM(vms,vm_conf_file);
+    vm = jemVmGetVM(vms,&vm_count,vm_conf_file);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
         fprintf(stdout,"VM pointer is null\n");
 
     fprintf(stdout,"\nvm = getVM(vms,\"%s\") ->\n",vm_home);
-    vm = jemVmGetVM(vms,vm_home);
+    vm = jemVmGetVM(vms,&vm_count,vm_home);
     if(vm)
         fprintf(stdout,"vm->filename=%s\n",vm->filename);
     else
@@ -390,7 +391,7 @@ void testEnvManager() {
     jemInitEnv(&env);
 
     fprintf(stdout,"\nenv.vms = loadVMs()\n");
-    env.vms = jemVmLoadVMs();
+    env.vms = jemVmLoadVMs(&(env.vm_count));
 
     fprintf(stdout,"\nstruct vm *avm = getActiveVM(&env);\n");
     struct jem_vm *avm = jemGetActiveVM(&env);
