@@ -34,7 +34,7 @@ struct jem_env {
     struct jem_vm *active_vm;   /** pointer to the active vm struct in the virtual machines vms struct array */
 };
 
-struct jem_env jem_env;
+extern struct jem_env jem_env;
 
 /**
  * Cleanup call before program exit, clean up env, free memory, etc

@@ -29,6 +29,7 @@ char *jvm;
 char *vm_home;
 char *vm_conf_file;
 char *pkg_env_file;
+struct jem_env jem_env;
 
 void testOutputFormatter() {
     int i;
