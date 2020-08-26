@@ -30,7 +30,7 @@ option(HAVE_MUSL "Set -DHAVE_MUSL=ON/TRUE to use musl instead of glibc" OFF)
 
 IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     if(HAVE_MUSL)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -largp")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -DHAVE_MUSL -largp")
     else()
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE")
     endif()
