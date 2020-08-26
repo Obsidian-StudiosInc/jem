@@ -82,7 +82,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     switch(key) {
         case 'a':
             initEnvVMs();
-            jem_env.active_vm = jemVmGetVM(jem_env.vms,arg);
+            jem_env.active_vm = jemVmGetVM(jem_env.vms,&(jem_env.vm_count),arg);
             break;
         case 'd':
             jem_with_dependencies = true;

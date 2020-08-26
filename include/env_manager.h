@@ -32,6 +32,7 @@ struct jem_env {
     struct jem_pkg *pkgs;       /** packages */
     struct jem_vm *vms;         /** virtual machines */
     struct jem_vm *active_vm;   /** pointer to the active vm struct in the virtual machines vms struct array */
+    unsigned short vm_count;    /** stores the amount of vms in the array */
 };
 
 extern struct jem_env jem_env;

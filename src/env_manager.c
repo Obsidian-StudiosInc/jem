@@ -58,7 +58,7 @@ void jemFreeEnv(struct jem_env *env) {
  */
 void initEnvVMs(void) {
     if(!jem_env.vms)
-        jem_env.vms = jemVmLoadVMs();
+        jem_env.vms = jemVmLoadVMs(&(jem_env.vm_count));
 }
 
 /**
@@ -154,7 +154,7 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
     if((tainted = getenv("JEM_VM"))) {
         vm_name = strndup(tainted,1024);
         if(vm_name) {
-            vm = jemVmGetVM(env->vms,vm_name);
+            vm = jemVmGetVM(env->vms,&(env->vm_count),vm_name);
             free(vm_name);
         }
     } else {
@@ -172,7 +172,7 @@ struct jem_vm *jemLoadActiveVM(struct jem_env *env) {
                 free(abs_file);
                 continue;
             }
-            vm = jemVmGetVM(env->vms,basename(abs_file));
+            vm = jemVmGetVM(env->vms,&(env->vm_count),basename(abs_file));
             free(abs_file);
             if(vm)
                 break;
@@ -300,7 +300,7 @@ void jemPrintActiveVM(void) {
  */
 void jemPrintVMParams(const char *vm_name) {
     initEnvVMs();
-    struct jem_vm *vm = jemVmGetVM(jem_env.vms,vm_name);
+    struct jem_vm *vm = jemVmGetVM(jem_env.vms,&(jem_env.vm_count),vm_name);
     if(vm) {
         int i;
         for(i=0;vm->params[i].name;i++)
@@ -524,7 +524,7 @@ void jemSetSystemVM(const char *vm_name) {
         return;
     }
     initEnvVMs();
-    struct jem_vm *vm = jemVmGetVM(jem_env.vms,vm_name);
+    struct jem_vm *vm = jemVmGetVM(jem_env.vms,&(jem_env.vm_count),vm_name);
     if(!vm)
         jemPrintError("Could not find matching vm");
     else
@@ -542,7 +542,7 @@ void jemSetUserVM(const char *vm_name) {
         return;
     }
     initEnvVMs();
-    struct jem_vm *vm = jemVmGetVM(jem_env.vms,vm_name);
+    struct jem_vm *vm = jemVmGetVM(jem_env.vms,&(jem_env.vm_count),vm_name);
     if(!vm)
         jemPrintError("Could not find matching vm");
     else {

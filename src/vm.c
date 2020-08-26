@@ -255,18 +255,20 @@ char *jemVmGetUserVMLink(void) {
  * from an array of VM structs
  *
  * @param vms array of vm structs
+ * @param vm_count the amount of vms in the array
  * @param file the name of the file to parse
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
-struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name) {
+struct jem_vm *jemVmGetVM(struct jem_vm *vms,
+                          unsigned short *vm_count,
+                          const char *vm_name) {
     unsigned int i = vm_name[0];
     if(!vms)
         return(NULL);
-    size_t vms_len = sizeof(struct jem_vm) / sizeof(vms);
     if(strlen(vm_name)==1 &&
        isdigit(i)) {
         i = atoi(vm_name) - 1;
-        if(i<=vms_len)
+        if(i<=*vm_count)
             return(&vms[i]);
         else
             return (NULL);
@@ -276,7 +278,7 @@ struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name) {
         if(isdigit(b)) {
             char **end_ptr = NULL;
             unsigned long l = strtol(vm_name,end_ptr,10) - 1;
-            if(i<=vms_len)
+            if(i<=*vm_count)
                 return(&vms[l]);
             else
                 return (NULL);
@@ -331,9 +333,10 @@ int jemVmCompareVMs(const void *v1, const void *v2) {
  * Loads all installed VMs config files. Storing them in an dynamically allocated
  * vm struct array.
  *
+ * @param vm_count the amount of vms in the array
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-struct jem_vm *jemVmLoadVMs(void) {
+struct jem_vm *jemVmLoadVMs(unsigned short *vm_count) {
     DIR *dp;
     struct jem_vm *vms = NULL;
     int i = 0;
@@ -368,6 +371,7 @@ struct jem_vm *jemVmLoadVMs(void) {
         qsort(vms,i+2,sizeof(struct jem_vm),jemVmCompareVMs);
     if(dp)
         closedir(dp);
+    *vm_count = i;
     return(vms);
 }
 

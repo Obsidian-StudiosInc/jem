@@ -152,10 +152,13 @@ char *jemVmGetUserVMLink(void);
  * from an array of VM structs
  *
  * @param vms array of vm structs
+ * @param vm_count the amount of vms in the array
  * @param file the name of the file to parse
  * @return a pointer to a vm struct, or null if not found. Must NOT be freed!
  */
-struct jem_vm *jemVmGetVM(struct jem_vm *vms,const char *vm_name);
+struct jem_vm *jemVmGetVM(struct jem_vm *vms,
+                          unsigned short *vm_count,
+                          const char *vm_name);
 
 /**
  * Get user and system VM links
@@ -177,9 +180,10 @@ int jemVmCompareVMs(const void *v1, const void *v2);
  * Loads all installed VMs config files. Storing them in an dynamically allocated
  * vm struct array.
  *
+ * @param vm_count the amount of vms in the array
  * @return an array of vm structs. Which must be freed, including struct members!
  */
-struct jem_vm *jemVmLoadVMs(void);
+struct jem_vm *jemVmLoadVMs(unsigned short *vm_count);
 
 /**
  * Set the VM, create a symlink for the given vm to target
