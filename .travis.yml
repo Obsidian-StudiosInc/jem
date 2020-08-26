@@ -70,7 +70,6 @@ jobs:
         - true // avoid coverity double build
 
 script:
-  - echo ${OPTS}
   - cmake -D CMAKE_BUILD_TYPE=Debug -D BUILD_DOC=ON ${OPTS} ./
   - ${SONAR} make package jem-test
   - sudo dpkg -i --force-all dist/jem-*.x86_64.deb
