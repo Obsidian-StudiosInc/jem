@@ -2,6 +2,7 @@ language: c
 compiler: gcc
 sudo: required
 dist: focal
+jdk: openjdk11
 env:
   global:
     - MY_PV=0.2.7
