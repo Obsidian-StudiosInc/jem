@@ -1,0 +1,15 @@
+# Copyright 2020 Obsidian-Studios, Inc.
+# Distributed under the terms of the GNU General Public License v2
+
+VERSION="OpenJDK 11"
+JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+JDK_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+JAVAC=${JAVA_HOME}/bin/javac
+PATH="${JAVA_HOME}/bin"
+ROOTPATH="${JAVA_HOME}/bin"
+LDPATH="${JAVA_HOME}/lib/:${JAVA_HOME}/lib/server/"
+PROVIDES_TYPE="JDK JRE"
+PROVIDES_VERSION="11"
+ENV_VARS="JAVA_HOME JDK_HOME JAVAC PATH ROOTPATH LDPATH"
+VMHANDLE="openjdk-11"
+BUILD_ONLY="FALSE"
