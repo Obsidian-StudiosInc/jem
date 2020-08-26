@@ -1,7 +1,7 @@
 language: c
 compiler: gcc
 sudo: required
-dist: xenial
+dist: focal
 env:
   global:
     - MY_PV=0.2.7
