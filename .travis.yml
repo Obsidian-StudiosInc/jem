@@ -20,10 +20,10 @@ install:
 jobs:
   include:
     - stage: Test build
-    - stage: Test build musl
-      env:
-        - CC="musl-gcc"
-        - OPTS=-DHAVE_MUSL=ON
+#    - stage: Test build musl
+#      env:
+#        - CC="musl-gcc"
+#        - OPTS=-DHAVE_MUSL=ON
     - stage: SonarQube Scan
       env:
         - SONAR="build-wrapper-linux-x86-64 --out-dir bw-output"
