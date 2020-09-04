@@ -40,7 +40,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: p/dWgK6qv942D3u/DQ6tLoEd1Qv/xKQ79oiacEsoA60LUcmNxcO9Ls62KBmJ/W1PwFZFsepijZvuvb3XPhRVSd0pXXete5vkG9fmZ+cJe+5w28KgLN2gRWvToiVkZ98atKCGkh4IqKc07y+gk632bGBfPNsqGZD/FOhV5GLIbopvuN+vK3BWXJB/XZeKrBt43odM4DrSTLXi6drkO1stHk5lqMo07Sa6VtF3Zml6Lxy7eFz5rRXAQH32KoiNKObyNS3k8PgofJ2o1hFpcGLCmDDRFqLH2bSQ2QW3xPyoHN+pYeQBe8n0Trnin9wvHcUIIJyubwXThguSI0wHha6ZZMSL6Cin9C2i9t8COfWHpHUGWdJ98rum46iRTffD6lG3hA+ACfHO4CDcuP8ezWzhYCX8Bwkztd5XYDJ5fBC6HzElyFUAyoyu97R4LUgxLn1KXM6WoTaMTwGgQNL8ZtnypJeDzSefZNzIIayZJMCDyqPJwVEKibntvrKtHeJUpS/sKh4nL53eQiMzXgvjlu9nZer1nOx9GXrBgzdtRkjSmmbpQI50VUnwhHf7mnVVDBJ5QsuG3V5m0n2Ft6W5T3wOexgvhfdzewVpMbMhmPlGF1eiKsKapGkTtnNs6vYlc6ThtRJfSUKX4fgr7EIGeSIg/XgBTy7yjtu3IlZj4w7IGjk=
+          secure: LpyDRXZYYXPt3qFHwrljEaqFwqV+vmtGRAMImkYCP2m7BHDPLBnP0qFu8FwcZ0zb5dS2onIRmr9Gguio08ACpfY7fEJXlNCaRZ2dLAj/4oS3x4PM0ZpFprod1EeF6KHcqB7qJtQzN+iX6nk8Cfs/iIIS8u4i/TGUOlIcgBFQ/IFKVkYVSlcxn1CKe0wJh7/eNH+g+7OpIiNUbBreN1eYKV7zTCe1qLiaH9WifGgyOyghflEBgZdp9YZX6m0DFln1ZXOG3abLqtsUrBioCjmlWxP/wZPRtiemvfG9X5C/wgDistdNE2KMCeZLx80MN3XPaQ3/OMwZi7luCjGbLGVYKzIN9Ofz/pV249757C6ppPV0SCSaF9qFkRQGgktwMqA/+acwtL0c2x5D/XRQp+SBF9J80gAkVCzK0y+q/x4mRDRIUUp+943OX5yIjcLQQqTgoXxrcNR6fTCXm0lFCGkxYIaKKa/1pJ4LzYb0/hIAmbRWDQdf8fFena97/E757Nq2C+Ci42FymSktFOZjP6plON4wg5C2ZWR8PjyLCyF99k3Feq/TqSikbuTVuMmsOYqm/EixFgsgpVpQsXjW4OpfavmRu68W2oNvUAUHdPbKCpx+352doqIT0T6eOV0mVqdOZE7yfh6iqhBwRl06TrbCEeJp3ay7ko0TbfjlWIRgLF8=
         file:
           - dist/jem-${MY_PV}.x86_64.deb
           - dist/jem-${MY_PV}.x86_64.rpm
