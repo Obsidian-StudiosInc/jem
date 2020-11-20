@@ -84,6 +84,8 @@ struct jem_param *jemParseFile(const char *file) {
     char *var_value = NULL;     // ${VAR} value to replace the variable in paramter value
     int var_value_len = 0;
     while((bytes_read = getline(&line,&line_size,fp))>0 && !feof(fp)) {
+        if(!line)
+            continue;
         char *value = NULL;     // value of a parameter in a config/env file
         if(strlen(line)>0 && line[0]!='#') {
             if(!(value = strchr(line,'=')))
