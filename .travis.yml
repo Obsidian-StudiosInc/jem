@@ -7,7 +7,7 @@ env:
     - MY_PV=0.2.8
 
 install:
-  - sudo apt-get -qq update
+  - sudo apt-get -qq update || true
   - sudo apt-get install -y cmake rpm libc6-dbg openjdk-11-jdk-headless musl-tools shellcheck valgrind
   - if [ ! "${SHIPPABLE}" ]; then wget https://github.com/Obsidian-StudiosInc/travis-ci-musl-argp/releases/download/1/argp-standalone_1.3-1_amd64.deb ; fi
   - if [ ! "${SHIPPABLE}" ]; then sudo dpkg -i *.deb ; fi
